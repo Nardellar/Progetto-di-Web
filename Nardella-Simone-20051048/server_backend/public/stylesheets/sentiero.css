@@ -1,0 +1,29 @@
+.booking-section {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.booking-section p {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.btn-primary {
+    background-color: #ff5722;
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #e64a19;
+    transform: scale(1.05);
+}
+
+.btn-primary:active {
+    background-color: #d84315;
+    transform: scale(1);
+}

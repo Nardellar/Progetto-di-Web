@@ -1,0 +1,24 @@
+.single-blog-content {
+    margin-top: 20px; /* Aggiunge uno spazio tra l'immagine e il contenuto */
+}
+
+.post_block img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.reservation-wrapper {
+    margin-top: 20px; /* Imposta la distanza desiderata dalla foto */
+        width: 100%; /* Imposta la larghezza al 100% per occupare tutto lo spazio disponibile */
+        text-align: left; /* Allinea il contenuto del wrapper a sinistra */
+    
+}
+
+@media (max-width: 767px) {
+    .reservation-wrapper {
+        margin-top: 0; /* Modifica il margine superiore per dispositivi mobili se necessario */
+    }
+}
+.icone-side {
+    margin-right: 10px;
+}
