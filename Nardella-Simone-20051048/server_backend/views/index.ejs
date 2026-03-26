@@ -28,27 +28,7 @@
 
 <body>
     <section class="header">
-        <div class="navbar-option">
-            <div class="container">
-                <nav class="navbar navbar-default">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>                        
-                        </button>
-                        <a class="navbar-brand" href="/"><img src="/images/logo.png" alt="" /></a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="myNavbar">
-                        <ul class="nav navbar-nav navbar-left">
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/percorsi">Percorsi</a></li>
-                            <li><a href="/registrazione">Accedi o registrati</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </div>
+        <%- include('partials/navbar') %>
         <section class="banner">
             <div class="container">
                 <div class="banner-content">
@@ -295,41 +275,7 @@
         </div>
     </section>
    
-    <section class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="col-md-6">
-                        <div class="footer-content">
-                            <div class="footer-logo">
-                                <img src="/images/logo.png" alt="" />
-                            </div>
-                            <div class="footer-text">
-                                <p>
-                                    Per qualsiasi problema contatta la nostra mail di supporto, o chiama il centro assistenza:
-                                </p>
-                            </div>
-                            <div class="footer-address">
-                                <ul>
-                                    <li><i class="fa fa-map-marker" aria-hidden="true"></i> Università del Piemonte Orientale, Vercelli, Italia
-                                    </li>
-
-                                    <li>
-                                        <i class="fa fa-phone" aria-hidden="true"></i> +(39) 112
-
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-envelope" aria-hidden="true"></i> 20051048@studenti.uniupo.it
-
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <%- include('partials/footer') %>
 
     <script src="/javascripts/jquery.min.js"></script>
     <script src="/javascripts/owl-carousel/owl.carousel.min.js"></script>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="utf-8" />
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="description" content="<%= facility.nome %>">
+    <meta name="author" content="Simone Nardella">
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Dosis:300,400,500,600,700,800" rel="stylesheet">
+    <link rel='stylesheet' type='text/css' href="/stylesheets/bootstrap.min.css">
+    <link rel='stylesheet' type='text/css' href="/stylesheets/font-awesome.min.css">
+    <link rel='stylesheet' type='text/css' href="/stylesheets/style.css">
+    <link rel='stylesheet' type='text/css' href="/stylesheets/blog-style.css">
+    <link rel='stylesheet' type='text/css' href="/stylesheets/singoloHotel.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body class="single-page">
+
+    <section class="header" id="header">
+        <%- include('partials/navbar') %>
+    </section>
+
+    <section class="blog_wrapper">
+        <div class="container">
+            <div class="heading-top">
+                <h1><%= facility.nome %></h1>
+                <% if (facility.nome_cammino) { %>
+                <p>Struttura sul percorso <a href="/sentiero/<%= facility.slug_cammino %>"><%= facility.nome_cammino %></a></p>
+                <% } %>
+            </div>
+            <% if (typeof successo !== 'undefined' && successo) { %>
+            <div class="alert alert-success"><%= successo %></div>
+            <% } %>
+            <% if (typeof errore !== 'undefined' && errore) { %>
+            <div class="alert alert-danger"><%= errore %></div>
+            <% } %>
+            <div class="row">
+                <div class="col-md-9 col-sm-8">
+                    <div class="post_block">
+                        <div class="col-md-12">
+                            <% if (facility.immagine) { %>
+                            <img src="/images/<%= facility.immagine %>" alt="<%= facility.nome %>" style="width: 100%; height: auto;">
+                            <% } else { %>
+                            <div style="height:300px;background:#e9ecef;display:flex;align-items:center;justify-content:center;">
+                                <i class="fa fa-home fa-5x" style="color:#aaa;"></i>
+                            </div>
+                            <% } %>
+                            <div class="single-blog-content">
+                                <h2><%= facility.nome %></h2>
+                                <p>
+                                    <% if (facility.indirizzo) { %>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+                                    </svg>
+                                    <%= facility.indirizzo %>, <%= facility.citta %><br>
+                                    <% } %>
+                                    <%= facility.descrizione %>
+                                </p>
+                                <% if (facility.capacita) { %>
+                                <p><strong>Capacità:</strong> <%= facility.capacita %> ospiti</p>
+                                <% } %>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <!-- Sezione Domande e Risposte -->
+                    <div class="comments">
+                        <h2><%= questions.length %> Domand<%= questions.length === 1 ? 'a' : 'e' %></h2>
+
+                        <% questions.forEach(function(q) { %>
+                        <div class="comment_block">
+                            <div class="col-md-10 col-sm-10">
+                                <div class="col-md-2 col-sm-2"><img src="/images/<%= q.immagine_profilo || 'fotoProfiloAnonima.jpg' %>"></div>
+                                <div class="col-md-10 col-sm-10 no-padding">
+                                    <h3><%= q.nome_autore %><%= q.email_autore ? '' : ' (Anonimo)' %></h3>
+                                    <span><%= new Date(q.creato_il).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) %> <%= new Date(q.creato_il).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) %></span>
+                                    <p><%= q.testo %></p>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-2"><a href="" class="readmore">Rispondi</a></div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <% q.answers.forEach(function(a) { %>
+                        <div class="comment_block col-md-offset-1">
+                            <div class="col-md-10 col-sm-10">
+                                <div class="col-md-2 col-sm-2"><img src="/images/Host1.jpg"></div>
+                                <div class="col-md-10 col-sm-10 no-padding">
+                                    <h3><%= a.nome_risponditore ? (a.nome_risponditore + ' ' + (a.cognome_risponditore || '')) : a.email_risponditore %></h3>
+                                    <span><%= new Date(a.creato_il).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) %> <%= new Date(a.creato_il).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) %></span>
+                                    <p><%= a.testo %></p>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-2"><a href="" class="readmore">Rispondi</a></div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <% }); %>
+                        <% }); %>
+
+                        <!-- Form nuova domanda -->
+                        <div class="leave_reply">
+                            <h2>Fai una domanda</h2>
+                            <form action="/struttura/<%= facility.id %>/domanda" method="post">
+                                <div class="form-group col-md-6 col-sm-6">
+                                    <label for="domanda-nome" class="sr-only">Nome</label>
+                                    <input id="domanda-nome" class="form-control" placeholder="Nome*" name="nome_autore" type="text" required>
+                                </div>
+                                <div class="form-group col-md-6 col-sm-6">
+                                    <label for="domanda-email" class="sr-only">Email</label>
+                                    <input id="domanda-email" class="form-control" placeholder="Email (opzionale)" name="email_autore" type="email">
+                                </div>
+                                <div class="form-group col-md-12 col-sm-12">
+                                    <label for="domanda-testo" class="sr-only">La tua domanda</label>
+                                    <textarea id="domanda-testo" class="form-control" rows="6" placeholder="La tua domanda..." name="testo" required></textarea>
+                                </div>
+                                <div class="form-group col-md-12 col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Invia domanda</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <!-- Sidebar con prenotazione -->
+                <div class="col-md-3 col-sm-4">
+                    <div class="sidebar">
+                        <div class="widget">
+                            <h2 class="heading">Informazioni</h2>
+                            <ul>
+                                <li><strong>Città:</strong> <%= facility.citta %></li>
+                                <% if (facility.indirizzo) { %>
+                                <li><strong>Indirizzo:</strong> <%= facility.indirizzo %></li>
+                                <% } %>
+                                <% if (facility.prezzo_notte) { %>
+                                <li><strong>Prezzo/notte:</strong> &euro;<%= facility.prezzo_notte.toFixed(2) %></li>
+                                <% } %>
+                                <% if (facility.capacita) { %>
+                                <li><strong>Capacità:</strong> <%= facility.capacita %> ospiti</li>
+                                <% } %>
+                            </ul>
+                        </div>
+
+                        <% if (user) { %>
+                        <section class="col-md-12" style="background-color: rgb(121, 199, 223); padding-bottom: 30px;">
+                            <div class="reservation-form">
+                                <h3>Prenota il tuo soggiorno</h3>
+                                <form action="/struttura/<%= facility.id %>/prenota" method="post">
+                                    <div class="form-group">
+                                        <label for="check_in">Check-in:</label>
+                                        <input id="check_in" name="check_in" class="form-control" type="date" min="<%= new Date().toISOString().split('T')[0] %>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="check_out">Check-out:</label>
+                                        <input id="check_out" name="check_out" class="form-control" type="date" min="<%= new Date().toISOString().split('T')[0] %>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="numero_ospiti">Numero di ospiti:</label>
+                                        <input id="numero_ospiti" name="numero_ospiti" class="form-control" type="number" min="1" max="10" value="1" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Prenota ora</button>
+                                </form>
+                            </div>
+                        </section>
+                        <% } else { %>
+                        <div class="widget">
+                            <p><a href="/registrazione">Accedi</a> per prenotare questa struttura.</p>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </section>
+
+    <%- include('partials/footer') %>
+
+    <script src="/javascripts/jquery.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/booking-validation.js"></script>
+</body>
+
+</html>

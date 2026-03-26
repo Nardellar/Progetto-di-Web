@@ -1,76 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 
 <head>
     <meta charset="utf-8" />
-    <title>:: SHG_Hotel ::</title>
+    <title><%= title %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="description" content="">
     <meta name="keywords" content="">
-    <meta name="author" content="">
+    <meta name="author" content="Simone Nardella">
 
-    <!-- Google font here -->
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Dosis:300,400,500,600,700,800" rel="stylesheet">
-    <!-- Latest compiled and minified CSS -->
     <link rel='stylesheet' type='text/css' href="/stylesheets/bootstrap.min.css">
-
-    <!--  Font Awesome CSS -->
     <link rel='stylesheet' type='text/css' href="/stylesheets/font-awesome.min.css">
-
     <link rel='stylesheet' type='text/css' href="/stylesheets/style.css">
-
-    <!-- Custom CSS -->
     <link rel='stylesheet' type='text/css' href="/stylesheets/blog-style.css">
-
-    <!-- Latest compiled and minified JavaScript -->
     <script src="/javascripts/jquery.min.js"></script>
     <script src="/javascripts/bootstrap.min.js"></script>
-
     <link rel='stylesheet' type='text/css' href="/stylesheets/singoloHotel.css">
-    <!--icone WSS-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!--icone Google-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body class="single-page">
 
     <section class="header" id="header">
-        <div class="navbar-option">
-            <div class="container">
-                <nav class="navbar navbar-default">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="/"><img src="/images/logo.png" alt="" /></a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="myNavbar">
-                        <ul class="nav navbar-nav navbar-left">
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/percorsi">Percorsi</a></li>
-                            <li><a href="/registrazione">Accedi o registrati</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </div>
+        <%- include('partials/navbar') %>
     </section>
     <!-- Middle Wrapper Start Here-->
     <section class="blog_wrapper">
 
         <div class="container">
             <div class="heading-top">
-                <h1>SHG Hotel</h1>
-                <p>
-                    Benvenuto
-                </p>
+                <h1><%= facility.nome %></h1>
+                <% if (facility.nome_cammino) { %>
+                <p>Struttura sul percorso <a href="/sentiero/<%= facility.slug_cammino %>"><%= facility.nome_cammino %></a></p>
+                <% } %>
             </div>
+            <% if (typeof successo !== 'undefined' && successo) { %>
+            <div class="alert alert-success"><%= successo %></div>
+            <% } %>
+            <% if (typeof errore !== 'undefined' && errore) { %>
+            <div class="alert alert-danger"><%= errore %></div>
+            <% } %>
             <div class="row">
 
                 <div class="col-md-9 col-sm-8">
@@ -112,92 +86,56 @@
                         <div class="clearfix"></div>
                     </div>
 
-                    <!--Related Post-->
-                    <!--
-                    <div class="related_post">
-                        <h2>Related Post</h2>
-                        <div class="col-md-4 col-sm-4">
-                            <img src="/images/blog/related+post.jpg">
-                            <h3>heading goes here</h3>
-                            <a href=""><i class="fa fa-comments"></i> comments </a>
-                        </div>
-                        <div class="col-md-4 col-sm-4">
-                            <img src="/images/blog/related+post.jpg">
-                            <h3>heading goes here</h3>
-                            <a href=""><i class="fa fa-comments"></i> comments </a>
-                        </div>
-                        <div class="col-md-4 col-sm-4">
-                            <img src="/images/blog/related+post.jpg">
-                            <h3>heading goes here</h3>
-                            <a href=""><i class="fa fa-comments"></i> comments </a>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                    -->
-
                     <!--Comments Section-->
                     <div class="comments">
-                        <h2>3 Domande</h2>
+                        <h2><%= questions.length %> Domand<%= questions.length === 1 ? 'a' : 'e' %></h2>
 
+                        <% questions.forEach(function(q) { %>
                         <div class="comment_block">
                             <div class="col-md-10 col-sm-10">
-                                <div class=" col-md-2 col-sm-2"><img src="/images/fotoProfiloAnonima.jpg"></div>
+                                <div class=" col-md-2 col-sm-2"><img src="/images/<%= q.email_autore ? 'fotoProfilo1.jpg' : 'fotoProfiloAnonima.jpg' %>"></div>
                                 <div class="col-md-10 col-sm-10 no-padding">
-                                    <h3>Giorgio (Anonimo)</h3>
-                                    <span>25 dicembre 2023 12:35</span>
-                                    <p> Buongiorno. Volevo chiedere se ci fossero parcheggi gratuiti in zona
-                                    </p>
+                                    <h3><%= q.nome_autore %><%= q.email_autore ? '' : ' (Anonimo)' %></h3>
+                                    <span><%= new Date(q.creato_il).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) %> <%= new Date(q.creato_il).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) %></span>
+                                    <p><%= q.testo %></p>
                                 </div>
                             </div>
                             <div class="col-md-2 col-sm-2"><a href="" class="readmore">Rispondi</a></div>
                             <div class="clearfix"></div>
                         </div>
 
+                        <% q.answers.forEach(function(a) { %>
                         <div class="comment_block col-md-offset-1">
                             <div class="col-md-10 col-sm-10">
                                 <div class=" col-md-2 col-sm-2"><img src="/images/Host1.jpg"></div>
                                 <div class="col-md-10 col-sm-10 no-padding">
-                                    <h3>Matteo Babrieri</h3>
-                                    <span>30 dicembre 2023 17:24</span>
-                                    <p> Certamente. A 5 minuti a piedi dalla struttura vi è un comodo e ampio parcheggio
-                                        gratuito. È chiuso solo di domenica per il mercato cittadino.
-                                    </p>
-
+                                    <h3><%= a.nome_risponditore ? (a.nome_risponditore + ' ' + (a.cognome_risponditore || '')) : a.email_risponditore %></h3>
+                                    <span><%= new Date(a.creato_il).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) %> <%= new Date(a.creato_il).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) %></span>
+                                    <p><%= a.testo %></p>
                                 </div>
                             </div>
                             <div class="col-md-2 col-sm-2"><a href="" class="readmore">Rispondi</a></div>
                             <div class="clearfix"></div>
                         </div>
-
-
-                        <div class="comment_block">
-                            <div class="col-md-10 col-sm-10">
-                                <div class=" col-md-2 col-sm-2"><img src="/images/fotoProfilo1.jpg"></div>
-                                <div class="col-md-10 col-sm-10 no-padding">
-                                    <h3>Vincenzo Russotto</h3>
-                                    <span>7 marzo 2024 9:56</span>
-                                    <p> È inclusa la colazione?
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-2 col-sm-2"><a href="" class="readmore">Rispondi</a></div>
-                            <div class="clearfix"></div>
-                        </div>
-
+                        <% }); %>
+                        <% }); %>
 
                         <!--Reply Section-->
                         <div class="leave_reply">
                             <h2>Fai una domanda</h2>
-                            <form>
+                            <form action="/struttura/<%= facility.id %>/domanda" method="post">
                                 <div class="form-group col-md-6 col-sm-6">
-                                    <input class="form-control" placeholder="Nome*" name="" type="text">
+                                    <label for="shg-domanda-nome" class="sr-only">Nome</label>
+                                    <input id="shg-domanda-nome" class="form-control" placeholder="Nome*" name="nome_autore" type="text" required>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6">
-                                    <input class="form-control" placeholder="Email*" name="" type="text">
+                                    <label for="shg-domanda-email" class="sr-only">Email</label>
+                                    <input id="shg-domanda-email" class="form-control" placeholder="Email*" name="email_autore" type="email">
                                 </div>
                                 <div class="form-group col-md-12 col-sm-12">
-                                    <textarea class="form-control" rows="6"
-                                        placeholder="corpo (es. c'è il servizio in camera?)" name=""></textarea>
+                                    <label for="shg-domanda-testo" class="sr-only">La tua domanda</label>
+                                    <textarea id="shg-domanda-testo" class="form-control" rows="6"
+                                        placeholder="corpo (es. c'è il servizio in camera?)" name="testo" required></textarea>
                                 </div>
                                 <div class="form-group col-md-12 col-sm-12">
                                     <button type="submit" class="btn btn-primary">Invia domanda</button>
@@ -252,31 +190,38 @@
                                 <li><a><i class="material-icons icone-side">&#xe541;</i>
                                         Colazione</a></li>
                             </ul>
+                            <% if (user) { %>
                             <section class="col-md-12"
                                 style=" background-color: rgb(121, 199, 223); padding-bottom: 30px;">
                                 <div class="reservation-form">
                                     <h3>Prenota il tuo soggiorno</h3>
-                                    <form id="reservation" action="" method="post">
+                                    <form id="reservation" action="/struttura/<%= facility.id %>/prenota" method="post">
                                         <div class="form-group">
-                                            <label for="data">Check-in:</label>
-                                            <input id="data" class="form-control" placeholder="Seleziona la data"
-                                                type="date" tabindex="1" required>
+                                            <label for="check_in">Check-in:</label>
+                                            <input id="check_in" name="check_in" class="form-control" type="date" min="<%= new Date().toISOString().split('T')[0] %>" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="data">Check-out:</label>
-                                            <input id="data" class="form-control" placeholder="Seleziona la data"
-                                                type="date" tabindex="1" required>
+                                            <label for="check_out">Check-out:</label>
+                                            <input id="check_out" name="check_out" class="form-control" type="date" min="<%= new Date().toISOString().split('T')[0] %>" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="ospiti">Numero di ospiti:</label>
-                                            <input id="ospiti" class="form-control" placeholder="Inserisci il numero"
-                                                type="number" min="1" max="10" tabindex="2" required>
+                                            <label for="numero_ospiti">Numero di ospiti:</label>
+                                            <input id="numero_ospiti" name="numero_ospiti" class="form-control"
+                                                type="number" min="1" max="10" value="1" required>
                                         </div>
-                                        <button type="submit" id="reservation-submit" class="btn btn-primary"
-                                            data-submit="...Sending">Prenota ora</button>
+                                        <button type="submit" id="reservation-submit" class="btn btn-primary">Prenota ora</button>
                                     </form>
                                 </div>
                             </section>
+                            <% } else { %>
+                            <section class="col-md-12"
+                                style=" background-color: rgb(121, 199, 223); padding-bottom: 30px;">
+                                <div class="reservation-form">
+                                    <h3>Prenota il tuo soggiorno</h3>
+                                    <p><a href="/registrazione">Accedi</a> per prenotare questa struttura.</p>
+                                </div>
+                            </section>
+                            <% } %>
 
                         </div>
 
@@ -290,45 +235,8 @@
         <div class="clearfix"></div>
     </section>
     <!-- Middle Wrapper End Here-->
-    <section class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="col-md-6">
-                        <div class="footer-content">
-                            <div class="footer-logo">
-                                <img src="/images/logo.png" alt="" />
-                            </div>
-                            <div class="footer-text">
-                                <p>
-                                    Per qualsiasi problema contatta la nostra mail di supporto, o chiama il centro
-                                    assistenza:
-                                </p>
-                            </div>
-                            <div class="footer-address">
-                                <ul>
-                                    <li><i class="fa fa-map-marker" aria-hidden="true"></i> Università del Piemonte
-                                        Orientale, Vercelli, Italia
-                                    </li>
 
-                                    <li>
-                                        <i class="fa fa-phone" aria-hidden="true"></i> +(39) 112
-
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-envelope" aria-hidden="true"></i> 20051048@studenti.uniupo.it
-
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
+    <%- include('partials/footer') %>
 
     <!--PRE LOADER HERE-->
     <div id="pre-loader">
@@ -340,6 +248,7 @@
 
     <!-- Custom js -->
     <script src="/javascripts/custom.js"></script>
+    <script src="/javascripts/booking-validation.js"></script>
 
 </body>
 

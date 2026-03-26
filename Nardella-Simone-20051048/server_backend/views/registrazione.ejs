@@ -5,114 +5,94 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="Registrazione">
     <meta name="author" content="Simone Nardella">
-    <title>Contact</title>
-    <!-- Bootstrap core CSS -->
+    <title><%= title %></title>
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
-    <!-- Custom styles for this template -->
     <link href="/stylesheets/style.css" rel="stylesheet">
     <link href="/stylesheets/blog-style.css" rel="stylesheet">
     <link href="/stylesheets/contact.css" rel="stylesheet">
-    <!-- For Font style -->
     <link rel="stylesheet" href="/stylesheets/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Dosis:300,400,500,600,700,800" rel="stylesheet">
-    <!-- Owl Stylesheets -->
     <link rel="stylesheet" href="/stylesheets/owl-carousel/owl.carousel.min.css">
     <link rel="stylesheet" href="/stylesheets/owl-carousel/owl.theme.default.min.css">
 </head>
 
 <body>
     <section class="header" id="header">
-        <div class="navbar-option">
-            <div class="container">
-                <nav class="navbar navbar-default">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>                        
-                        </button>
-                        <a class="navbar-brand" href="/"><img src="/images/logo.png" alt="" /></a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="myNavbar">
-                        <ul class="nav navbar-nav navbar-left">
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/percorsi">Percorsi</a></li>
-                            <li><a href="/registrazione">Accedi o registrati</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </div>
+        <%- include('partials/navbar') %>
     </section>
+
     <section class="contact-form">
         <div class="container">
             <div class="contact-heading">
                 <h1>Accedi o Registrati</h1>
                 <h3>Crea un nuovo account o accedi se ne possiedi già uno.</h3>
             </div>
-             <!-- Form per il login -->
-             <form id="contact" class="login-form" action="" method="post">
+
+            <% if (error) { %>
+            <div class="alert alert-danger text-center"><%= error %></div>
+            <% } %>
+            <% if (success) { %>
+            <div class="alert alert-success text-center"><%= success %></div>
+            <% } %>
+
+            <!-- Form Login -->
+            <form id="login-form" class="login-form <%= activeForm === 'register' ? 'hidden' : '' %>" action="/login" method="post">
                 <h3>Accedi</h3>
                 <fieldset>
-                    <input placeholder="Your Email Address" type="email" tabindex="1" required>
+                    <label for="login-email" class="sr-only">Indirizzo Email</label>
+                    <input id="login-email" name="email" placeholder="Indirizzo Email" type="email" tabindex="1" required>
                 </fieldset>
                 <fieldset>
-                    <input placeholder="Your Password" type="password" tabindex="2" required>
+                    <label for="login-password" class="sr-only">Password</label>
+                    <input id="login-password" name="password" placeholder="Password" type="password" tabindex="2" required>
                 </fieldset>
                 <fieldset>
-                    <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Accedi</button>
+                    <button type="submit">Accedi</button>
                 </fieldset>
-                <p>Non hai un'account? <a href="#" id="register-link">Registrati</a></p>
+                <p>Non hai un account? <a href="#" id="register-link">Registrati</a></p>
             </form>
 
-
-            <form id="contact" class="register-form" action="" method="post" style="display: none;">
+            <!-- Form Registrazione -->
+            <form id="register-form" class="register-form <%= activeForm === 'register' ? '' : 'hidden' %>" action="/register" method="post">
                 <h3>Registrati</h3>
                 <fieldset>
-                    <input placeholder="Your name" type="text" tabindex="1" required autofocus>
+                    <label for="reg-nome" class="sr-only">Nome</label>
+                    <input id="reg-nome" name="nome" placeholder="Nome" type="text" tabindex="1" required>
                 </fieldset>
                 <fieldset>
-                    <input placeholder="Your Email Address" type="email" tabindex="2" required>
+                    <label for="reg-cognome" class="sr-only">Cognome</label>
+                    <input id="reg-cognome" name="cognome" placeholder="Cognome" type="text" tabindex="2" required>
                 </fieldset>
                 <fieldset>
-                    <input placeholder="Your Password" type="password" tabindex="3" required>
+                    <label for="reg-email" class="sr-only">Indirizzo Email</label>
+                    <input id="reg-email" name="email" placeholder="Indirizzo Email" type="email" tabindex="3" required>
                 </fieldset>
                 <fieldset>
-                    <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Registrati</button>
+                    <label for="reg-password" class="sr-only">Password</label>
+                    <input id="reg-password" name="password" placeholder="Password" type="password" tabindex="4" required>
                 </fieldset>
-                <p>Hai già un'account? <a href="#" id="login-link">Accedi</a></p>
+                <fieldset>
+                    <label for="reg-role" class="sr-only">Seleziona il tuo ruolo</label>
+                    <select id="reg-role" name="role" tabindex="5" required>
+                        <option value="" disabled selected>Seleziona il tuo ruolo</option>
+                        <option value="camminatore">Camminatore</option>
+                        <option value="ristoratore">Ristoratore</option>
+                    </select>
+                </fieldset>
+                <fieldset>
+                    <button type="submit">Registrati</button>
+                </fieldset>
+                <p>Hai già un account? <a href="#" id="login-link">Accedi</a></p>
             </form>
-
-            
-
         </div>
+    </section>
 
+    <%- include('partials/footer') %>
 
-    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-   <!--Sezione di JavaScript per permettere l'alternanza dei form: --> 
-    <script>
-        $(document).ready(function() {
-             // Mostra il form di login e nasconde quello di registrazione all'avvio della pagina
-             $(".login-form").show();
-            $(".register-form").hide();
-
-            // Quando viene cliccato il link "Register", mostra il form di registrazione e nasconde quello di login
-            $("#register-link").click(function () {
-                $(".login-form").hide();
-                $(".register-form").show();
-            });
-
-            // Quando viene cliccato il link "Login", mostra il form di login e nasconde quello di registrazione
-            $("#login-link").click(function () {
-                $(".register-form").hide();
-                $(".login-form").show();
-            });
-        });
-    </script>
+    <script src="/javascripts/auth-toggle.js"></script>
 </body>
 
 </html>

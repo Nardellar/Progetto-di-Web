@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Simone Nardella">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+    <link href="/stylesheets/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Dosis:300,400,500,600,700,800" rel="stylesheet">
+</head>
+
+<body>
+    <section class="header" id="header">
+        <%- include('partials/navbar') %>
+    </section>
+
+    <section style="padding: 40px 0; min-height: 60vh;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Il mio profilo</h3>
+                        </div>
+                        <div class="panel-body">
+                            <p><strong>Nome:</strong> <%= user.nome %> <%= user.cognome %></p>
+                            <p><strong>Email:</strong> <%= user.email %></p>
+                            <p><strong>Ruolo:</strong> <%= user.role === 'camminatore' ? 'Camminatore' : 'Ristoratore' %></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <% if (user.role === 'camminatore') { %>
+
+                    <!-- Prenotazioni -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Le mie prenotazioni (<%= prenotazioni.length %>)</h3>
+                        </div>
+                        <% if (prenotazioni.length === 0) { %>
+                        <div class="panel-body">
+                            <p>Non hai ancora effettuato prenotazioni. <a href="/percorsi">Esplora i percorsi</a> per trovare una struttura.</p>
+                        </div>
+                        <% } else { %>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Struttura</th>
+                                    <th>Check-in</th>
+                                    <th>Check-out</th>
+                                    <th>Ospiti</th>
+                                    <th>Stato</th>
+                                    <th>Data richiesta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% prenotazioni.forEach(function(p) { %>
+                                <tr>
+                                    <td><a href="/struttura/<%= p.id_struttura %>"><%= p.nome_struttura %></a> <br><small><%= p.citta_struttura %></small></td>
+                                    <td><%= new Date(p.check_in).toLocaleDateString('it-IT') %></td>
+                                    <td><%= new Date(p.check_out).toLocaleDateString('it-IT') %></td>
+                                    <td><%= p.numero_ospiti %></td>
+                                    <td>
+                                        <% if (p.status === 'pending') { %>
+                                        <span class="label label-warning">In attesa</span>
+                                        <% } else if (p.status === 'accepted') { %>
+                                        <span class="label label-success">Accettata</span>
+                                        <% } else { %>
+                                        <span class="label label-danger">Rifiutata</span>
+                                        <% } %>
+                                    </td>
+                                    <td><%= new Date(p.creato_il).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' }) %></td>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                        <% } %>
+                    </div>
+
+                    <!-- Domande -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Le mie domande (<%= domande.length %>)</h3>
+                        </div>
+                        <% if (domande.length === 0) { %>
+                        <div class="panel-body">
+                            <p>Non hai ancora fatto domande.</p>
+                        </div>
+                        <% } else { %>
+                        <div class="list-group">
+                            <% domande.forEach(function(d) { %>
+                            <a href="/struttura/<%= d.id_struttura_link %>" class="list-group-item">
+                                <h4 class="list-group-item-heading"><%= d.nome_struttura %></h4>
+                                <p class="list-group-item-text"><%= d.testo %></p>
+                                <small class="text-muted"><%= new Date(d.creato_il).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) %></small>
+                            </a>
+                            <% }); %>
+                        </div>
+                        <% } %>
+                    </div>
+
+                    <% } else { %>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Pannello ristoratore</h3>
+                        </div>
+                        <div class="panel-body">
+                            <p>Da qui puoi gestire le tue strutture, visualizzare le prenotazioni ricevute e rispondere alle domande dei camminatori.</p>
+                            <a href="/gestione" class="btn btn-primary"><i class="fa fa-cog"></i> Vai alla gestione strutture</a>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>
+
+    <script src="/javascripts/jquery.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+</body>
+
+</html>

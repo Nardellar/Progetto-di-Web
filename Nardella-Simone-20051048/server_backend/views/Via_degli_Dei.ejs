@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="Simone Nardella">
-    <title>Homepage</title>
+    <title><%= title %></title>
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
     <link href="/stylesheets/style.css" rel="stylesheet">
     <link rel="stylesheet" href="/stylesheets/font-awesome.min.css">
@@ -20,27 +20,7 @@
 
 <body>
     <section class="header" id="header">
-        <div class="navbar-option">
-            <div class="container">
-                <nav class="navbar navbar-default">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="/"><img src="/images/logo.png" alt="" /></a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="myNavbar">
-                        <ul class="nav navbar-nav navbar-left">
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/percorsi">Percorsi</a></li>
-                            <li><a href="/registrazione">Accedi o registrati</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </div>
+        <%- include('partials/navbar') %>
     </section>
 
     <section class="trails">
@@ -186,41 +166,34 @@
             </div>
         </div>
     </section>
-    <section class="footer">
+    <% if (facilities && facilities.length > 0) { %>
+    <section id="strutture" style="padding: 40px 0;">
         <div class="container">
+            <h2 style="text-align:center; margin-bottom:30px;">Strutture lungo il percorso</h2>
             <div class="row">
-                <div class="col-md-12">
-                    <div class="col-md-6">
-                        <div class="footer-content">
-                            <div class="footer-logo">
-                                <img src="/images/logo.png" alt="" />
-                            </div>
-                            <div class="footer-text">
-                                <p>
-                                    Per qualsiasi problema contatta la nostra mail di supporto, o chiama il centro assistenza:
-                                </p>
-                            </div>
-                            <div class="footer-address">
-                                <ul>
-                                    <li><i class="fa fa-map-marker" aria-hidden="true"></i> Università del Piemonte Orientale, Vercelli, Italia
-                                    </li>
-
-                                    <li>
-                                        <i class="fa fa-phone" aria-hidden="true"></i> +(39) 112
-
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-envelope" aria-hidden="true"></i> 20051048@studenti.uniupo.it
-
-                                    </li>
-                                </ul>
-                            </div>
+                <% facilities.forEach(function(f) { %>
+                <div class="col-md-4" style="margin-bottom:20px">
+                    <div class="panel panel-default">
+                        <% if (f.immagine) { %>
+                        <img src="/images/<%= f.immagine %>" alt="<%= f.nome %>" style="width:100%; height:200px; object-fit:cover;">
+                        <% } %>
+                        <div class="panel-body">
+                            <h4><%= f.nome %></h4>
+                            <p><%= f.citta %></p>
+                            <% if (f.prezzo_notte) { %>
+                            <p><strong>&euro;<%= f.prezzo_notte.toFixed(2) %></strong> / notte</p>
+                            <% } %>
+                            <a href="/struttura/<%= f.id %>" class="btn btn-primary btn-sm">Dettagli e prenota</a>
                         </div>
                     </div>
                 </div>
+                <% }); %>
             </div>
         </div>
     </section>
+    <% } %>
+
+    <%- include('partials/footer') %>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="/javascripts/jquery.min.js"></script>

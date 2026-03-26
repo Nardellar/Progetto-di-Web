@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Simone Nardella">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+    <link href="/stylesheets/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Dosis:300,400,500,600,700,800" rel="stylesheet">
+</head>
+
+<body>
+    <section class="header" id="header">
+        <%- include('partials/navbar') %>
+    </section>
+
+    <section style="padding: 40px 0; min-height: 60vh;">
+        <div class="container">
+            <h1>Gestione strutture</h1>
+            <p class="lead">Benvenuto, <%= user.nome %>. Qui puoi gestire le tue strutture, le prenotazioni e rispondere alle domande.</p>
+
+            <% if (typeof successo !== 'undefined' && successo) { %>
+            <div class="alert alert-success"><%= successo %></div>
+            <% } %>
+            <% if (typeof errore !== 'undefined' && errore) { %>
+            <div class="alert alert-danger"><%= errore %></div>
+            <% } %>
+
+            <% if (strutture.length === 0) { %>
+            <div class="alert alert-info">Non hai ancora strutture registrate.</div>
+            <% } %>
+
+            <% strutture.forEach(function(s) { %>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="fa fa-building"></i> <%= s.nome %> &mdash; <%= s.citta %>
+                        <a href="/struttura/<%= s.id %>" class="btn btn-xs btn-default pull-right">Vedi pagina pubblica</a>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <% if (s.immagine) { %>
+                            <img src="/images/<%= s.immagine %>" alt="<%= s.nome %>" class="img-responsive" style="margin-bottom:15px">
+                            <% } %>
+                            <ul class="list-unstyled">
+                                <% if (s.prezzo_notte) { %>
+                                <li><strong>Prezzo:</strong> &euro;<%= s.prezzo_notte.toFixed(2) %>/notte</li>
+                                <% } %>
+                                <% if (s.capacita) { %>
+                                <li><strong>Capacità:</strong> <%= s.capacita %> ospiti</li>
+                                <% } %>
+                            </ul>
+                        </div>
+                        <div class="col-md-9">
+
+                            <!-- PRENOTAZIONI -->
+                            <h4><i class="fa fa-calendar"></i> Prenotazioni (<%= s.prenotazioni.length %>)</h4>
+                            <% if (s.prenotazioni.length === 0) { %>
+                            <p class="text-muted">Nessuna prenotazione ricevuta.</p>
+                            <% } else { %>
+                            <table class="table table-condensed table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Ospite</th>
+                                        <th>Check-in</th>
+                                        <th>Check-out</th>
+                                        <th>Ospiti</th>
+                                        <th>Stato</th>
+                                        <th>Azioni</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% s.prenotazioni.forEach(function(p) { %>
+                                    <tr class="<%= p.status === 'pending' ? 'warning' : (p.status === 'accepted' ? 'success' : 'danger') %>">
+                                        <td><%= p.nome_camminatore %> <%= p.cognome_camminatore %><br><small class="text-muted"><%= p.email_camminatore %></small></td>
+                                        <td><%= new Date(p.check_in).toLocaleDateString('it-IT') %></td>
+                                        <td><%= new Date(p.check_out).toLocaleDateString('it-IT') %></td>
+                                        <td><%= p.numero_ospiti %></td>
+                                        <td>
+                                            <% if (p.status === 'pending') { %>
+                                            <span class="label label-warning">In attesa</span>
+                                            <% } else if (p.status === 'accepted') { %>
+                                            <span class="label label-success">Accettata</span>
+                                            <% } else { %>
+                                            <span class="label label-danger">Rifiutata</span>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <% if (p.status === 'pending') { %>
+                                            <form action="/prenotazione/<%= p.id %>/aggiorna" method="post" style="display:inline">
+                                                <input type="hidden" name="status" value="accepted">
+                                                <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-check"></i> Accetta</button>
+                                            </form>
+                                            <form action="/prenotazione/<%= p.id %>/aggiorna" method="post" style="display:inline">
+                                                <input type="hidden" name="status" value="rejected">
+                                                <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-times"></i> Rifiuta</button>
+                                            </form>
+                                            <% } else { %>
+                                            <span class="text-muted">-</span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                            <% } %>
+
+                            <hr>
+
+                            <!-- DOMANDE -->
+                            <h4><i class="fa fa-comments"></i> Domande (<%= s.domande.length %>)</h4>
+                            <% if (s.domande.length === 0) { %>
+                            <p class="text-muted">Nessuna domanda ricevuta.</p>
+                            <% } else { %>
+                            <% s.domande.forEach(function(d) { %>
+                            <div class="well well-sm">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <strong><%= d.nome_autore %></strong>
+                                        <% if (!d.email_autore) { %><small>(Anonimo)</small><% } %>
+                                        <span class="text-muted pull-right">
+                                            <%= new Date(d.creato_il).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' }) %>
+                                        </span>
+                                        <p style="margin-top:5px"><%= d.testo %></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <% if (d.num_risposte > 0) { %>
+                                        <span class="label label-info"><%= d.num_risposte %> risposta/e</span>
+                                        <% } else { %>
+                                        <form action="/domanda/<%= d.id %>/rispondi" method="post">
+                                            <div class="form-group" style="margin-bottom:5px">
+                                                <textarea name="testo" class="form-control input-sm" rows="2" placeholder="Scrivi la tua risposta..." required></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary btn-xs"><i class="fa fa-reply"></i> Rispondi</button>
+                                        </form>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }); %>
+                            <% } %>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>
+
+    <script src="/javascripts/jquery.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+</body>
+
+</html>
