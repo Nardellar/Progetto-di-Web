@@ -10,43 +10,100 @@
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
     <link href="/stylesheets/style.css" rel="stylesheet">
     <link rel="stylesheet" href="/stylesheets/font-awesome.min.css">
+    <link rel="stylesheet" href="/stylesheets/notifications.css">
+    <link rel="stylesheet" href="/stylesheets/singoloHotel.css">
+    <link rel="stylesheet" href="/stylesheets/profilo.css">
     <link href="https://fonts.googleapis.com/css?family=Dosis:300,400,500,600,700,800" rel="stylesheet">
 </head>
 
 <body>
+    <% const profileImage = (user && user.immagine_profilo)
+      ? (user.immagine_profilo.startsWith('http') ? user.immagine_profilo : ('/images/' + user.immagine_profilo))
+      : '/images/fotoProfiloAnonima.jpg'; %>
+
     <section class="header" id="header">
         <%- include('partials/navbar') %>
     </section>
 
-    <section style="padding: 40px 0; min-height: 60vh;">
-        <div class="container">
+    <main class="profilo-page">
+        <section class="container">
+            <%- include('partials/notifications') %>
+
             <div class="row">
-                <div class="col-md-4">
-                    <div class="panel panel-default">
+                <div class="col-md-8 col-sm-12">
+                    <div class="panel panel-default profilo-card" id="profilo-info">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Il mio profilo</h3>
+                            <div class="profilo-headline">
+                                <img src="<%= profileImage %>" alt="Immagine profilo" class="profilo-avatar">
+                                <div>
+                                    <h2 class="profilo-name"><%= user.nome %> <%= user.cognome %></h2>
+                                    <p class="profilo-email"><i class="fa fa-envelope"></i> <%= user.email %></p>
+                                    <span class="label <%= user.role === 'camminatore' ? 'label-info' : 'label-primary' %>"><%= user.role === 'camminatore' ? 'Camminatore' : 'Ristoratore' %></span>
+                                </div>
+                            </div>
                         </div>
                         <div class="panel-body">
-                            <p><strong>Nome:</strong> <%= user.nome %> <%= user.cognome %></p>
-                            <p><strong>Email:</strong> <%= user.email %></p>
-                            <p><strong>Ruolo:</strong> <%= user.role === 'camminatore' ? 'Camminatore' : 'Ristoratore' %></p>
+                            <h4><i class="fa fa-pencil"></i> Modifica profilo</h4>
+                            <form action="/profilo/aggiorna" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="profilo-nome">Nome</label>
+                                    <input id="profilo-nome" name="nome" type="text" class="form-control" value="<%= user.nome %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profilo-cognome">Cognome</label>
+                                    <input id="profilo-cognome" name="cognome" type="text" class="form-control" value="<%= user.cognome %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profilo-immagine">Immagine profilo</label>
+                                    <input id="profilo-immagine" name="immagine_profilo" type="file" class="form-control" accept=".png,.jpg,.jpeg,image/png,image/jpeg">
+                                    <span class="help-block">Formati consentiti: PNG, JPG, JPEG. Dimensione massima: 2MB.</span>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Salva modifiche</button>
+                            </form>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-8">
-                    <% if (user.role === 'camminatore') { %>
-
-                    <!-- Prenotazioni -->
-                    <div class="panel panel-default">
+                <% if (user.role === 'ristoratore') { %>
+                <div class="col-md-4 col-sm-12">
+                    <div class="panel panel-primary profilo-content-panel profilo-ristoratore-panel">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Le mie prenotazioni (<%= prenotazioni.length %>)</h3>
+                            <h3 class="panel-title"><i class="fa fa-cutlery"></i> Area ristoratore</h3>
                         </div>
-                        <% if (prenotazioni.length === 0) { %>
                         <div class="panel-body">
-                            <p>Non hai ancora effettuato prenotazioni. <a href="/percorsi">Esplora i percorsi</a> per trovare una struttura.</p>
+                            <p class="profilo-ristoratore-text">Gestisci in modo rapido strutture, richieste e messaggi dei camminatori dal tuo pannello operativo.</p>
+                            <div class="profilo-ristoratore-stats">
+                                <div class="profilo-ristoratore-stat">
+                                    <span class="label label-warning">In attesa</span>
+                                    <strong><%= (ristoratoreStats && ristoratoreStats.pendingRequests) ? ristoratoreStats.pendingRequests : 0 %></strong>
+                                    <span>richieste</span>
+                                </div>
+                                <div class="profilo-ristoratore-stat">
+                                    <span class="label label-info">Domande</span>
+                                    <strong><%= (ristoratoreStats && ristoratoreStats.questions) ? ristoratoreStats.questions : 0 %></strong>
+                                    <span>totali</span>
+                                </div>
+                            </div>
+                            <a href="/gestione" class="btn btn-default btn-lg"><i class="fa fa-cog"></i> Vai alla gestione strutture</a>
                         </div>
-                        <% } else { %>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+
+            <% if (user.role === 'camminatore') { %>
+            <div class="panel panel-default profilo-content-panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-calendar"></i> Le mie prenotazioni</h3>
+                </div>
+                <div class="panel-body">
+                    <% if (prenotazioni.length === 0) { %>
+                    <div class="profilo-empty">
+                        <p><strong>Nessuna prenotazione ancora.</strong></p>
+                        <p>Inizia dai percorsi e trova la struttura giusta per il tuo trekking.</p>
+                        <a href="/percorsi" class="btn btn-primary btn-sm"><i class="fa fa-map-signs"></i> Esplora i percorsi</a>
+                    </div>
+                    <% } else { %>
+                    <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -79,51 +136,48 @@
                                 <% }); %>
                             </tbody>
                         </table>
-                        <% } %>
-                    </div>
-
-                    <!-- Domande -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Le mie domande (<%= domande.length %>)</h3>
-                        </div>
-                        <% if (domande.length === 0) { %>
-                        <div class="panel-body">
-                            <p>Non hai ancora fatto domande.</p>
-                        </div>
-                        <% } else { %>
-                        <div class="list-group">
-                            <% domande.forEach(function(d) { %>
-                            <a href="/struttura/<%= d.id_struttura_link %>" class="list-group-item">
-                                <h4 class="list-group-item-heading"><%= d.nome_struttura %></h4>
-                                <p class="list-group-item-text"><%= d.testo %></p>
-                                <small class="text-muted"><%= new Date(d.creato_il).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) %></small>
-                            </a>
-                            <% }); %>
-                        </div>
-                        <% } %>
-                    </div>
-
-                    <% } else { %>
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Pannello ristoratore</h3>
-                        </div>
-                        <div class="panel-body">
-                            <p>Da qui puoi gestire le tue strutture, visualizzare le prenotazioni ricevute e rispondere alle domande dei camminatori.</p>
-                            <a href="/gestione" class="btn btn-primary"><i class="fa fa-cog"></i> Vai alla gestione strutture</a>
-                        </div>
                     </div>
                     <% } %>
                 </div>
             </div>
-        </div>
-    </section>
+
+            <div class="panel panel-default profilo-content-panel" id="profilo-domande">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-comments"></i> Le mie domande (<%= domande.length %>)</h3>
+                </div>
+                <div class="panel-body">
+                    <% if (domande.length === 0) { %>
+                    <p>Non hai ancora fatto domande.</p>
+                    <% } else { %>
+                    <div class="list-group">
+                        <% domande.forEach(function(d) { %>
+                        <div class="list-group-item">
+                            <h4 class="list-group-item-heading">
+                                <a href="/struttura/<%= d.id_struttura_link %>"><%= d.nome_struttura %></a>
+                            </h4>
+                            <p class="list-group-item-text"><%= d.testo %></p>
+                            <small class="text-muted"><%= new Date(d.creato_il).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) %></small>
+                            <form action="/domanda/<%= d.id %>/cancella" method="post" class="delete-question-form profilo-delete-form">
+                                <input type="hidden" name="redirect_to" value="/profilo">
+                                <button type="submit" class="btn btn-link btn-sm"><i class="fa fa-trash"></i> Cancella domanda</button>
+                            </form>
+                        </div>
+                        <% }); %>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+            <% } %>
+
+
+        </section>
+    </main>
 
     <%- include('partials/footer') %>
 
     <script src="/javascripts/jquery.min.js"></script>
     <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/notifications.js"></script>
 </body>
 
 </html>

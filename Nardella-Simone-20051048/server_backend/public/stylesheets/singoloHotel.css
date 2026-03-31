@@ -1,24 +1,649 @@
-.single-blog-content {
-    margin-top: 20px; /* Aggiunge uno spazio tra l'immagine e il contenuto */
+.post_block {
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(18, 31, 52, 0.08);
+    background: #fff;
 }
 
-.post_block img {
+.facility-subtitle {
+    font-size: 17px;
+}
+
+.facility-hero-image {
     display: block;
     width: 100%;
-    height: auto;
+    height: 380px;
+    object-fit: cover;
+    border-radius: 10px;
 }
-.reservation-wrapper {
-    margin-top: 20px; /* Imposta la distanza desiderata dalla foto */
-        width: 100%; /* Imposta la larghezza al 100% per occupare tutto lo spazio disponibile */
-        text-align: left; /* Allinea il contenuto del wrapper a sinistra */
-    
+
+/* Keep carousel frame height stable across images with different aspect ratios */
+.shg-hero-carousel .carousel-inner {
+    height: 380px;
+}
+
+.shg-hero-carousel .carousel-inner > .item {
+    height: 380px;
+}
+
+/* Override generic blog img spacing and Bootstrap auto-height inside carousel */
+.blog_wrapper .post_block .shg-hero-carousel .carousel-inner > .item > img.facility-hero-image {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    margin-right: 0;
+    border-radius: 0;
+}
+
+.shg-hero-carousel {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(17, 28, 46, 0.16);
+}
+
+.shg-hero-carousel .carousel-control {
+    background-image: none;
+    opacity: 0.9;
+}
+
+.shg-hero-carousel .carousel-control .glyphicon {
+    top: 48%;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
+}
+
+.facility-hero-placeholder {
+    height: 380px;
+    background: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.facility-placeholder-icon {
+    color: #a8adb5;
+}
+
+.shg-modern .heading-top {
+    margin-bottom: 55px;
+}
+
+.shg-modern .heading-top h1 {
+    letter-spacing: 6px;
+}
+
+.shg-modern .shg-subtitle {
+    font-size: 18px;
+    color: #4d5a70;
+}
+
+.shg-modern .post_block {
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(18, 31, 52, 0.08);
+}
+
+.shg-modern .shg-hero-image {
+    width: 100%;
+    height: 520px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.shg-modern .shg-hero-carousel {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(17, 28, 46, 0.16);
+}
+
+.shg-modern .shg-hero-carousel .carousel-control {
+    background-image: none;
+    opacity: 0.9;
+}
+
+.shg-modern .shg-hero-carousel .carousel-control .glyphicon {
+    top: 48%;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
+}
+
+.shg-modern .single-blog-content {
+    margin-top: 18px;
+    background: #f9fbff;
+    border: 1px solid #e5edf7;
+    border-radius: 10px;
+    padding: 18px 22px;
+}
+
+.shg-modern .author_block {
+    background: #fff;
+    border: 1px solid #edf2f8;
+    border-radius: 12px;
+    box-shadow: 0 8px 22px rgba(18, 31, 52, 0.08);
+    padding: 8px 8px 14px;
+    margin-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.shg-modern .author_block .shg-host-photo {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid #e2e9f5;
+    display: block;
+    margin: 0 auto 2px;
+}
+
+.author_block .shg-host-photo {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid #e2e9f5;
+    display: block;
+    margin: 0 auto 2px;
+}
+
+/* Aumenta la leggibilita del blocco host per tutte le strutture */
+.author_block h3 {
+    font-size: 24px;
+    margin-top: 0;
+}
+
+.author_block span {
+    font-size: 18px;
+    display: inline-block;
+    margin-top: 0;
+    color: #4d5a70;
+}
+
+.author_block p {
+    font-size: 18px;
+    line-height: 1.7;
+    margin-top: 6px;
+}
+
+/* Allinea il box host delle pagine struttura allo stile SHG */
+.single-page .author_block {
+    padding: 12px 8px 18px;
+    margin-top: 12px;
+}
+
+.single-page .author_block h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.single-page .author_block h3 {
+    font-size: 24px;
+    margin: 2px 0 6px;
+}
+
+.single-page .author_block span {
+    font-size: 18px;
+    display: inline-block;
+    margin-bottom: 6px;
+    color: #4d5a70;
+}
+
+.single-page .author_block p {
+    font-size: 18px;
+    line-height: 1.7;
+    margin-top: 6px;
+}
+
+.shg-modern .author_block h3 {
+    font-size: 24px;
+    margin-top: 0;
+}
+
+.shg-modern .author_block span {
+    font-size: 18px;
+    display: inline-block;
+    margin-top: 0;
+    color: #4d5a70;
+}
+
+.shg-modern .author_block p {
+    font-size: 18px;
+    line-height: 1.7;
+    margin-top: 6px;
+}
+
+.shg-modern .comments .comment_block {
+    background: #fff;
+    border: 1px solid #edf2f8;
+    border-radius: 10px;
+    padding: 14px 0;
+}
+
+.shg-modern .sidebar .widget {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(20, 28, 40, 0.08);
+    padding: 6px 14px 14px;
+    margin-bottom: 18px;
+}
+
+.shg-modern .sidebar .widget:last-child {
+    margin-bottom: 0;
+}
+
+.shg-modern .sidebar .widget .heading {
+    margin: 0 0 4px;
+    line-height: 1.12;
+    font-size: 21px;
+}
+
+.shg-modern .shg-booking-box {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    background: linear-gradient(145deg, #f4f8ff, #eaf1ff);
+    border: 1px solid #d7e3fb;
+    border-radius: 12px;
+    margin-top: 18px;
+    padding: 14px 12px 24px;
+    box-shadow: 0 10px 24px rgba(35, 74, 145, 0.14);
+}
+
+.shg-modern .reservation-form h3 {
+    margin-top: 0;
+    color: #1e3f74;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.shg-modern .reservation-form h3 .fa {
+    margin-right: 8px;
+}
+
+.shg-modern .shg-booking-btn {
+    width: 100%;
+    margin-top: 8px;
+    border-radius: 28px;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow: 0 8px 20px rgba(35, 74, 145, 0.22);
+    background: #2f62b8;
+    border-color: #2f62b8;
+}
+
+.shg-modern .shg-booking-btn:hover {
+    background: #254f95;
+    border-color: #254f95;
+    transform: translateY(-1px);
 }
 
 @media (max-width: 767px) {
-    .reservation-wrapper {
-        margin-top: 0; /* Modifica il margine superiore per dispositivi mobili se necessario */
+    .shg-modern .shg-hero-image {
+        height: 320px;
+    }
+
+    .shg-hero-carousel .carousel-inner,
+    .shg-hero-carousel .carousel-inner > .item,
+    .blog_wrapper .post_block .shg-hero-carousel .carousel-inner > .item > img.facility-hero-image {
+        height: 250px;
     }
 }
+
+.single-blog-content {
+    margin-top: 18px;
+    background: #f9fbff;
+    border: 1px solid #e5edf7;
+    border-radius: 10px;
+    padding: 18px 22px;
+}
+
+.single-blog-content h2 {
+    margin-top: 0;
+}
+
+.facility-description {
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.comments .comment_block {
+    background: #fff;
+    border: 1px solid #eef1f5;
+    border-radius: 10px;
+    padding: 16px 0;
+}
+
+.qa-avatar {
+    width: 74px;
+    height: 74px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #e2e9f5;
+    display: block;
+    margin: 2px auto 0;
+}
+
+.reply-form-collapsed {
+    display: none;
+}
+
+.reply-inline-form {
+    margin: 10px 0 4px;
+    padding: 12px;
+    border: 1px solid #e2e8f3;
+    border-radius: 8px;
+    background: #f8fbff;
+}
+
+button.readmore {
+    border: 0;
+    background: none;
+    padding: 0;
+    color: #f04c26;
+    font-weight: 600;
+}
+
+button.readmore:hover {
+    text-decoration: underline;
+}
+
+.question-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+}
+
 .icone-side {
-    margin-right: 10px;
+    margin-right: 8px;
+    font-size: 18px;
+    vertical-align: middle;
+}
+
+.delete-question-form {
+    margin: 0;
+}
+
+.profilo-delete-form {
+    margin-top: 10px;
+}
+
+.delete-question-btn {
+    color: #111 !important;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.delete-question-btn:hover,
+.delete-question-btn:focus {
+    color: #000 !important;
+    text-decoration: underline;
+}
+
+.reviews-block {
+    margin-top: 30px;
+    padding: 24px 22px;
+    background: #fff;
+    border: 1px solid #dde6f2;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(18, 31, 52, 0.08);
+    clear: both;
+}
+
+.reviews-block h2 {
+    font-size: 34px;
+    margin: 0 0 8px;
+    letter-spacing: 1px;
+}
+
+.review-summary {
+    margin-bottom: 18px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #3b4a62;
+}
+
+.review-summary strong {
+    font-size: 22px;
+    color: #1f3456;
+}
+
+.review-average-value {
+    margin-right: 8px;
+}
+
+.review-stars-summary {
+    vertical-align: middle;
+}
+
+.review-item {
+    border: 1px solid #e6edf7;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+}
+
+.review-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.review-item-header strong {
+    font-size: 20px;
+    color: #1f3456;
+}
+
+.review-item p {
+    font-size: 17px;
+    line-height: 1.7;
+    color: #2f3d55;
+    margin: 10px 0 8px;
+}
+
+.review-stars {
+    color: #f0b319;
+    font-size: 24px;
+    letter-spacing: 2px;
+}
+
+.sidebar-rating-box {
+    margin-bottom: 16px;
+    padding: 12px 10px;
+    border: 1px solid #e0e8f5;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #f9fbff 0%, #f3f8ff 100%);
+}
+
+.sidebar-rating-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #4a5c7a;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.sidebar-rating-content {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sidebar-rating-content .review-average-value {
+    font-size: 24px;
+    margin-right: 0;
+}
+
+.sidebar-rating-content .review-stars {
+    font-size: 22px;
+}
+
+.sidebar-rating-empty {
+    display: block;
+    font-size: 14px;
+    color: #4f6383;
+}
+
+.review-stay-date {
+    display: inline-block;
+    font-size: 15px;
+    color: #4f6383;
+    font-weight: 600;
+}
+
+.shg-modern .shg-login-cta-text {
+    font-size: 20px;
+    line-height: 1.5;
+    font-weight: 600;
+    color: #2f3d55;
+    margin: 10px 0 0;
+}
+
+.shg-modern .shg-login-cta-text a {
+    color: #2f62b8;
+    font-weight: 800;
+    text-decoration: underline;
+}
+
+.review-form {
+    margin-top: 18px;
+    border-top: 1px dashed #dde6f2;
+    padding-top: 18px;
+}
+
+.review-form h3 {
+    margin: 0 0 12px;
+    font-size: 24px;
+}
+
+.rating-input {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    margin-bottom: 12px;
+}
+
+.rating-input input {
+    display: none;
+}
+
+.rating-input label {
+    cursor: pointer;
+    font-size: 34px;
+    color: #d0d7e6;
+    padding: 0 4px;
+    margin: 0;
+}
+
+.rating-input label:hover,
+.rating-input label:hover ~ label,
+.rating-input input:checked ~ label {
+    color: #f0b319;
+}
+
+.review-form textarea.form-control {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.leave_reply::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.owner-self-question-note {
+    font-size: 17px;
+    line-height: 1.6;
+    margin-left: 10px;
+    padding-left: 10px;
+    border-left: 3px solid #e2e8f3;
+}
+
+@media (max-width: 767px) {
+    .owner-self-question-note {
+        font-size: 16px;
+        margin-left: 8px;
+        padding-left: 8px;
+    }
+
+    .reviews-block h2 {
+        font-size: 28px;
+    }
+
+    .review-summary {
+        font-size: 16px;
+    }
+
+    .review-item-header strong {
+        font-size: 18px;
+    }
+
+    .review-item p {
+        font-size: 16px;
+    }
+
+    .review-stars {
+        font-size: 20px;
+    }
+}
+
+.sidebar .widget {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(20, 28, 40, 0.08);
+    padding: 4px 16px 16px;
+    margin-bottom: 18px;
+}
+
+.sidebar .widget:last-child {
+    margin-bottom: 0;
+}
+
+.sidebar .widget .heading {
+    margin: 0 0 4px;
+    margin-bottom: 4px;
+    padding-top: 0;
+    line-height: 1.12;
+    font-size: 22px;
+}
+
+/* Override blog-style.css default (margin-top: 35px; padding: 10px 10px) */
+.blog_wrapper .sidebar .widget .heading {
+    margin-top: 0 !important;
+    margin-bottom: 4px !important;
+    padding: 0 !important;
+    line-height: 1.12;
+}
+
+.sidebar .widget ul {
+    margin-top: 0;
+}
+
+.sidebar .widget li,
+.sidebar .widget p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.reservation-box {
+    background: linear-gradient(160deg, #e7f5ff, #d6eef8);
+    border-radius: 12px;
+    margin-top: 18px;
+    padding: 20px 18px 24px;
+}
+
+.reservation-form h3 {
+    margin-top: 0;
+    color: #14324d;
+}
+
+@media (max-width: 767px) {
+    .facility-hero-image,
+    .facility-hero-placeholder {
+        height: 250px;
+    }
 }

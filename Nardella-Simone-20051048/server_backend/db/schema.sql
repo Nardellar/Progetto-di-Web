@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS utenti (
   password_hash TEXT NOT NULL,
   nome TEXT NOT NULL,
   cognome TEXT NOT NULL,
+  immagine_profilo TEXT,
   role TEXT NOT NULL CHECK(role IN ('camminatore', 'ristoratore')),
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP --serve ai risotratori per mostrare su sito anzianita dell''account
 );
@@ -29,6 +30,7 @@ CREATE TABLE IF NOT EXISTS facilities (
   id_cammino INTEGER,
   nome TEXT NOT NULL,
   citta TEXT NOT NULL,
+  numero_tappa INTEGER CHECK(numero_tappa >= 0),
   indirizzo TEXT,
   descrizione TEXT,
   immagine TEXT,
@@ -37,6 +39,34 @@ CREATE TABLE IF NOT EXISTS facilities (
   FOREIGN KEY (email_ristoratore) REFERENCES utenti(email),
   FOREIGN KEY (id_cammino) REFERENCES trails(id),
   UNIQUE (id_cammino, nome)
+);
+
+CREATE TABLE IF NOT EXISTS facility_images (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id_struttura INTEGER NOT NULL,
+  percorso_immagine TEXT NOT NULL,
+  creato_il DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (id_struttura) REFERENCES facilities(id),
+  UNIQUE (id_struttura, percorso_immagine)
+);
+
+CREATE TABLE IF NOT EXISTS service_catalog (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  slug TEXT NOT NULL UNIQUE,
+  nome TEXT NOT NULL,
+  icon_type TEXT NOT NULL CHECK(icon_type IN ('fa', 'material')),
+  icon_value TEXT NOT NULL,
+  sort_order INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS facility_services (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id_struttura INTEGER NOT NULL,
+  id_servizio INTEGER NOT NULL,
+  creato_il DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (id_struttura) REFERENCES facilities(id),
+  FOREIGN KEY (id_servizio) REFERENCES service_catalog(id),
+  UNIQUE (id_struttura, id_servizio)
 );
 
 CREATE TABLE IF NOT EXISTS facility_unavailability (
@@ -82,4 +112,16 @@ CREATE TABLE IF NOT EXISTS answers (
   creato_il DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (id_domanda) REFERENCES questions(id),
   FOREIGN KEY (email_risponditore) REFERENCES utenti(email)
+);
+
+CREATE TABLE IF NOT EXISTS reviews (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id_struttura INTEGER NOT NULL,
+  email_camminatore TEXT NOT NULL,
+  voto INTEGER NOT NULL CHECK(voto BETWEEN 1 AND 5),
+  testo TEXT,
+  creato_il DATETIME DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (id_struttura, email_camminatore),
+  FOREIGN KEY (id_struttura) REFERENCES facilities(id),
+  FOREIGN KEY (email_camminatore) REFERENCES utenti(email)
 );

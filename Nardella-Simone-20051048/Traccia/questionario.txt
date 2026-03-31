@@ -1,0 +1,97 @@
+1. Descrizione sintetica dello scopo della applicazione scelta: 
+
+Un sito di trekking; che permetta ai ristoranti e rifugi sul percorso di ricevere comode prenotazioni per vitto e/o alloggio. Ovviamente il sito fornisce anche molte informazioni utili ai camminatori che decidono di intraprendere il viaggio e permette la condivisione di video, segnalazioni sul percorso e domande. 
+
+ 
+
+2. Numero di utenti (con registrazione e login) previsti. Per avere il pieno punteggio (30L/30) è necessario supportare almeno due tipi diversi di utenti (ad es.: venditore e compratore; utente standard e utente amministratore; etc.). E' prevista una penalizzazione di 3 punti per i progetti che supportano un solo tipo di utente registrato. L'utente generico che fruisce del sito senza effettuare login non è compreso nel conteggio degli utenti 
+
+2 utenti registrati 
+
+ 
+
+3. Quali operazioni può fare sul sito un utente anonimo (non registrato)?                    La possibilità di navigare sul sito o potersi registrare non viene considerata nel conteggio delle operazioni disponibili per utenti non registrati 
+
+Un utente anonimo può fare domande sul FAQ pubblico relativo ad un sentiero o domande alle strutture circa i loro servizi. 
+
+ 
+
+4. E' possibile per almeno un tipo di utente registrarsi sulla piattaforma? 
+
+Si 
+
+ 
+
+5. Quali operazioni possono fare sul sito gli utenti con registrazione, dopo il login, separate per tipo di utente? L’applicazione deve tenere conto di quale utente è correntemente loggato: a titolo di esempio, un’applicazione per la gestione di contenuti web non può permettere la modifica dei contenuti stessi ad utenti diversi dai creatori. 
+
+Se registrato: condividere media, rispondere alle domande 
+
+Ristoratori: aggiungere nuove attività sul percorso, modificare orari di apertura, accettare prenotazioni, rispondere alle recensioni  
+
+Camminatori: recensire le strutture, fare prenotazioni. 
+
+ 
+
+6. Il sito deve prevedere una base dati per garantire la persistenza dei dati inseriti. Quali informazioni si prevede di memorizzare, in aggiunta alle informazioni relative agli utenti? 
+
+Informazioni sulle strutture (recensioni, posti disponibili…) 
+
+Domande e risposte degli utenti. 
+
+ 
+
+ 
+
+7. Quali funzionalità di ricerca il sito metterà a disposizione, e a quali utenti verranno rese disponibili?  Nota bene: la sola selezione, tramite applicazioni di filtri, di quali elementi visualizzare in una pagina non costituisce una vera funzionalità di ricerca. 
+
+Cercare le strutture per nome. Cercare i percorsi per nome. Cercare le città (dei sentieri) per nome 
+
+ 
+
+8. Quali elementi saranno utilizzati per effettuare la ricerca? Selezionare tutte le opzioni applicabili 
+
+Ricerca testuale 
+
+ 
+
+ 
+
+Commento prof: Non chiaro chi gestisce i percorsi (aggiunta/Rimozione) e dove sono salvati. Valutare ricerca su mappa 
+
+
+
+
+
+CONCLUSIONI: 
+
+- NO PRENOTAZIONI REAL TIME, SOLO RICHIESTE PRENOTAZIONE (giustificazionw: è come fanno i rifugi in montagna, per motivi di approvigionamento un rifugiio potrenbe non voler sempre avere massima capienza e deve valtare bene se avere nuovi ospiti in quel giorno)
+
+Risposta	Problema	Suggerimento
+Q1	Ok	-
+Q3	Due tipi di Q&A (FAQ + strutture)----->Ridurre a uno solo di domande alle strutture (opz: FAQ statiche per cammini)
+Q5	Prenotazioni complesse	----> “Richiesta di prenotazione” invece di gestione disponibilità in tempo reale
+Q5	“Condividere media”	---> Specificare: solo link a YouTube, non upload <<---- DA VALUTARE SE FARO VERAMENTE QUESTO FAQ
+Q5	Chi gestisce i percorsi	-----> Aggiungere: percorsi gestiti da admin o pre-caricati
+Q7	Ricerca su mappa ---> Opzionale come extra; non obbligatoria
+
+
+giustificazioni:
+perchè SSR? 📱
+- Performance in condizioni di rete precarie:
+  Il tuo target include camminatori che potrebbero usare il sito da uno smartphone
+  con una connessione 3G debole in mezzo ai boschi. L'SSR invia un file HTML molto
+  leggero che il browser mostra quasi istantaneamente. Una SPA richiederebbe il
+  download e l'esecuzione di un grosso pacchetto JavaScript prima di mostrare
+  l'interfaccia, consumando più dati e batteria.
+
+- Sicurezza e robustezza della logica di business: Gestendo le richieste di
+  prenotazione e i ruoli (camminatore vs. ristoratore), avere tutto centralizzato
+  sul server (SSR) riduce i bug. La logica di validazione e il controllo degli
+  accessi rimangono "blindati" sul server, senza dover duplicare i controlli anche
+  nel codice lato client.
+
+Perchè gestione di prenotazioni come richieste invece che prenotazioni real-time?
+- Realismo e semplicità: I rifugi e ristoranti in montagna spesso non hanno un
+sistema di prenotazione in tempo reale, ma accettano richieste via telefono
+questo è dovuto dal fatto che i rifugi gestiscoo logistica cibo ed è piu complicato gestire cliento
+non hanno interesse a rimpire sempre il più possibile

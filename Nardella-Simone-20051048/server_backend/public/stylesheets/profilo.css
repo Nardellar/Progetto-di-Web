@@ -1,0 +1,125 @@
+.profilo-page {
+    padding: 40px 0;
+    min-height: 82vh;
+    background: #f7f9fc;
+}
+
+.profilo-card,
+.profilo-content-panel {
+    border: 1px solid #e6ebf2;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(20, 32, 52, 0.08);
+}
+
+.profilo-headline {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.profilo-name {
+    margin: 0 0 4px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.profilo-email {
+    margin-bottom: 8px;
+    color: #657184;
+}
+.profilo-avatar {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #e9edf5;
+    box-shadow: 0 4px 14px rgba(20, 32, 52, 0.16);
+}
+
+.profilo-edit-box {
+    margin-top: 16px;
+    border-top: 1px solid #eef2f8;
+    padding-top: 14px;
+}
+
+.profilo-edit-box h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 18px;
+}
+
+.profilo-content-panel .panel-heading {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.profilo-empty {
+    color: #5f6d82;
+}
+
+.profilo-empty p {
+    margin-bottom: 8px;
+}
+
+.profilo-content-panel .table {
+    margin-bottom: 0;
+}
+
+.profilo-ristoratore-panel .panel-body {
+    background: linear-gradient(135deg, #fbfdff 0%, #f3f7fc 100%);
+}
+
+.profilo-ristoratore-panel .panel-title {
+    font-size: 20px;
+}
+
+.profilo-ristoratore-text {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.profilo-ristoratore-stats {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.profilo-ristoratore-stat {
+    background: #fff;
+    border: 1px solid #e6ebf2;
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.profilo-ristoratore-stat strong {
+    font-size: 22px;
+    color: #1d2736;
+}
+
+@media (min-width: 992px) {
+    .profilo-ristoratore-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767px) {
+    .profilo-headline {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .profilo-name {
+        font-size: 22px;
+    }
+}
+
+.profilo-edit-box .help-block {
+    margin-bottom: 10px;

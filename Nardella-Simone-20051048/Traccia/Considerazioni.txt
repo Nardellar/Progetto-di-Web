@@ -1,0 +1,99 @@
+ricorda che il controllo degli inpujt deve essere fatto sia client side (nell'interfaccia per quel che si può) che server side. ricorda, server side deve 
+comunuqe riesceguire i controlli già fatti dal client side
+
+1. decidi bene che funzionalità deve avere il tuo sito
+
+2. scrivere il DB (usa sqllite con sqlite studio)
+
+3. prova qualche route (almeno accesso e iscriviti)
+
+4. fai registrazione, login e logout
+
+5. completa la grafica, le query e le funzionalità
+
+6. avvia suvito express per struttura cartelle
+
+
+
+
+
+
+ci sono 4 aree: DB, Server, HTML, Javascript (routes)
+
+(occhio) sqlite di default non attiva chiavi esterne le devi attivare quando apri connessione con DB
+
+l'approccio server-side rendering è più semplice
+
+conisgli andre-waka:
+Non mischiare single page (cioè client side) con ssr(cioè node)
+
+scegli e si coerente se il sito è desktop only/first o mobile first/only..... parti scrivendo il progetto per desktop only/first poi se hai tempo valuti alternative
+
+
+
+Scelta tecnica consigliata (per stare nei tempi):
+- Usa Node + Express + SQLite + Passport + EJS (SSR).
+- Non mischiare SPA/client routing con SSR: nel tuo caso è meglio solo SSR (coerente anche con le tue note in Traccia/Considerazioni.txt).
+Riusa struttura e stile delle pagine attuali in Nardella-Simone-20051048/*.html convertendole in viste EJS.
+
+
+MVP che soddisfa i requisiti:
+- 2 ruoli: camminatore e ristoratore.
+- Pubblico: vedere percorsi/strutture + ricerca testuale.
+- Loggato camminatore: inviare richiesta prenotazione, fare domanda a struttura.
+- Loggato ristoratore: vedere richieste della propria struttura, accettare/rifiutare, rispondere alle domande.
+- DB usato davvero per contenuti (non solo utenti): richieste, domande/risposte, strutture.
+
+Schema DB minimo (sufficiente per l’esame):
+- users(id, email, password_hash, nome, role)
+- trails(id, name, slug, city_start, city_end, description)
+- facilities(id, owner_user_id, name, city, address, description)
+- booking_requests(id, facility_id, walker_user_id, check_in, check_out, guests, status)
+- questions(id, facility_id, author_user_id, text, created_at)
+- answers(id, question_id, responder_user_id, text, created_at)
+
+
+Piano 14 giorni:
+Giorni 1-2: setup progetto Express/EJS + static assets + struttura cartelle.
+
+Giorno 3: DB schema + seed + attivazione foreign keys SQLite (PRAGMA foreign_keys = ON).
+
+Giorni 4-5: auth completa (register/login/logout) con Passport.
+
+Giorni 6-7: pagine pubbliche SSR (/, /percorsi, /strutture, dettagli).
+
+Giorni 8-9: funzionalità camminatore (richiesta prenotazione + domanda).
+
+Giorni 10-11: funzionalità ristoratore (gestione richieste + risposte).
+
+Giorno 12: ricerca testuale reale (LIKE) su strutture, percorsi, città.
+
+Giorni 13-14: bugfix, pulizia stile/requisiti, test manuali Chrome/Firefox, demo data.
+
+Cosa modificare nel tuo questionario (per coerenza e tempi):
+
+- Conferma che i percorsi sono precaricati nel DB (non admin completo in questa versione).
+- Conferma “prenotazioni” come richieste (pending/accepted/rejected) e non realtime.
+- Limita Q&A a domande sulle strutture (FAQ sentieri solo statiche o escluse).
+- Ricerca: testuale su nome struttura, nome percorso, città.
+
+Tagli intelligenti se sei in ritardo:
+Niente upload media (al massimo link opzionale).
+Niente CRUD completo percorsi.
+Niente dashboard complesse: solo pagine essenziali per ogni ruolo.
+Niente API esterne/deploy finché il core non è stabile.
+
+
+
+
+
+ho usato "multer" oer caricare immagini
+
+
+GIORNI:
+
+29-31-1: completamento funzionalità e miglioramento estetica
+2: completa altri percorsi oltre via degli dei e shg hotel
+3: ricontrolla specifiche e funzionalità che avevo specificato in form passato
+4: testing approfodnito e check di aver applciato solo sturmenti del corso ed evenutali strumenti esterni.
+5-6: readme e commentazione codice

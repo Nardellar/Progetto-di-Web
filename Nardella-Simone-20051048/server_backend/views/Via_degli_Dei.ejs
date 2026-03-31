@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="/stylesheets/owl-carousel/owl.carousel.min.css">
     <link rel="stylesheet" href="/stylesheets/owl-carousel/owl.theme.default.min.css">
     <link rel="stylesheet" href="/stylesheets/sentiero.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
    
 </head>
 
@@ -152,17 +154,65 @@
                         <!-- panel-group -->
                         <div class="booking-section">
                             <h2>Ti ha convinto? Prenota una struttura lungo il percorso!</h2>
-                            <a href="/strutture" class="btn btn-primary">Prenota ora</a>
+                            <a href="/strutture?cammino=via-degli-dei" class="btn btn-primary">Prenota ora</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <aside class="col-md-6">
                     <div class="banner-heading">
-                        <h2>Mappa</h2>
+                        <h2>Info </h2>
                     </div>
-                    <div id="map" class="map"></div>
-                    <img src="/images/Via degli Dei mappa.jpg">
-                </div>
+                    <div class="panel panel-default trekking-info-panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-map-signs"></i> Info trekking</h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="list-unstyled">
+                                <li><strong>Partenza:</strong> Bologna</li>
+                                <li><strong>Arrivo:</strong> Firenze</li>
+                                <li><strong>Regione:</strong> Emilia-Romagna / Toscana</li>
+                                <li><strong>Numero tappe:</strong> 5</li>
+                                <li><strong>Lunghezza totale:</strong> 130 km</li>
+                                <li><strong>Stagione ideale:</strong> Primavera / Autunno</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="banner-heading" style="margin-top: 18px;">
+                        <h2>Galleria tappe</h2>
+                    </div>
+                    <div id="tappeGallery" class="carousel slide tappa-carousel" data-ride="carousel">
+                        <div class="carousel-inner" role="listbox">
+                            <div class="item active">
+                                <img src="/images/Via degli Dei.jpg" alt="Via degli Dei - tappa 1">
+                                <div class="carousel-caption">Tappa 1: Bologna - Badolo</div>
+                            </div>
+                            <div class="item">
+                                <img src="/images/Via degli Dei.jpg" alt="Via degli Dei - tappa 2">
+                                <div class="carousel-caption">Tappa 2: Badolo - Madonna dei Fornelli</div>
+                            </div>
+                            <div class="item">
+                                <img src="/images/Via degli Dei.jpg" alt="Via degli Dei - tappa 3">
+                                <div class="carousel-caption">Tappa 3: Madonna dei Fornelli - Passo della Futa</div>
+                            </div>
+                            <div class="item">
+                                <img src="/images/Via degli Dei.jpg" alt="Via degli Dei - tappa 4">
+                                <div class="carousel-caption">Tappa 4: Passo della Futa - San Piero a Sieve</div>
+                            </div>
+                            <div class="item">
+                                <img src="/images/Via degli Dei.jpg" alt="Via degli Dei - tappa 5">
+                                <div class="carousel-caption">Tappa 5: San Piero a Sieve - Firenze</div>
+                            </div>
+                        </div>
+                        <a class="left carousel-control" href="#tappeGallery" role="button" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">Precedente</span>
+                        </a>
+                        <a class="right carousel-control" href="#tappeGallery" role="button" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">Successiva</span>
+                        </a>
+                    </div>
+                </aside>
             </div>
         </div>
     </section>
@@ -183,7 +233,7 @@
                             <% if (f.prezzo_notte) { %>
                             <p><strong>&euro;<%= f.prezzo_notte.toFixed(2) %></strong> / notte</p>
                             <% } %>
-                            <a href="/struttura/<%= f.id %>" class="btn btn-primary btn-sm">Dettagli e prenota</a>
+                            <a href="/struttura/<%= f.id %>" class="btn btn-primary btn-lg">Dettagli e prenota</a>
                         </div>
                     </div>
                 </div>
@@ -192,6 +242,12 @@
         </div>
     </section>
     <% } %>
+    <section id="mappa-interattiva" style="padding: 40px 0 60px;">
+        <div class="container">
+            <h2 style="text-align:center; margin-bottom:20px;">Mappa interattiva del percorso</h2>
+            <div id="via-degli-dei-map" style="height: 480px; border-radius: 10px; overflow: hidden;"></div>
+        </div>
+    </section>
 
     <%- include('partials/footer') %>
 
@@ -199,12 +255,11 @@
     <script src="/javascripts/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <!-- Owl Stylesheets -->
     <script src="/javascripts/owl-carousel/owl.carousel.min.js"></script>
-    <!-- Custom Script -->
-    <script src="/javascripts/script.js"></script>
-    <!-- Map Script -->
-    <script src="/javascripts/map.js"></script>
+    <script src="/javascripts/via-degli-dei-map.js"></script>
 </body>
 
 </html>

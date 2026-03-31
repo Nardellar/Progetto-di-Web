@@ -1,0 +1,88 @@
+.app-notifications {
+    position: fixed;
+    top: 84px;
+    right: 20px;
+    width: min(420px, calc(100vw - 32px));
+    z-index: 1200;
+    margin: 0;
+    pointer-events: none;
+}
+
+.app-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 8px 20px rgba(26, 35, 50, 0.1);
+    border: 1px solid transparent;
+    animation: app-notice-in 0.25s ease-out;
+    pointer-events: auto;
+}
+
+.app-notice i {
+    font-size: 20px;
+    margin-top: 1px;
+}
+
+.app-notice-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.app-notice-content strong {
+    font-size: 14px;
+    letter-spacing: 0.2px;
+}
+
+.app-notice-content span {
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.app-notice-close {
+    border: 0;
+    background: transparent;
+    font-size: 24px;
+    line-height: 1;
+    padding: 0;
+    opacity: 0.6;
+}
+
+.app-notice-close:hover {
+    opacity: 1;
+}
+
+.app-notice-success {
+    background: #eefaf1;
+    border-color: #b8e8c2;
+    color: #23633b;
+}
+
+.app-notice-error {
+    background: #fff2f2;
+    border-color: #f1b8b8;
+    color: #8f2525;
+}
+
+@keyframes app-notice-in {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 767px) {
+    .app-notifications {
+        top: 72px;
+        right: 10px;
+        width: calc(100vw - 20px);
+    }
+}

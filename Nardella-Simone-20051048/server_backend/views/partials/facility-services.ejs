@@ -1,0 +1,21 @@
+<h2 class="heading">Servizi</h2>
+<% if (facilityServices && facilityServices.length) { %>
+<ul>
+    <% facilityServices.forEach(function(service) { %>
+    <li>
+        <a>
+            <% if (service.icon_type === 'material') { %>
+            <i class="material-icons icone-side" aria-hidden="true"><%= service.icon_value %></i>
+            <% } else { %>
+            <i class="fa <%= service.icon_value %> icone-side" aria-hidden="true"></i>
+            <% } %>
+            <%= service.nome %>
+        </a>
+    </li>
+    <% }); %>
+</ul>
+<% } else { %>
+<p class="text-muted">Nessun servizio configurato.</p>
+<% } %>
+
+

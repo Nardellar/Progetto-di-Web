@@ -1,0 +1,6 @@
+per avviare serve scrivi sempre:
+"npm run dev" NON npm start
+
+serve per aggiornare pagine in tempo reale
+
+ricorda di usare express validator per sanificazione input

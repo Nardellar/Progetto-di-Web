@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/stylesheets/owl-carousel/owl.theme.default.min.css">
     <link rel="stylesheet" href="/stylesheets/jquery.fancybox.min.css">
     <link rel="stylesheet" href="/stylesheets/gallery.css">
+    <link rel="stylesheet" href="/stylesheets/percorsi.css">
 </head>
 
 <body>
@@ -23,31 +24,112 @@
         <%- include('partials/navbar') %>
     </section>
 
-    <section class="gallery">
+    <section class="percorsi-hero">
         <div class="container">
-            <h2>Avventure <span>epiche</span> ti attendono!</h2>
-            <h4>Scopri il tuo sentiero ideale e immergiti nella natura selvaggia:</h4>
-
-            <% for (let i = 0; i < trails.length; i += 3) { %>
-            <div class="images">
-                <div class="row">
-                    <% for (let j = i; j < Math.min(i + 3, trails.length); j++) { %>
-                    <div class="col-md-4">
-                        <a href="/sentiero/<%= trails[j].slug %>">
-                            <div class="image-container">
-                                <img src="/images/<%= trails[j].immagine %>" alt="<%= trails[j].nome %>" />
-                                <div class="overlay">
-                                    <div class="overlay-text"><%= trails[j].nome %></div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <% } %>
-                </div>
+            <div class="percorsi-hero-box">
+                <p class="kicker">Catalogo Cammini</p>
+                <h1>Trova il percorso perfetto per la tua prossima avventura</h1>
+                <p class="subtitle">Dai sentieri iconici alle traversate più impegnative: confronta tappe, lunghezza e area geografica in un colpo d'occhio.</p>
+                <a href="/cerca?q=" class="btn btn-default hero-cta"><i class="fa fa-search"></i> Esplora con la ricerca</a>
             </div>
-            <% } %>
         </div>
     </section>
+
+    <main class="percorsi-main">
+        <section class="container">
+            <div class="section-head">
+                <h2>Percorsi disponibili</h2>
+                <span class="count"><%= trails.length %> cammini</span>
+            </div>
+            <div class="row">
+                <div class="col-md-9 col-sm-8">
+                    <div class="row">
+                        <% trails.forEach(function(trail, index) { %>
+                        <article class="col-md-4 col-sm-6">
+                            <div class="trail-card">
+                                <a href="/sentiero/<%= trail.slug %>" class="trail-image-link">
+                                    <% if (trail.immagine) { %>
+                                    <img src="/images/<%= trail.immagine %>" alt="<%= trail.nome %>" class="trail-image">
+                                    <% } else { %>
+                                    <div class="trail-image placeholder">
+                                        <i class="fa fa-map-signs"></i>
+                                    </div>
+                                    <% } %>
+                                </a>
+
+                                <div class="trail-content">
+                                    <h3><a href="/sentiero/<%= trail.slug %>"><%= trail.nome %></a></h3>
+                                    <p class="route"><i class="fa fa-map-marker"></i> <%= trail.citta_partenza %> &rarr; <%= trail.citta_arrivo %></p>
+
+                                    <div class="chips">
+                                        <% if (trail.regione) { %><span><%= trail.regione %></span><% } %>
+                                        <% if (trail.stagione_ideale) { %><span><%= trail.stagione_ideale %></span><% } %>
+                                    </div>
+
+                                    <ul class="trail-meta">
+                                        <li><strong>Tappe:</strong> <%= trail.numero_tappe || '-' %></li>
+                                        <li><strong>Lunghezza:</strong> <%= trail.lunghezza_totale_km || '-' %> km</li>
+                                    </ul>
+
+                                    <p class="desc"><%= trail.descrizione %></p>
+                                    <a class="btn btn-primary trail-cta" href="/sentiero/<%= trail.slug %>">Scopri il percorso</a>
+                                </div>
+                            </div>
+                        </article>
+                        <% if ((index + 1) % 2 === 0) { %>
+                        <div class="clearfix visible-sm-block"></div>
+                        <% } %>
+                        <% if ((index + 1) % 3 === 0) { %>
+                        <div class="clearfix visible-md-block visible-lg-block"></div>
+                        <% } %>
+                        <% }); %>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-4">
+                    <div class="percorsi-sidebar sidebar">
+                        <form class="filter-form" action="/percorsi" method="get">
+                            <div class="widget">
+                                <h3 class="heading">Ricerca e filtri</h3>
+
+                                <div class="form-group">
+                                    <label for="tappeRange">Numero tappe</label>
+                                    <select class="form-control" id="tappeRange" name="tappeRange">
+                                        <option value="">Tutte</option>
+                                        <option value="1-4" <%= (activeFilters && activeFilters.tappeRange === '1-4') ? 'selected' : '' %>>1-4 tappe</option>
+                                        <option value="5-7" <%= (activeFilters && activeFilters.tappeRange === '5-7') ? 'selected' : '' %>>5-7 tappe</option>
+                                        <option value="8-11" <%= (activeFilters && activeFilters.tappeRange === '8-11') ? 'selected' : '' %>>8-11 tappe</option>
+                                        <option value="12+" <%= (activeFilters && activeFilters.tappeRange === '12+') ? 'selected' : '' %>>12+ tappe</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="regione">Regione</label>
+                                    <select class="form-control" id="regione" name="regione">
+                                        <option value="">Tutte</option>
+                                        <% (filterOptions && filterOptions.regioni ? filterOptions.regioni : []).forEach(function (r) { %>
+                                        <option value="<%= r %>" <%= (activeFilters && activeFilters.regione === r) ? 'selected' : '' %>><%= r %></option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="stagione">Stagione ideale</label>
+                                    <select class="form-control" id="stagione" name="stagione">
+                                        <option value="">Tutte</option>
+                                        <% (filterOptions && filterOptions.stagioni ? filterOptions.stagioni : []).forEach(function (s) { %>
+                                        <option value="<%= s %>" <%= (activeFilters && activeFilters.stagione === s) ? 'selected' : '' %>><%= s %></option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="submit filter-submit">Applica filtri</button>
+                                <a href="/percorsi" class="reset-filters">Reset</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <%- include('partials/footer') %>
 

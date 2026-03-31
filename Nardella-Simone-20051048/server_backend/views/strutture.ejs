@@ -23,18 +23,28 @@
 
     <section class="blog_wrapper">
         <div class="container">
-            <div class="heading-top">
-                <h1>Strutture</h1>
+            <% var filters = activeFilters || {}; %>
+            <% var options = filterOptions || { tappe: [], services: [], sortOptions: [] }; %>
+            <% var resetUrl = filtroCammino ? ('/strutture?cammino=' + filtroCammino.slug) : '/strutture'; %>
+            <% var pager = pagination || { currentPage: 1, totalPages: 1, totalItems: facilities.length, hasPrev: false, hasNext: false }; %>
+            <% var pageBase = baseQueryString ? ('/strutture?' + baseQueryString + '&page=') : '/strutture?page='; %>
+             <div class="heading-top">
+                 <h1>Strutture</h1>
+                <% if (filtroCammino) { %>
+                <p>Strutture disponibili sul percorso <strong><%= filtroCammino.nome %></strong></p>
+                <% } else { %>
                 <p>Lista delle strutture convenzionate</p>
-            </div>
-            <div class="row">
-                <div class="col-md-9 col-sm-8">
+                <% } %>
+                <p class="results-count"><strong><%= pager.totalItems %></strong> risultati trovati</p>
+             </div>
+             <div class="row">
+                 <div class="col-md-9 col-sm-8">
                     <% if (facilities.length === 0) { %>
-                    <p>Nessuna struttura disponibile al momento.</p>
+                    <p class="facilities-empty">Nessuna struttura disponibile al momento.</p>
                     <% } %>
 
-                    <% facilities.forEach(function(f) { %>
-                    <div class="post_block">
+                     <% facilities.forEach(function(f) { %>
+                     <div class="post_block">
                         <div class="col-md-12">
                             <div class="col-md-5">
                                 <% if (f.immagine) { %>
@@ -49,11 +59,6 @@
                                 <h2><a href="/struttura/<%= f.id %>"><%= f.nome %></a></h2>
                                 <p><strong><%= f.citta %></strong></p>
                                 <p><%= f.descrizione %></p>
-                                <% if (f.nome_cammino) { %>
-                                <p><strong>Cammino:</strong>
-                                    <a href="/sentiero/<%= f.slug_cammino %>"><%= f.nome_cammino %></a>
-                                </p>
-                                <% } %>
                                 <% if (f.prezzo_notte) { %>
                                 <p><strong>Prezzo/notte:</strong> &euro;<%= f.prezzo_notte.toFixed(2) %></p>
                                 <% } %>
@@ -63,15 +68,95 @@
                         <div class="clearfix"></div>
                     </div>
                     <% }); %>
-                </div>
 
-                <div class="col-md-3 col-sm-4">
+                    <% if (pager.totalPages > 1) { %>
+                    <nav aria-label="Paginazione strutture" class="facilities-pagination-wrap">
+                        <ul class="pagination facilities-pagination">
+                            <li class="<%= pager.hasPrev ? '' : 'disabled' %>">
+                                <a href="<%= pager.hasPrev ? (pageBase + (pager.currentPage - 1)) : '#' %>" aria-label="Precedente">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <% for (var p = 1; p <= pager.totalPages; p++) { %>
+                            <li class="<%= p === pager.currentPage ? 'active' : '' %>">
+                                <a href="<%= pageBase + p %>"><%= p %></a>
+                            </li>
+                            <% } %>
+                            <li class="<%= pager.hasNext ? '' : 'disabled' %>">
+                                <a href="<%= pager.hasNext ? (pageBase + (pager.currentPage + 1)) : '#' %>" aria-label="Successiva">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <% } %>
+                 </div>
+
+                 <div class="col-md-3 col-sm-4">
                     <div class="sidebar">
-                        <div class="form-group">
-                            <label for="sidebar-search" class="sr-only">Cerca struttura</label>
-                            <input id="sidebar-search" type="text" class="form-control" placeholder="Cerca struttura...">
-                            <button type="submit" class="submit">Cerca</button>
-                        </div>
+                        <form method="get" action="/strutture" class="filter-form">
+                            <% if (filtroCammino) { %>
+                            <input type="hidden" name="cammino" value="<%= filtroCammino.slug %>">
+                            <% } %>
+
+                            <div class="widget">
+                                <h3 class="heading">Ricerca e filtri</h3>
+
+                                <div class="form-group">
+                                    <label for="sidebar-search">Cerca</label>
+                                    <input id="sidebar-search" name="q" type="text" class="form-control"
+                                        placeholder="Nome struttura..." value="<%= filters.q || '' %>">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="filter-tappa">Tappa</label>
+                                    <select id="filter-tappa" name="tappa" class="form-control">
+                                        <option value="">Tutte le tappe</option>
+                                        <% options.tappe.forEach(function(tappa) { %>
+                                        <option value="<%= tappa.value %>" <%= filters.tappa === tappa.value ? 'selected' : '' %>><%= tappa.label %>
+                                        </option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="filter-prezzo-min">Prezzo minimo</label>
+                                    <input id="filter-prezzo-min" name="prezzoMin" type="number" min="0" step="1"
+                                        class="form-control" value="<%= filters.prezzoMin || '' %>">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="filter-prezzo-max">Prezzo massimo</label>
+                                    <input id="filter-prezzo-max" name="prezzoMax" type="number" min="0" step="1"
+                                        class="form-control" value="<%= filters.prezzoMax || '' %>">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="filter-sort">Ordina per</label>
+                                    <select id="filter-sort" name="sort" class="form-control">
+                                        <% options.sortOptions.forEach(function(opt) { %>
+                                        <option value="<%= opt.value %>" <%= (filters.sort || 'nome_asc') === opt.value ? 'selected' : '' %>><%= opt.label %>
+                                        </option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+
+                                <% if (options.services.length) { %>
+                                <div class="form-group services-group">
+                                    <label>Servizi</label>
+                                    <% options.services.forEach(function(service) { %>
+                                    <label class="service-option">
+                                        <input type="checkbox" name="servizi" value="<%= service.slug %>" <%= (filters.servizi || []).indexOf(service.slug) !== -1 ? 'checked' : '' %>>
+                                        <span><%= service.nome %></span>
+                                    </label>
+                                    <% }); %>
+                                </div>
+                                <% } %>
+
+                                <button type="submit" class="submit filter-submit">Applica filtri</button>
+                                <a href="<%= resetUrl %>" class="reset-filters">Reset</a>
+                             </div>
+                         </form>
                     </div>
                 </div>
             </div>

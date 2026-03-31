@@ -1,0 +1,276 @@
+.percorsi-hero {
+  background: linear-gradient(120deg, rgba(10, 20, 35, 0.9), rgba(240, 76, 38, 0.85));
+  padding: 80px 0 70px;
+  color: #fff;
+}
+
+.percorsi-hero-box {
+  max-width: 760px;
+}
+
+.percorsi-hero .kicker {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 13px;
+  opacity: 0.9;
+  margin-bottom: 12px;
+}
+
+.percorsi-hero h1 {
+  font-size: 42px;
+  line-height: 1.15;
+  margin: 0 0 15px;
+}
+
+.percorsi-hero .subtitle {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 22px;
+  color: #f6f6f6;
+}
+
+.percorsi-hero .hero-cta {
+  border: 2px solid #fff;
+  color: #fff;
+  background: transparent;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.percorsi-hero .hero-cta:hover {
+  background: #fff;
+  color: #f04c26;
+}
+
+.percorsi-main {
+  background: #f7f8fb;
+  padding: 50px 0 70px;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: 34px;
+  color: #1d2736;
+}
+
+.section-head .count {
+  background: #fff;
+  color: #f04c26;
+  border: 1px solid #f2c8be;
+  border-radius: 25px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.trail-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(18, 29, 49, 0.08);
+  margin-bottom: 30px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  min-height: 580px;
+  display: flex;
+  flex-direction: column;
+}
+
+.trail-image-link {
+  display: block;
+}
+
+.trail-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 35px rgba(18, 29, 49, 0.14);
+}
+
+.trail-image {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+  display: block;
+}
+
+.trail-image.placeholder {
+  background: #e8ebf2;
+  color: #9ba5b6;
+  font-size: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trail-content {
+  padding: 20px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.trail-content h3 {
+  margin: 0 0 10px;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.trail-content h3 a {
+  color: #1d2736;
+}
+
+.trail-content h3 a:hover {
+  color: #f04c26;
+}
+
+.trail-content .route {
+  color: #5a6577;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.chips {
+  margin-bottom: 12px;
+}
+
+.chips span {
+  display: inline-block;
+  margin: 0 8px 8px 0;
+  background: #fef0ed;
+  color: #cf3d1d;
+  border: 1px solid #f7d0c7;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.trail-meta {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  color: #3e4a5f;
+}
+
+.trail-meta li {
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.trail-content .desc {
+  color: #667086;
+  font-size: 14px;
+  line-height: 1.55;
+  margin-bottom: 16px;
+}
+
+.trail-content .trail-cta {
+  margin-top: auto;
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.percorsi-sidebar .widget {
+  background: #fff;
+  padding: 14px;
+  box-shadow: 0 0 4px #ddd;
+}
+
+.percorsi-sidebar .heading {
+  font-size: 22px;
+  color: #333;
+  font-weight: 500;
+  margin: 0 0 12px;
+}
+
+.percorsi-sidebar label {
+  font-weight: 700;
+  color: #444;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.percorsi-sidebar .form-group {
+  margin-bottom: 14px;
+  width: 100%;
+  float: none;
+  clear: both;
+}
+
+.percorsi-sidebar .form-control {
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: 6px 12px;
+  font-size: 15px;
+  line-height: 1.42857;
+  color: #000;
+  background-color: #fff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.percorsi-sidebar .submit {
+  background: #f04c26;
+  padding: 7px 30px;
+  color: #fff;
+  font-size: 15px;
+  outline: 0;
+  text-transform: uppercase;
+  position: relative;
+  transition: all 0.5s ease;
+  border: 2px solid #f04c26;
+  width: 100%;
+  text-align: center;
+  display: block;
+  margin-top: 2px;
+}
+
+.percorsi-sidebar .submit:hover {
+  background: transparent;
+  color: #f04c26;
+}
+
+.percorsi-sidebar .reset-filters {
+  display: block;
+  margin-top: 8px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+.percorsi-sidebar .reset-filters:hover {
+  color: #f04c26;
+}
+
+@media (max-width: 991px) {
+  .percorsi-hero h1 {
+    font-size: 34px;
+  }
+
+  .trail-card {
+    min-height: auto;
+  }
+
+  .trail-content .trail-cta {
+    font-size: 15px;
+    padding: 11px 14px;
+  }
+
+  .percorsi-sidebar {
+    margin-top: 24px;
+  }
+}

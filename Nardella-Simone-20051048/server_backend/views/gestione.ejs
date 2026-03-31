@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
     <link href="/stylesheets/style.css" rel="stylesheet">
     <link rel="stylesheet" href="/stylesheets/font-awesome.min.css">
+    <link rel="stylesheet" href="/stylesheets/notifications.css">
+    <link rel="stylesheet" href="/stylesheets/gestione.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Dosis:300,400,500,600,700,800" rel="stylesheet">
 </head>
 
@@ -18,17 +21,60 @@
         <%- include('partials/navbar') %>
     </section>
 
-    <section style="padding: 40px 0; min-height: 60vh;">
+    <section class="gestione-page">
         <div class="container">
             <h1>Gestione strutture</h1>
             <p class="lead">Benvenuto, <%= user.nome %>. Qui puoi gestire le tue strutture, le prenotazioni e rispondere alle domande.</p>
 
-            <% if (typeof successo !== 'undefined' && successo) { %>
-            <div class="alert alert-success"><%= successo %></div>
-            <% } %>
-            <% if (typeof errore !== 'undefined' && errore) { %>
-            <div class="alert alert-danger"><%= errore %></div>
-            <% } %>
+            <%- include('partials/notifications') %>
+
+            <button type="button" class="btn btn-primary gestione-add-toggle" data-target="#new-facility-panel">
+                <i class="fa fa-plus-circle"></i> Aggiungi struttura
+            </button>
+
+            <div class="panel panel-default gestione-add-panel" id="new-facility-panel" aria-hidden="true">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-plus-circle"></i> Aggiungi una nuova struttura</h3>
+                </div>
+                <div class="panel-body">
+                    <form action="/struttura/nuova" method="post" class="gestione-inline-form" id="new-facility-form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nuova-nome">Nome struttura</label>
+                                    <input id="nuova-nome" name="nome" class="form-control" type="text" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nuova-cammino">Cammino</label>
+                                    <select id="nuova-cammino" name="id_cammino" class="form-control" required>
+                                        <option value="">Seleziona un cammino</option>
+                                        <% (trails || []).forEach(function(trail) { %>
+                                        <option value="<%= trail.id %>"><%= trail.nome %></option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nuova-tappa">Tappa del cammino</label>
+                                    <select id="nuova-tappa" name="tappa" class="form-control" required disabled>
+                                        <option value="">Seleziona prima un cammino</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="nuova-descrizione">Descrizione (opzionale)</label>
+                            <textarea id="nuova-descrizione" name="descrizione" class="form-control" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Crea struttura</button>
+                    </form>
+                </div>
+            </div>
 
             <% if (strutture.length === 0) { %>
             <div class="alert alert-info">Non hai ancora strutture registrate.</div>
@@ -36,18 +82,60 @@
 
             <% strutture.forEach(function(s) { %>
             <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
+                <div class="panel-heading gestione-panel-heading">
+                    <h3 class="panel-title gestione-panel-title">
                         <i class="fa fa-building"></i> <%= s.nome %> &mdash; <%= s.citta %>
-                        <a href="/struttura/<%= s.id %>" class="btn btn-xs btn-default pull-right">Vedi pagina pubblica</a>
                     </h3>
+                    <div class="gestione-panel-actions">
+                        <a href="/struttura/<%= s.id %>" class="btn btn-sm gestione-public-page-btn">Visualizza pagina pubblica</a>
+                        <form action="/struttura/<%= s.id %>/elimina" method="post" class="gestione-inline-delete" onsubmit="return confirm('Vuoi eliminare definitivamente questa struttura?');">
+                            <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
+                        </form>
+                    </div>
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-3">
-                            <% if (s.immagine) { %>
-                            <img src="/images/<%= s.immagine %>" alt="<%= s.nome %>" class="img-responsive" style="margin-bottom:15px">
+                        <div class="col-md-3 gestione-media-col" data-structure-name="<%= s.nome %>">
+                            <% const immagineStruttura = s.immagine ? (s.immagine.startsWith('http') ? s.immagine : ('/images/' + s.immagine)) : null; %>
+                            <% let anteprimaUrl = immagineStruttura;
+                               if (!anteprimaUrl && s.immagini && s.immagini.length) {
+                                 const prima = s.immagini[0];
+                                 anteprimaUrl = prima.percorso_immagine.startsWith('http') ? prima.percorso_immagine : ('/images/' + prima.percorso_immagine);
+                               } %>
+                            <div class="gestione-preview-slot">
+                                <% if (anteprimaUrl) { %>
+                                <img src="<%= anteprimaUrl %>" alt="<%= s.nome %>" class="img-responsive gestione-facility-image gestione-preview-main">
+                                <% } else { %>
+                                <p class="text-muted gestione-preview-empty">Nessuna immagine caricata.</p>
+                                <% } %>
+                            </div>
+
+                            <h5>Galleria immagini (<%= (s.immagini || []).length %>)</h5>
+                            <% if (s.immagini && s.immagini.length) { %>
+                            <div class="gestione-gallery-list">
+                                <% s.immagini.forEach(function(img) { %>
+                                <% const imgUrl = img.percorso_immagine.startsWith('http') ? img.percorso_immagine : ('/images/' + img.percorso_immagine); %>
+                                <% const isSelected = anteprimaUrl === imgUrl; %>
+                                <div class="gestione-gallery-item">
+                                    <img src="<%= imgUrl %>" alt="Immagine struttura — clic per anteprima" class="img-responsive gestione-gallery-thumb gestione-gallery-thumb-selectable<%= isSelected ? ' is-selected' : '' %>" data-preview-src="<%= imgUrl %>" tabindex="0" role="button">
+                                    <form action="/struttura/<%= s.id %>/immagine/elimina" method="post" class="gestione-gallery-delete-form">
+                                        <input type="hidden" name="image_id" value="<%= img.id %>">
+                                        <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Vuoi eliminare questa immagine?')">Elimina</button>
+                                    </form>
+                                </div>
+                                <% }); %>
+                            </div>
                             <% } %>
+
+                            <form action="/struttura/<%= s.id %>/immagine" method="post" enctype="multipart/form-data" class="gestione-inline-form">
+                                <div class="form-group">
+                                    <label for="immagine-struttura-<%= s.id %>">Aggiungi immagine galleria</label>
+                                    <input id="immagine-struttura-<%= s.id %>" type="file" name="immagine_struttura" class="form-control" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm">Aggiungi immagine</button>
+                            </form>
+
+                            <hr>
                             <ul class="list-unstyled">
                                 <% if (s.prezzo_notte) { %>
                                 <li><strong>Prezzo:</strong> &euro;<%= s.prezzo_notte.toFixed(2) %>/notte</li>
@@ -56,6 +144,41 @@
                                 <li><strong>Capacità:</strong> <%= s.capacita %> ospiti</li>
                                 <% } %>
                             </ul>
+                            <form action="/struttura/<%= s.id %>/dettagli" method="post" class="gestione-inline-form">
+                                <div class="form-group">
+                                    <label for="prezzo-notte-<%= s.id %>">Prezzo per notte (&euro;)</label>
+                                    <input id="prezzo-notte-<%= s.id %>" name="prezzo_notte" class="form-control" type="number" min="0" step="0.01" value="<%= s.prezzo_notte != null ? Number(s.prezzo_notte).toFixed(2) : '' %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="capacita-<%= s.id %>">Capacità massima ospiti</label>
+                                    <input id="capacita-<%= s.id %>" name="capacita" class="form-control" type="number" min="1" max="1000" value="<%= s.capacita || 1 %>" required>
+                                </div>
+                                <button type="submit" class="btn btn-success btn-sm">Salva dettagli struttura</button>
+                            </form>
+
+                            <hr>
+                            <form action="/struttura/<%= s.id %>/servizi" method="post" class="gestione-inline-form gestione-services-form">
+                                <h5>Servizi disponibili</h5>
+                                <% if (serviceCatalog && serviceCatalog.length) { %>
+                                <div class="gestione-services-list">
+                                    <% serviceCatalog.forEach(function(service) { %>
+                                    <% const isChecked = (s.service_ids || []).indexOf(service.id) !== -1; %>
+                                    <label class="gestione-service-item" for="service-<%= s.id %>-<%= service.id %>">
+                                        <input id="service-<%= s.id %>-<%= service.id %>" type="checkbox" name="service_ids" value="<%= service.id %>" <%= isChecked ? 'checked' : '' %>>
+                                        <% if (service.icon_type === 'material') { %>
+                                        <i class="material-icons" aria-hidden="true"><%= service.icon_value %></i>
+                                        <% } else { %>
+                                        <i class="fa <%= service.icon_value %>" aria-hidden="true"></i>
+                                        <% } %>
+                                        <span><%= service.nome %></span>
+                                    </label>
+                                    <% }); %>
+                                </div>
+                                <button type="submit" class="btn btn-info btn-sm">Salva servizi</button>
+                                <% } else { %>
+                                <p class="text-muted">Nessun servizio predefinito disponibile.</p>
+                                <% } %>
+                            </form>
                         </div>
                         <div class="col-md-9">
 
@@ -113,10 +236,10 @@
 
                             <hr>
 
-                            <!-- DOMANDE -->
-                            <h4><i class="fa fa-comments"></i> Domande (<%= s.domande.length %>)</h4>
+                            <!-- DOMANDE (solo senza risposta) -->
+                            <h4><i class="fa fa-comments"></i> Domande in attesa (<%= s.domande.length %>)</h4>
                             <% if (s.domande.length === 0) { %>
-                            <p class="text-muted">Nessuna domanda ricevuta.</p>
+                            <p class="text-muted">Nessuna domanda in attesa di risposta.</p>
                             <% } else { %>
                             <% s.domande.forEach(function(d) { %>
                             <div class="well well-sm">
@@ -130,16 +253,13 @@
                                         <p style="margin-top:5px"><%= d.testo %></p>
                                     </div>
                                     <div class="col-md-4">
-                                        <% if (d.num_risposte > 0) { %>
-                                        <span class="label label-info"><%= d.num_risposte %> risposta/e</span>
-                                        <% } else { %>
                                         <form action="/domanda/<%= d.id %>/rispondi" method="post">
-                                            <div class="form-group" style="margin-bottom:5px">
-                                                <textarea name="testo" class="form-control input-sm" rows="2" placeholder="Scrivi la tua risposta..." required></textarea>
+                                            <div class="form-group gestione-reply-field">
+                                                <label for="risposta-<%= d.id %>" class="sr-only">Risposta alla domanda</label>
+                                                <textarea id="risposta-<%= d.id %>" name="testo" class="form-control input-sm" rows="2" placeholder="Scrivi la tua risposta..." required></textarea>
                                             </div>
                                             <button type="submit" class="btn btn-primary btn-xs"><i class="fa fa-reply"></i> Rispondi</button>
                                         </form>
-                                        <% } %>
                                     </div>
                                 </div>
                             </div>
@@ -158,6 +278,57 @@
 
     <script src="/javascripts/jquery.min.js"></script>
     <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/notifications.js"></script>
+    <script src="/javascripts/gestione-gallery-preview.js"></script>
+    <script>
+        (function () {
+            var trails = <%- JSON.stringify(trails || []) %>;
+            var toggle = document.querySelector('.gestione-add-toggle');
+            var panel = document.querySelector('#new-facility-panel');
+            var camminoSelect = document.getElementById('nuova-cammino');
+            var tappaSelect = document.getElementById('nuova-tappa');
+
+            if (toggle && panel) {
+                toggle.addEventListener('click', function () {
+                    var isOpen = panel.classList.toggle('is-open');
+                    panel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+                });
+            }
+
+            function updateTappeOptions() {
+                var selectedId = Number(camminoSelect.value || 0);
+                var trail = trails.find(function (t) { return t.id === selectedId; });
+                tappaSelect.innerHTML = '';
+
+                if (!trail || !trail.tappe || !trail.tappe.length) {
+                    tappaSelect.disabled = true;
+                    var option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'Nessuna tappa disponibile';
+                    tappaSelect.appendChild(option);
+                    return;
+                }
+
+                tappaSelect.disabled = false;
+                var placeholder = document.createElement('option');
+                placeholder.value = '';
+                placeholder.textContent = 'Seleziona una tappa';
+                tappaSelect.appendChild(placeholder);
+
+                trail.tappe.forEach(function (tappa) {
+                    var option = document.createElement('option');
+                    option.value = tappa.value;
+                    option.textContent = tappa.label;
+                    tappaSelect.appendChild(option);
+                });
+            }
+
+            if (camminoSelect && tappaSelect) {
+                camminoSelect.addEventListener('change', updateTappeOptions);
+                updateTappeOptions();
+            }
+        })();
+    </script>
 </body>
 
 </html>

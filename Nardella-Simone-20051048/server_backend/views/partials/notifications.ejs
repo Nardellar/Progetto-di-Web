@@ -1,0 +1,27 @@
+<% var successMessage = noticeSuccess || (typeof success !== 'undefined' ? success : null) || (typeof successo !== 'undefined' ? successo : null); %>
+<% var errorMessage = noticeError || (typeof error !== 'undefined' ? error : null) || (typeof errore !== 'undefined' ? errore : null); %>
+
+<% if (successMessage || errorMessage) { %>
+<div id="app-notifications" class="app-notifications" aria-live="polite" aria-atomic="true">
+    <% if (successMessage) { %>
+    <div class="app-notice app-notice-success" role="alert">
+        <i class="fa fa-check-circle"></i>
+        <div class="app-notice-content">
+            <strong>Operazione completata</strong>
+            <span><%= successMessage %></span>
+        </div>
+        <button type="button" class="app-notice-close" aria-label="Chiudi notifica">&times;</button>
+    </div>
+    <% } %>
+    <% if (errorMessage) { %>
+    <div class="app-notice app-notice-error" role="alert">
+        <i class="fa fa-exclamation-triangle"></i>
+        <div class="app-notice-content">
+            <strong>Attenzione</strong>
+            <span><%= errorMessage %></span>
+        </div>
+        <button type="button" class="app-notice-close" aria-label="Chiudi notifica">&times;</button>
+    </div>
+    <% } %>
+</div>
+<% } %>

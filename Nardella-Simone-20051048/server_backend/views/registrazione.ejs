@@ -12,6 +12,7 @@
     <link href="/stylesheets/style.css" rel="stylesheet">
     <link href="/stylesheets/blog-style.css" rel="stylesheet">
     <link href="/stylesheets/contact.css" rel="stylesheet">
+    <link href="/stylesheets/notifications.css" rel="stylesheet">
     <link rel="stylesheet" href="/stylesheets/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Dosis:300,400,500,600,700,800" rel="stylesheet">
     <link rel="stylesheet" href="/stylesheets/owl-carousel/owl.carousel.min.css">
@@ -30,12 +31,7 @@
                 <h3>Crea un nuovo account o accedi se ne possiedi già uno.</h3>
             </div>
 
-            <% if (error) { %>
-            <div class="alert alert-danger text-center"><%= error %></div>
-            <% } %>
-            <% if (success) { %>
-            <div class="alert alert-success text-center"><%= success %></div>
-            <% } %>
+            <%- include('partials/notifications') %>
 
             <!-- Form Login -->
             <form id="login-form" class="login-form <%= activeForm === 'register' ? 'hidden' : '' %>" action="/login" method="post">
@@ -92,6 +88,7 @@
     <%- include('partials/footer') %>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/javascripts/notifications.js"></script>
     <script src="/javascripts/auth-toggle.js"></script>
 </body>
 

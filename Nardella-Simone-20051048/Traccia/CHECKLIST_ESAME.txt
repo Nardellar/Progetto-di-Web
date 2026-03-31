@@ -1,0 +1,98 @@
+================================================================================
+MF0438 — CHECKLIST ESAME (pre-consegna / revisione)
+Progetto: Trekking — strutture, percorsi, prenotazioni richiesta, Q&A
+================================================================================
+
+LEGENDA: [ ] da fare  [x] fatto  [!] rischio / da chiarire col docente
+
+--------------------------------------------------------------------------------
+A. STACK E ARCHITETTURA (traccia)
+--------------------------------------------------------------------------------
+[x] Node.js + Express
+[x] SQLite (database relazionale)
+[x] Passport (login + strategia locale + sessione)
+[x] EJS templating server-side (scelta coerente SSR; Page.js non usato)
+[x] HTML5 + CSS3 + Bootstrap / tema personalizzato
+[x] async/await su route e controller (sqlite tramite helper)
+[!] Classi ES6 nel back-end E nel front-end — la traccia le richiede esplicitamente.
+    Nel repository al momento non ci sono dichiarazioni `class`. Valutare:
+    - 1–2 classi nel server (es. servizio prenotazioni / validazione) oppure
+    - 1 classe nel browser (es. piccolo modulo UI senza variabili globali)
+    Chiedere al docente se pattern solo-a-funzioni è accettabile.
+
+--------------------------------------------------------------------------------
+B. REQUISITI FUNZIONALI (traccia)
+--------------------------------------------------------------------------------
+[x] Almeno due tipi utente registrato: camminatore + ristoratore
+[x] Contenuti pubblici (home, percorsi, dettaglio sentiero/struttura, ricerca) +
+    aree protette (profilo, gestione, POST prenotazione da camminatore)
+[x] Ricerca reale lato server: GET /cerca con LIKE su percorsi e strutture
+    (nome, città sentieri, regione, descrizione, ecc.)
+[x] DB usato per più delle sole credenziali: trails, facilities, domande,
+    risposte, richieste prenotazione, indisponibilità
+[x] Chi modifica cosa: solo ristoratore sulle proprie strutture (gestione);
+    camminatore sulle proprie richieste (profilo)
+[!] Cancellazione dati: verificare che esista almeno una DELETE o flusso che
+    rimuove contenuti dal DB (oltre a “rifiuta prenotazione”). Se manca,
+    aggiungere es. cancellazione domanda propria o simile, o documentare
+    che la “cancellazione” è lo stato rifiutato — meglio allinearsi alla traccia.
+
+--------------------------------------------------------------------------------
+C. DOMINIO E QUESTIONARIO (allineamento)
+--------------------------------------------------------------------------------
+[x] Prenotazioni = richieste, accettazione/rifiuto da struttura (no real-time)
+[x] Ruoli: Ristoratori (strutture) e Camminatori
+[x] Percorsi: pre-caricati nel DB (init.js / schema) — da menzionare in README
+[x] Ricerca testuale: strutture, percorsi, città (campi su trails/facilities)
+[!] Questionario (Q3): FAQ sentiero + domande strutture — nel sito attuale
+    domande principalmente sulle strutture; valutare FAQ statiche per sentiero
+    o chiarire in relazione che avete semplificato come da note prof.
+[!] Questionario (Q5): “media / recensioni” — se non implementate, dichiararlo
+    in documentazione (fuori scope / solo link YouTube / futuro) per coerenza.
+
+--------------------------------------------------------------------------------
+D. REQUISITI STILISTICI (traccia + regole corso)
+--------------------------------------------------------------------------------
+[!] HTML semantico: introdurre dove possibile <header>, <main>, <aside> oltre
+    a <section>;<footer> nel partial è ok
+[!] “Nessun CSS/JS inline”: in alcune viste ci sono attributi style="..." per
+    placeholder immagini. Per sicurezza in esame, spostare in classi in un .css
+    esterno (es. .placeholder-struttura { ... })
+[x] JS in file esterni; no document.write rilevante
+[x] Form: login/register POST; ricerca GET; operazioni di scrittura POST
+[!] “Nessuna variabile globale” nel JS browser: verificare custom.js e altri
+    script (eventuali leak su window)
+
+--------------------------------------------------------------------------------
+E. SICUREZZA E ROBUSTEZZA (buona pratica esame)
+--------------------------------------------------------------------------------
+[x] Password hashate (bcrypt)
+[x] Sessione + middleware ruoli (isLoggedIn, isCamminatore, isRistoratore)
+[ ] Messaggi di errore non espongono stack in produzione (verificare app.js)
+[ ] Validazione server-side su tutti i POST critici (express-validator)
+[ ] Limiti sensati su input (lunghezza testo domanda/risposta)
+
+--------------------------------------------------------------------------------
+F. PRE-CONSEGNA OPERATIVA
+--------------------------------------------------------------------------------
+[ ] README con: come installare (npm install), avvio (npm run dev / npm start),
+    inizializzazione DB (node db/init.js), utenti di test (email/password),
+    porta (3000), browser supportati
+[ ] .gitignore contiene node_modules e (se richiesto) *.db — allineare a richiesta prof
+[ ] Eseguire init su macchina “pulita” e navigare tutto il flusso:
+    anonimo → registrazione → login camminatore → prenotazione → domanda
+    login ristoratore → gestione → accetta/rifiuta → risposta domanda
+[ ] Prova ricerca: termine percorsi, città, nome struttura, nessun risultato
+[ ] Chrome e Firefox (versioni indicate in traccia)
+
+--------------------------------------------------------------------------------
+G. BOZZA “COSA DIRE ALL’ESAME” (30 secondi)
+--------------------------------------------------------------------------------
+- SSR con Express + EJS; SQLite con percorsi pre-seedati; Passport + ruoli.
+- Ricerca server-side su percorsi e strutture.
+- Prenotazioni solo richiesta; il ristoratore accetta o rifiuta dalla dashboard.
+- Domande/risposte persistite sul DB con controllo del gestore struttura.
+
+================================================================================
+Fine checklist — aggiornare le voci [!] e [ ] prima della consegna.
+================================================================================

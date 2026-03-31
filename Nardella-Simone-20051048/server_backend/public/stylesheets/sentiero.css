@@ -27,3 +27,153 @@
     background-color: #d84315;
     transform: scale(1);
 }
+
+.trail-hero-image {
+    width: 100%;
+    height: 360px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.trail-description {
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.trail-cta {
+    margin-top: 12px;
+}
+
+.tappa-card-wrap {
+    margin-bottom: 22px;
+}
+
+.tappa-card {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.tappa-placeholder-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.trail-facilities-row {
+    margin-top: 40px;
+}
+
+.trail-facility-card-wrap {
+    margin-bottom: 20px;
+}
+
+.trail-facility-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.trail-facility-placeholder {
+    height: 200px;
+    background: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.trail-facility-placeholder-icon {
+    color: #aaa;
+}
+
+.tappa-carousel {
+    margin-bottom: 18px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.tappa-carousel .item img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+}
+
+.tappa-carousel .carousel-control {
+    background-image: none;
+    opacity: 0.9;
+}
+
+.tappa-carousel .carousel-control .glyphicon {
+    top: 48%;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.trekking-info-panel {
+    margin-top: 18px;
+    border-radius: 14px;
+    border: 1px solid #f2d0c8;
+    box-shadow: 0 16px 32px rgba(16, 29, 52, 0.14);
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.trekking-info-panel:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 40px rgba(16, 29, 52, 0.2);
+}
+
+.trekking-info-panel .panel-heading {
+    background: linear-gradient(125deg, #f04c26 0%, #ff7a4f 55%, #ff9a75 100%);
+    border-bottom: 0;
+    padding: 14px 18px;
+}
+
+.trekking-info-panel .panel-title {
+    font-size: 18px;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+}
+
+.trekking-info-panel .panel-title .fa {
+    color: #fff;
+    margin-right: 8px;
+}
+
+.trekking-info-panel .panel-body {
+    background: linear-gradient(180deg, #ffffff 0%, #fff8f6 100%);
+    padding: 14px 18px;
+}
+
+.trekking-info-panel .panel-body ul li {
+    padding: 9px 0;
+    border-bottom: 1px dashed #f2ddd7;
+    color: #2f3c4f;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.trekking-info-panel .panel-body ul li:last-child {
+    border-bottom: 0;
+}
+
+#tappeGallery .item img {
+    height: 520px;
+}
+
+#tappeGallery .carousel-caption {
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 8px;
+    padding: 10px 14px;
+    right: 8%;
+    left: 8%;
+    bottom: 20px;
+}
+
+@media (max-width: 991px) {
+    #tappeGallery .item img {
+        height: 360px;
+    }
+}

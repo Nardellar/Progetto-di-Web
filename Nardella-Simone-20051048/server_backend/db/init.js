@@ -26,11 +26,11 @@ db.exec(schemaSQL, (err) => {
       ('Kungsleden', 'kungsleden', 'Abisko', 'Hemavan', 'Svezia', 'Estate', 20, 440,
        'Un sentiero storico nel nord della Svezia, che attraversa paesaggi selvaggi e antiche foreste.',
        'Kungsleden.jpg'),
-      ('Cammino Grande di Celestino', 'cammino-grande-di-celestino', 'L''Aquila', 'Sulmona', 'Abruzzo', 'Primavera/Estate', 7, 90,
+      ('Cammino Grande di Celestino', 'cammino-grande-di-celestino', 'L''Aquila', 'Sulmona', 'Abruzzo', 'Primavera/Estate', 5, 90,
        'Un percorso spirituale attraverso l''Italia meridionale, seguendo le orme di San Celestino V.',
        'Cammino Grande di Celestino.jpg'),
-      ('Alta Via Dolomitica', 'alta-via-dolomitica', 'Braies', 'Belluno', 'Trentino-Alto Adige/Veneto', 'Estate', 10, 120,
-       'Un percorso alpino tra le Dolomiti, con panorami mozzafiato sulle vette più famose.',
+      ('Alta Via Dolomitica', 'alta-via-dolomitica', 'Lago di Braies', 'Belluno', 'Dolomiti (Alto Adige/Veneto)', 'Giugno-Settembre', 11, 125,
+       'L''Alta Via 1 delle Dolomiti attraversa il cuore delle Dolomiti dal Lago di Braies fino a Belluno, lungo un itinerario tra i piu spettacolari e celebri al mondo.',
        'Alta via Dolomitica.jpg'),
       ('Grande Anello dei Sibillini', 'grande-anello-dei-sibillini', 'Visso', 'Visso', 'Marche/Umbria', 'Primavera/Estate', 9, 120,
        'Un anello escursionistico nel cuore del Parco Nazionale dei Monti Sibillini.',
@@ -49,34 +49,70 @@ db.exec(schemaSQL, (err) => {
       ('camminatore@test.it', '$2b$10$4WaBiHLC6sbeUaUsj.MrHeCDUzityuJ9maOZT.1bJJh9k4hWPihyu', 'Marco', 'Rossi', 'camminatore');
 
     -- Strutture di test - Via degli Dei (trail_id = 1)
-    INSERT OR IGNORE INTO facilities (email_ristoratore, id_cammino, nome, citta, indirizzo, descrizione, immagine, prezzo_notte, capacita)
+    INSERT OR IGNORE INTO facilities (email_ristoratore, id_cammino, nome, citta, numero_tappa, indirizzo, descrizione, immagine, prezzo_notte, capacita)
     VALUES
-      ('ristoratore@test.it', 1, 'SHG Hotel', 'Zola Predosa', 'Via Risorgimento 186', 
+      ('ristoratore@test.it', 1, 'SHG Hotel', 'Zola Predosa', 1, 'Via Risorgimento 186', 
        'Hotel con WiFi, ristorante e bar. Valutato 8,1 per coppie.',
        'BadoloHotel1.jpg', 75.00, 30),
-      ('ristoratore@test.it', 1, 'Appartamento degli Dei', 'Madonna dei Fornelli', 'Via del Centro 12',
+      ('ristoratore@test.it', 1, 'Appartamento degli Dei', 'Madonna dei Fornelli', 2, 'Via del Centro 12',
        'Affittacamere con vista montagna, colazione italiana inclusa.',
        'ViaDegliDeiHotel2.jpg', 55.00, 8),
-      ('ristoratore@test.it', 1, 'Residence Mugello Resort', 'Scarperia', 'Via Mugello 5',
+      ('ristoratore@test.it', 1, 'Residence Mugello Resort', 'Scarperia', 4, 'Via Mugello 5',
        'Appartamenti con angolo cottura e vista giardino, a 30 km da Firenze.',
        'ViaDegliDeiHotel3.jpg', 95.00, 20);
 
     -- Strutture - Alta Via Dolomitica (trail_id = 4)
-    INSERT OR IGNORE INTO facilities (email_ristoratore, id_cammino, nome, citta, indirizzo, descrizione, immagine, prezzo_notte, capacita)
+    INSERT OR IGNORE INTO facilities (email_ristoratore, id_cammino, nome, citta, numero_tappa, indirizzo, descrizione, immagine, prezzo_notte, capacita)
     VALUES
-      ('ristoratore@test.it', 4, 'Rifugio Lagazuoi', 'Cortina d''Ampezzo', 'Passo Falzarego',
+      ('ristoratore@test.it', 4, 'Rifugio Lagazuoi', 'Cortina d''Ampezzo', 3, 'Passo Falzarego',
        'Rifugio alpino a 2752m con vista panoramica sulle Dolomiti, cucina tipica tirolese.',
        NULL, 60.00, 40),
-      ('ristoratore@test.it', 4, 'Hotel Tre Cime', 'Auronzo di Cadore', 'Via Nazionale 15',
+      ('ristoratore@test.it', 4, 'Hotel Tre Cime', 'Auronzo di Cadore', 1, 'Via Nazionale 15',
        'Hotel accogliente ai piedi delle Tre Cime di Lavaredo, ideale per escursionisti.',
        NULL, 85.00, 25);
 
-    -- Strutture - Magna Via Francigena (trail_id = 6)
-    INSERT OR IGNORE INTO facilities (email_ristoratore, id_cammino, nome, citta, indirizzo, descrizione, immagine, prezzo_notte, capacita)
+    -- Strutture - Cammino Grande di Celestino (trail_id = 3)
+    INSERT OR IGNORE INTO facilities (email_ristoratore, id_cammino, nome, citta, numero_tappa, indirizzo, descrizione, immagine, prezzo_notte, capacita)
     VALUES
-      ('ristoratore@test.it', 6, 'Agriturismo Valle dei Templi', 'Agrigento', 'Contrada San Biagio',
+      ('ristoratore@test.it', 3, 'Locanda Eremi della Majella', 'Pacentro', 2, 'Via del Castello 7',
+       'Piccola locanda in pietra a due passi dal centro storico, con camere rustiche e colazione con prodotti locali. Ideale come tappa intermedia del cammino.',
+       NULL, 68.00, 10),
+      ('ristoratore@test.it', 3, 'Casa del Pellegrino Alento', 'Serramonacesca', 5, 'Contrada Abbazia 3',
+       'Alloggio per camminatori vicino all''Abbazia di San Liberatore, atmosfera semplice e accogliente con spazi comuni e deposito zaini.',
+       NULL, 55.00, 12);
+
+    -- Strutture - Magna Via Francigena (trail_id = 6)
+    INSERT OR IGNORE INTO facilities (email_ristoratore, id_cammino, nome, citta, numero_tappa, indirizzo, descrizione, immagine, prezzo_notte, capacita)
+    VALUES
+      ('ristoratore@test.it', 6, 'Agriturismo Valle dei Templi', 'Agrigento', 1, 'Contrada San Biagio',
        'Agriturismo immerso negli uliveti siciliani, a pochi km dalla Valle dei Templi.',
        NULL, 45.00, 12);
+
+    -- Catalogo servizi predefiniti
+    INSERT OR IGNORE INTO service_catalog (slug, nome, icon_type, icon_value, sort_order)
+    VALUES
+      ('camere-non-fumatori', 'Camere non fumatori', 'material', 'smoke_free', 20),
+      ('ristorante', 'Ristorante', 'material', 'restaurant', 30),
+      ('ospiti-disabili', 'Camere/strutture per ospiti disabili', 'fa', 'fa-wheelchair', 40),
+      ('servizio-in-camera', 'Servizio in camera', 'material', 'room_service', 50),
+      ('wifi-gratuito', 'Connessione WiFi gratuita', 'fa', 'fa-wifi', 60),
+      ('camere-familiari', 'Camere familiari', 'fa', 'fa-users', 70),
+      ('bar', 'Bar', 'material', 'local_bar', 80),
+      ('colazione', 'Colazione', 'material', 'free_breakfast', 90);
+
+    -- Per default assegniamo tutti i servizi alle strutture demo
+    INSERT OR IGNORE INTO facility_services (id_struttura, id_servizio)
+    SELECT f.id, s.id
+    FROM facilities f
+    CROSS JOIN service_catalog s;
+
+    INSERT OR IGNORE INTO facility_images (id_struttura, percorso_immagine)
+    VALUES
+      (1, 'BadoloHotel1.jpg'),
+      (1, 'ViaDegliDeiHotel2.jpg'),
+      (1, 'ViaDegliDeiHotel3.jpg'),
+      (2, 'ViaDegliDeiHotel2.jpg'),
+      (3, 'ViaDegliDeiHotel3.jpg');
 
     -- Date non disponibili di esempio
     INSERT OR IGNORE INTO facility_unavailability (id_struttura, data_da, data_a, nota)
@@ -102,10 +138,16 @@ db.exec(schemaSQL, (err) => {
       (1, 'ristoratore@test.it', 'Certamente. A 5 minuti a piedi dalla struttura vi è un comodo e ampio parcheggio gratuito. È chiuso solo di domenica per il mercato cittadino.', '2023-12-30 17:24:00'),
       (3, 'ristoratore@test.it', 'Sì, il rifugio è aperto da giugno a fine settembre, meteo permettendo.', '2025-06-16 09:00:00');
 
-    -- Prenotazione demo
+    -- Prenotazioni demo
     INSERT OR IGNORE INTO booking_requests (id_struttura, email_camminatore, check_in, check_out, numero_ospiti, status)
     VALUES
-      (1, 'camminatore@test.it', '2026-06-15', '2026-06-18', 2, 'pending');
+      (1, 'camminatore@test.it', '2026-06-15', '2026-06-18', 2, 'pending'),
+      (1, 'camminatore@test.it', '2025-05-10', '2025-05-12', 2, 'accepted');
+
+    -- Recensioni demo
+    INSERT OR IGNORE INTO reviews (id_struttura, email_camminatore, voto, testo, creato_il)
+    VALUES
+      (1, 'camminatore@test.it', 5, 'Ottima esperienza: camere pulite e personale molto disponibile.', '2025-05-13 10:15:00');
   `;
 
   db.exec(seed, (err) => {

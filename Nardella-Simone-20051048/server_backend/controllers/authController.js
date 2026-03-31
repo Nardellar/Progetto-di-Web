@@ -5,6 +5,23 @@ const db = require('../db/database');
 
 const salt_rounds = 10;
 
+function normalizePersonName(value) {
+  return String(value || '')
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toLowerCase()
+    .split(' ')
+    .map((token) => token
+      .split(/(['-])/)
+      .map((part) => {
+        if (part === '\'' || part === '-') return part;
+        if (!part) return part;
+        return part.charAt(0).toUpperCase() + part.slice(1);
+      })
+      .join(''))
+    .join(' ');
+}
+
 function dbGet(sql, params) {
   return new Promise((resolve, reject) => {
     db.get(sql, params, (err, row) => {
@@ -66,9 +83,11 @@ exports.postRegister = async (req, res) => {
     }
 
     const hash = await bcrypt.hash(password, salt_rounds);
+    const normalizedNome = normalizePersonName(nome);
+    const normalizedCognome = normalizePersonName(cognome);
     await dbRun(
       'INSERT INTO utenti (email, password_hash, nome, cognome, role) VALUES (?, ?, ?, ?, ?)',
-      [email, hash, nome, cognome, role]
+      [email, hash, normalizedNome, normalizedCognome, role]
     );
 
     res.redirect('/registrazione?success=Registrazione completata! Effettua il login.');
@@ -80,7 +99,23 @@ exports.postRegister = async (req, res) => {
 
 exports.postLogout = (req, res) => {
   req.logout((err) => {
-    if (err) console.error('Errore logout:', err.message);
-    res.redirect('/');
+    if (err) {
+      console.error('Errore logout:', err.message);
+      return res.redirect('/');
+    }
+
+    if (req.session) {
+      req.session.destroy((destroyErr) => {
+        if (destroyErr) {
+          console.error('Errore distruzione sessione:', destroyErr.message);
+        }
+        res.clearCookie('connect.sid');
+        return res.redirect('/');
+      });
+      return;
+    }
+
+    res.clearCookie('connect.sid');
+    return res.redirect('/');
   });
 };

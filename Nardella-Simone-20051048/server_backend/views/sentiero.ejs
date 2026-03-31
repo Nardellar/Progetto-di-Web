@@ -5,16 +5,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="<%= trail.nome %>">
+    <meta name="description" content="<%= trail.nome %> - dettaglio cammino">
     <meta name="author" content="Simone Nardella">
     <title><%= title %></title>
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
-    <link href="/stylesheets/style.css" rel="stylesheet">
     <link rel="stylesheet" href="/stylesheets/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Dosis:300,400,500,600,700,800" rel="stylesheet">
-    <link rel="stylesheet" href="/stylesheets/owl-carousel/owl.carousel.min.css">
-    <link rel="stylesheet" href="/stylesheets/owl-carousel/owl.theme.default.min.css">
-    <link rel="stylesheet" href="/stylesheets/sentiero.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/via-degli-dei-modern.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 </head>
 
 <body>
@@ -22,84 +21,181 @@
         <%- include('partials/navbar') %>
     </section>
 
-    <section class="trails">
+    <% var details = trailDetails || null; %>
+    <% var detailedStages = details && details.stages ? details.stages : null; %>
+    <% var totalStages = (detailedStages && detailedStages.length) || trail.numero_tappe || 1; %>
+
+    <section class="vddm-hero">
         <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="banner-heading">
-                        <h2><%= trail.nome %></h2>
-                    </div>
-                    <% if (trail.immagine) { %>
-                    <img src="/images/<%= trail.immagine %>" alt="<%= trail.nome %>" style="width:100%; height:auto; margin-bottom:20px;">
-                    <% } %>
-                    <p><%= trail.descrizione %></p>
-                    <% if (facilities.length > 0) { %>
-                    <a href="/strutture" class="btn btn-primary" style="margin-top:15px">Vedi strutture sul percorso</a>
-                    <% } %>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading"><h3 class="panel-title">Informazioni</h3></div>
-                        <div class="panel-body">
-                            <ul class="list-unstyled">
-                                <li><strong>Partenza:</strong> <%= trail.citta_partenza %></li>
-                                <li><strong>Arrivo:</strong> <%= trail.citta_arrivo %></li>
-                                <% if (trail.regione) { %>
-                                <li><strong>Regione:</strong> <%= trail.regione %></li>
-                                <% } %>
-                                <% if (trail.stagione_ideale) { %>
-                                <li><strong>Stagione ideale:</strong> <%= trail.stagione_ideale %></li>
-                                <% } %>
-                                <% if (trail.numero_tappe) { %>
-                                <li><strong>Numero tappe:</strong> <%= trail.numero_tappe %></li>
-                                <% } %>
-                                <% if (trail.lunghezza_totale_km) { %>
-                                <li><strong>Lunghezza totale:</strong> <%= trail.lunghezza_totale_km %> km</li>
-                                <% } %>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            <div class="vddm-hero-box">
+                <p class="kicker"><%= (details && details.kicker) || 'Cammino' %></p>
+                <h1><%= trail.nome %></h1>
+                <p class="subtitle"><%= (details && details.subtitle) || trail.descrizione || ('Da ' + trail.citta_partenza + ' a ' + trail.citta_arrivo + ' lungo un itinerario ricco di natura e borghi.') %></p>
+                <a href="/strutture?cammino=<%= trail.slug %>" class="btn btn-warning btn-lg vddm-hero-cta">
+                    <i class="fa fa-bed"></i> Prenota ora
+                </a>
             </div>
+        </div>
+    </section>
 
-            <% if (facilities.length > 0) { %>
-            <div id="strutture" class="row" style="margin-top:40px">
-                <div class="col-md-12">
-                    <h2>Strutture su questo percorso</h2>
-                    <div class="row">
-                        <% facilities.forEach(function(f) { %>
-                        <div class="col-md-4" style="margin-bottom:20px">
-                            <div class="panel panel-default">
-                                <% if (f.immagine) { %>
-                                <img src="/images/<%= f.immagine %>" alt="<%= f.nome %>" style="width:100%; height:200px; object-fit:cover;">
-                                <% } else { %>
-                                <div style="height:200px;background:#e9ecef;display:flex;align-items:center;justify-content:center;">
-                                    <i class="fa fa-home fa-3x" style="color:#aaa;"></i>
-                                </div>
-                                <% } %>
+    <main class="vddm-main">
+        <section class="container">
+            <div class="row vddm-top-row">
+                <div class="col-md-8 vddm-left-col">
+                    <div class="vddm-section-title">
+                        <h2>Tappe del percorso</h2>
+                    </div>
+
+                    <% if (details && details.intro) { %>
+                    <div class="vddm-stage-card">
+                        <p><%= details.intro %></p>
+                        <% if (details.classicStagesNote) { %>
+                        <p><strong><%= details.classicStagesNote %></strong></p>
+                        <% } %>
+                    </div>
+                    <% } %>
+
+                    <div class="panel-group vddm-accordion" id="trailAccordion" role="tablist" aria-multiselectable="true">
+                        <% for (var i = 1; i <= totalStages; i++) { %>
+                        <% var stage = detailedStages ? detailedStages[i - 1] : null; %>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="trailHeading<%= i %>">
+                                <h4 class="panel-title">
+                                    <a class="<%= i === 1 ? '' : 'collapsed' %>" role="button" data-toggle="collapse" data-parent="#trailAccordion" href="#trailCollapse<%= i %>" aria-expanded="<%= i === 1 ? 'true' : 'false' %>" aria-controls="trailCollapse<%= i %>">
+                                        <%= i %>) <%= stage ? stage.titolo : ('Tappa ' + i) %>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="trailCollapse<%= i %>" class="panel-collapse collapse<%= i === 1 ? ' in' : '' %>" role="tabpanel" aria-labelledby="trailHeading<%= i %>">
                                 <div class="panel-body">
-                                    <h4><%= f.nome %></h4>
-                                    <p><%= f.citta %></p>
-                                    <% if (f.prezzo_notte) { %>
-                                    <p><strong>&euro;<%= f.prezzo_notte.toFixed(2) %></strong> / notte</p>
+                                    <div class="vddm-stage-meta">
+                                        <% if (stage && stage.tempo) { %>
+                                        <span>Tempo: <%= stage.tempo %></span>
+                                        <% } %>
+                                        <% if (stage && stage.dislivello) { %>
+                                        <span>Dislivello: <%= stage.dislivello %></span>
+                                        <% } else if (trail.lunghezza_totale_km) { %>
+                                        <span>Lunghezza totale: <%= trail.lunghezza_totale_km %> km</span>
+                                        <% } %>
+                                    </div>
+                                    <% if (stage && stage.descrizione) { %>
+                                    <p><%= stage.descrizione %></p>
+                                    <% } else { %>
+                                    <p>
+                                        Questa sezione raccoglie la tappa <%= i %> del cammino <strong><%= trail.nome %></strong>.
+                                        Personalizza il testo con dettagli locali (punti acqua, dislivello e tempi) quando li avrai disponibili.
+                                    </p>
                                     <% } %>
-                                    <a href="/struttura/<%= f.id %>" class="btn btn-primary btn-sm">Dettagli</a>
                                 </div>
                             </div>
                         </div>
-                        <% }); %>
+                        <% } %>
+                    </div>
+
+                    <div class="vddm-booking-wrap">
+                        <a href="/strutture?cammino=<%= trail.slug %>" class="btn btn-warning btn-lg vddm-booking-cta">
+                            <i class="fa fa-bed"></i> Prenota ora
+                        </a>
                     </div>
                 </div>
+
+                <aside class="col-md-4 vddm-right-col">
+                    <div class="vddm-info-card">
+                        <h3><i class="fa fa-map-signs"></i> Info generali</h3>
+                        <ul>
+                            <li><strong>Partenza:</strong> <%= trail.citta_partenza %></li>
+                            <li><strong>Arrivo:</strong> <%= trail.citta_arrivo %></li>
+                            <% if (trail.regione) { %>
+                            <li><strong>Regione:</strong> <%= trail.regione %></li>
+                            <% } %>
+                            <% if (trail.numero_tappe) { %>
+                            <li><strong>Tappe:</strong> <%= trail.numero_tappe %></li>
+                            <% } %>
+                            <% if (trail.lunghezza_totale_km) { %>
+                            <li><strong>Lunghezza totale:</strong> <%= trail.lunghezza_totale_km %> km</li>
+                            <% } %>
+                            <% if (trail.stagione_ideale) { %>
+                            <li><strong>Stagione ideale:</strong> <%= trail.stagione_ideale %></li>
+                            <% } %>
+                        </ul>
+                    </div>
+
+                    <div class="vddm-gallery-title">
+                        <h3>Galleria cammino</h3>
+                    </div>
+                    <div id="trailGallery" class="carousel slide vddm-carousel" data-ride="carousel">
+                        <div class="carousel-inner" role="listbox">
+                            <% var fallbackTrailImage = trail.immagine ? ('/images/' + trail.immagine) : '/images/Via degli Dei.jpg'; %>
+                            <% var galleryImages = []; %>
+                            <% if (details && details.galleryImages && details.galleryImages.length) { %>
+                            <% galleryImages = details.galleryImages.map(function(img) { return img.startsWith('http') ? img : ('/images/' + img); }); %>
+                            <% } %>
+                            <% if (!galleryImages.length) { galleryImages = [fallbackTrailImage]; } %>
+                            <% while (galleryImages.length < 3) { galleryImages.push(fallbackTrailImage); } %>
+                            <% galleryImages.forEach(function(img, index) { %>
+                            <div class="item<%= index === 0 ? ' active' : '' %>">
+                                <img src="<%= img %>" alt="<%= trail.nome %> - panorama <%= index + 1 %>">
+                            </div>
+                            <% }); %>
+                        </div>
+                        <a class="left carousel-control" href="#trailGallery" role="button" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">Precedente</span>
+                        </a>
+                        <a class="right carousel-control" href="#trailGallery" role="button" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">Successiva</span>
+                        </a>
+                    </div>
+                </aside>
             </div>
-            <% } %>
-        </div>
-    </section>
+        </section>
+
+        <% if (facilities && facilities.length > 0) { %>
+        <section class="container vddm-facilities">
+            <div class="vddm-section-title">
+                <h2>Strutture lungo il percorso</h2>
+            </div>
+            <div class="row">
+                <% facilities.forEach(function(f) { %>
+                <div class="col-md-4 col-sm-6 vddm-facility-col">
+                    <article class="vddm-facility-card">
+                        <% if (f.immagine) { %>
+                        <img src="/images/<%= f.immagine %>" alt="<%= f.nome %>">
+                        <% } else { %>
+                        <div class="placeholder"><i class="fa fa-home fa-3x"></i></div>
+                        <% } %>
+                        <div class="body">
+                            <h4><%= f.nome %></h4>
+                            <p><i class="fa fa-map-marker"></i> <%= f.citta %></p>
+                            <% if (f.prezzo_notte) { %>
+                            <p><strong>&euro;<%= f.prezzo_notte.toFixed(2) %></strong> / notte</p>
+                            <% } %>
+                            <a href="/struttura/<%= f.id %>" class="btn btn-primary btn-lg">Dettagli e prenota</a>
+                        </div>
+                    </article>
+                </div>
+                <% }); %>
+            </div>
+        </section>
+        <% } %>
+
+        <section class="container vddm-map-section">
+            <div class="vddm-section-title">
+                <h2>Mappa interattiva</h2>
+            </div>
+            <div id="trail-map" class="vddm-map" data-gpx-map data-gpx="<%= details && details.gpxFile ? ('/gpx/' + details.gpxFile) : '' %>"></div>
+            <p class="vddm-map-note" data-gpx-note hidden>Traccia GPX non disponibile per questo cammino.</p>
+        </section>
+    </main>
 
     <%- include('partials/footer') %>
 
     <script src="/javascripts/jquery.min.js"></script>
     <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="/javascripts/trail-map.js"></script>
 </body>
 
 </html>
