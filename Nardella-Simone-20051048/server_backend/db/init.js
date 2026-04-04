@@ -23,18 +23,12 @@ db.exec(schemaSQL, (err) => {
       ('Via degli Dei', 'via-degli-dei', 'Bologna', 'Firenze', 'Emilia-Romagna/Toscana', 'Primavera/Autunno', 5, 130,
        'Un''antica strada escursionistica attraverso i monti dell''Appennino, dalla Toscana all''Emilia-Romagna.',
        'Via degli Dei.jpg'),
-      ('Kungsleden', 'kungsleden', 'Abisko', 'Hemavan', 'Svezia', 'Estate', 20, 440,
-       'Un sentiero storico nel nord della Svezia, che attraversa paesaggi selvaggi e antiche foreste.',
-       'Kungsleden.jpg'),
       ('Cammino Grande di Celestino', 'cammino-grande-di-celestino', 'L''Aquila', 'Sulmona', 'Abruzzo', 'Primavera/Estate', 5, 90,
        'Un percorso spirituale attraverso l''Italia meridionale, seguendo le orme di San Celestino V.',
        'Cammino Grande di Celestino.jpg'),
       ('Alta Via Dolomitica', 'alta-via-dolomitica', 'Lago di Braies', 'Belluno', 'Dolomiti (Alto Adige/Veneto)', 'Giugno-Settembre', 11, 125,
        'L''Alta Via 1 delle Dolomiti attraversa il cuore delle Dolomiti dal Lago di Braies fino a Belluno, lungo un itinerario tra i piu spettacolari e celebri al mondo.',
        'Alta via Dolomitica.jpg'),
-      ('Grande Anello dei Sibillini', 'grande-anello-dei-sibillini', 'Visso', 'Visso', 'Marche/Umbria', 'Primavera/Estate', 9, 120,
-       'Un anello escursionistico nel cuore del Parco Nazionale dei Monti Sibillini.',
-       'GrandeAnelloDeiSibillini.jpg'),
       ('Magna Via Francigena', 'magna-via-francigena', 'Palermo', 'Agrigento', 'Sicilia', 'Primavera/Autunno', 9, 180,
        'Un cammino che attraversa la Sicilia, seguendo le antiche vie dei pellegrini.',
        'magnaViaFrancigena.jpg'),
@@ -59,34 +53,68 @@ db.exec(schemaSQL, (err) => {
        'ViaDegliDeiHotel2.jpg', 55.00, 8),
       ('ristoratore@test.it', 1, 'Residence Mugello Resort', 'Scarperia', 4, 'Via Mugello 5',
        'Appartamenti con angolo cottura e vista giardino, a 30 km da Firenze.',
-       'ViaDegliDeiHotel3.jpg', 95.00, 20);
+       'ViaDegliDeiHotel3.jpg', 95.00, 20),
+      ('ristoratore@test.it', 1, 'Locanda del Passo', 'Monzuno', 3, 'Via della Torre 8',
+       'Locanda di montagna con camere essenziali, ideale per una sosta tranquilla.',
+       NULL, 62.00, 14),
+      ('ristoratore@test.it', 1, 'B&B Collina del Sole', 'Firenze', 5, 'Via del Pellegrino 22',
+       'Bed & breakfast in centro storico con colazione artigianale.',
+       NULL, 88.00, 10);
 
-    -- Strutture - Alta Via Dolomitica (trail_id = 4)
+    -- Strutture - Alta Via Dolomitica (trail_id = 3)
     INSERT OR IGNORE INTO facilities (email_ristoratore, id_cammino, nome, citta, numero_tappa, indirizzo, descrizione, immagine, prezzo_notte, capacita)
     VALUES
-      ('ristoratore@test.it', 4, 'Rifugio Lagazuoi', 'Cortina d''Ampezzo', 3, 'Passo Falzarego',
+      ('ristoratore@test.it', 3, 'Rifugio Lagazuoi', 'Cortina d''Ampezzo', 3, 'Passo Falzarego',
        'Rifugio alpino a 2752m con vista panoramica sulle Dolomiti, cucina tipica tirolese.',
        NULL, 60.00, 40),
-      ('ristoratore@test.it', 4, 'Hotel Tre Cime', 'Auronzo di Cadore', 1, 'Via Nazionale 15',
+      ('ristoratore@test.it', 3, 'Hotel Tre Cime', 'Auronzo di Cadore', 1, 'Via Nazionale 15',
        'Hotel accogliente ai piedi delle Tre Cime di Lavaredo, ideale per escursionisti.',
-       NULL, 85.00, 25);
+       NULL, 85.00, 25),
+      ('ristoratore@test.it', 3, 'Rifugio del Pelmo', 'Val di Zoldo', 6, 'Strada del Giau 3',
+       'Rifugio con cucina locale e camere condivise per trekker.',
+       NULL, 70.00, 28),
+      ('ristoratore@test.it', 3, 'Albergo delle Cime', 'Belluno', 11, 'Via degli Alpini 9',
+       'Albergo a gestione familiare vicino al centro storico.',
+       NULL, 78.00, 20);
 
-    -- Strutture - Cammino Grande di Celestino (trail_id = 3)
+    -- Strutture - Cammino Grande di Celestino (trail_id = 2)
     INSERT OR IGNORE INTO facilities (email_ristoratore, id_cammino, nome, citta, numero_tappa, indirizzo, descrizione, immagine, prezzo_notte, capacita)
     VALUES
-      ('ristoratore@test.it', 3, 'Locanda Eremi della Majella', 'Pacentro', 2, 'Via del Castello 7',
+      ('ristoratore@test.it', 2, 'Locanda Eremi della Majella', 'Pacentro', 2, 'Via del Castello 7',
        'Piccola locanda in pietra a due passi dal centro storico, con camere rustiche e colazione con prodotti locali. Ideale come tappa intermedia del cammino.',
        NULL, 68.00, 10),
-      ('ristoratore@test.it', 3, 'Casa del Pellegrino Alento', 'Serramonacesca', 5, 'Contrada Abbazia 3',
+      ('ristoratore@test.it', 2, 'Casa del Pellegrino Alento', 'Serramonacesca', 5, 'Contrada Abbazia 3',
        'Alloggio per camminatori vicino all''Abbazia di San Liberatore, atmosfera semplice e accogliente con spazi comuni e deposito zaini.',
-       NULL, 55.00, 12);
+       NULL, 55.00, 12),
+      ('ristoratore@test.it', 2, 'Borgo del Morrone', 'Sulmona', 1, 'Via Badia 18',
+       'Affittacamere storico con camere luminose e deposito bici.',
+       NULL, 72.00, 16);
 
-    -- Strutture - Magna Via Francigena (trail_id = 6)
+    -- Strutture - Magna Via Francigena (trail_id = 4)
     INSERT OR IGNORE INTO facilities (email_ristoratore, id_cammino, nome, citta, numero_tappa, indirizzo, descrizione, immagine, prezzo_notte, capacita)
     VALUES
-      ('ristoratore@test.it', 6, 'Agriturismo Valle dei Templi', 'Agrigento', 1, 'Contrada San Biagio',
+      ('ristoratore@test.it', 4, 'Agriturismo Valle dei Templi', 'Agrigento', 1, 'Contrada San Biagio',
        'Agriturismo immerso negli uliveti siciliani, a pochi km dalla Valle dei Templi.',
-       NULL, 45.00, 12);
+       NULL, 45.00, 12),
+      ('ristoratore@test.it', 4, 'Casa dei Pellegrini', 'Caltanissetta', 4, 'Via del Rosario 11',
+       'Alloggio semplice con camere private e spazi comuni.',
+       NULL, 52.00, 14),
+      ('ristoratore@test.it', 4, 'Dimora del Gelsomino', 'Palermo', 9, 'Via dei Mercanti 5',
+       'Piccola dimora con colazione siciliana e terrazza panoramica.',
+       NULL, 80.00, 10);
+
+    -- Strutture - Cammino dei Briganti (trail_id = 5)
+    INSERT OR IGNORE INTO facilities (email_ristoratore, id_cammino, nome, citta, numero_tappa, indirizzo, descrizione, immagine, prezzo_notte, capacita)
+    VALUES
+      ('ristoratore@test.it', 5, 'Ostello del Brigante', 'Sante Marie', 1, 'Via del Castello 2',
+       'Ostello per camminatori con cucina condivisa e deposito zaini.',
+       NULL, 38.00, 22),
+      ('ristoratore@test.it', 5, 'B&B Valle del Salto', 'Cartore', 3, 'Via Fonte 6',
+       'Camere in pietra con colazione casalinga.',
+       NULL, 48.00, 8),
+      ('ristoratore@test.it', 5, 'Rifugio dei Marsi', 'Tagliacozzo', 7, 'Via della Rocca 14',
+       'Rifugio con vista sulla valle, perfetto per l\'ultima tappa.',
+       NULL, 60.00, 15);
 
     -- Catalogo servizi predefiniti
     INSERT OR IGNORE INTO service_catalog (slug, nome, icon_type, icon_value, sort_order)

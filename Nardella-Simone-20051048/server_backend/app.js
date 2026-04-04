@@ -54,7 +54,6 @@ app.use(function (req, _res, next) {
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/gpx', express.static(path.join(__dirname, '..', 'vecho')));
 
 app.use(session({
   secret: 'trekking-upo-secret-2026',

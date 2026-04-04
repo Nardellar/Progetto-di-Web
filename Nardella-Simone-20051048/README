@@ -1,0 +1,19 @@
+SPIEGAZIONE CARTELLE:
+
+BIN: contiene avvio server su porta 3000 (ignora)
+
+CONTROLLERS: contengono la logica delle funzioni (esempio, creare prenotazione nel db, aggiungere una nuova struttura)
+
+DB: database
+
+MIDDLEWARE: molte operazioni dei controller dovrebbero fare dei controlli di sanificazione standard (es: l'utente è iscirtto per fare questa prenotazione, è un camminatore?, l'input ricevuto è una stringa vuota? è valido? )
+questi tipi di controlli che spesso vanno bene per più funzioni li metti question_id
+
+PUBLIC: contiene immagini/css/javascript
+
+ROUTES: qui catturiamo con es: "router.get/post()'/', function(req, res, next)" le informazioni che il browser richiede, spesso restituiamo una pagine con render (chiaamndo poi file ejs) oppuure una funzione controller per eseguire la logica richiesta.
+
+VIEWS: contiene i file ejs che costruiscono le pagine html
+
+
+RICORDA: sei protetto dal Cross-Site Scripting vulnerability (XSS) perchè nel ejs usaimo sempre <%= che è già html escaped

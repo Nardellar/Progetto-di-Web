@@ -7,11 +7,6 @@ module.exports = {
   'Cammino Grande di Celestino-imm2.jpg': 'trails/Cammino Grande di Celestino-imm2.jpg',
   'Cammino Grande di Celestino-imm3.jpg': 'trails/Cammino Grande di Celestino-imm3.jpg',
   'Cammino Grande di Celestino.jpg': 'trails/Cammino Grande di Celestino.jpg',
-  'GrandeAnelloDeiSibillini.jpg': 'trails/GrandeAnelloDeiSibillini.jpg',
-  'Kungsleden imm-1.jpg': 'trails/Kungsleden imm-1.jpg',
-  'Kungsleden imm-2.jpg': 'trails/Kungsleden imm-2.jpg',
-  'Kungsleden.jpg': 'trails/Kungsleden.jpg',
-  'Kungsleden_2.jpg': 'trails/Kungsleden_2.jpg',
   'Via degli Dei imm-1.jpg': 'trails/Via degli Dei imm-1.jpg',
   'Via degli Dei imm-2.jpg': 'trails/Via degli Dei imm-2.jpg',
   'Via degli Dei imm-3.jpg': 'trails/Via degli Dei imm-3.jpg',
@@ -44,4 +39,5 @@ module.exports = {
   'fotoProfilo1.jpg': 'profiles/defaults/fotoProfilo1.jpg',
   'fotoProfiloAnonima.jpg': 'profiles/defaults/fotoProfiloAnonima.jpg'
 };
+
 

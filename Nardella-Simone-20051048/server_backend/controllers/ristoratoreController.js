@@ -13,6 +13,10 @@ const validaRisposta = [
 ];
 
 const validaDettagliStruttura = [
+  body('nome')
+    .trim()
+    .notEmpty().withMessage('Inserisci il nome della struttura')
+    .isLength({ max: 120 }).withMessage('Nome troppo lungo (max 120 caratteri)'),
   body('prezzo_notte')
     .trim()
     .notEmpty().withMessage('Inserisci il prezzo per notte')
@@ -30,6 +34,11 @@ const validaNuovaStruttura = [
     .trim()
     .notEmpty().withMessage('Inserisci il nome della struttura')
     .isLength({ max: 120 }).withMessage('Nome troppo lungo (max 120 caratteri)'),
+  body('prezzo_notte')
+    .trim()
+    .notEmpty().withMessage('Inserisci il prezzo per notte')
+    .isFloat({ min: 0 }).withMessage('Il prezzo deve essere un numero maggiore o uguale a 0')
+    .toFloat(),
   body('id_cammino')
     .notEmpty().withMessage('Seleziona un cammino')
     .isInt({ min: 1 }).withMessage('Cammino non valido')
@@ -45,22 +54,22 @@ const validaNuovaStruttura = [
 
 function buildTrailTappe(trail) {
   const details = trailDetailsBySlug[trail.slug] || null;
-  const stages = (details && details.stages) ? details.stages : [];
+  const managementTappe = (details && Array.isArray(details.managementTappe))
+    ? details.managementTappe
+    : [];
   const options = [];
 
   if (trail.citta_partenza) {
     options.push({
-      value: 'start|' + trail.citta_partenza,
-      label: 'Inizio'
+      value: 'start',
+      label: 'Inizio - ' + trail.citta_partenza
     });
   }
 
-  stages.forEach(function (stage, index) {
-    const title = String(stage.titolo || '').trim();
-    const parts = title.split(' - ');
-    const place = (parts.length > 1 ? parts[parts.length - 1] : title) || ('Tappa ' + (index + 1));
+  managementTappe.forEach(function (placeRaw, index) {
+    const place = String(placeRaw || '').trim();
     options.push({
-      value: 'stage|' + place,
+      value: 'stage|' + (index + 1) + '|' + place,
       label: 'Tappa ' + (index + 1) + ' - ' + place
     });
   });
@@ -333,7 +342,7 @@ async function postAggiornaImmagineStruttura(req, res) {
   try {
     const facility = await getOwnedFacility(id, req.user.email);
     if (!facility) {
-      return res.redirect('/gestione?errore=' + encodeURIComponent('Struttura non trovata o non autorizzata'));
+      return res.redirect('/gestione?errore=' + encodeURIComponent('Struttura non trovata o non autorizzata') + '#struttura-' + id);
     }
 
     const newImagePath = 'facilities/' + req.file.filename;
@@ -348,7 +357,7 @@ async function postAggiornaImmagineStruttura(req, res) {
       await dbRun('UPDATE facilities SET immagine = ? WHERE id = ?', [newImagePath, id]);
     }
 
-    return res.redirect('/gestione?successo=' + encodeURIComponent('Immagine aggiunta alla galleria'));
+    return res.redirect('/gestione?successo=' + encodeURIComponent('Immagine aggiunta alla galleria') + '#struttura-' + id);
   } catch (err) {
     console.error('Errore aggiornamento immagine struttura:', err.message);
     return res.redirect('/gestione?errore=' + encodeURIComponent('Errore durante il caricamento dell\'immagine'));
@@ -365,7 +374,7 @@ async function postEliminaImmagineStruttura(req, res) {
     }
 
     if (!Number.isInteger(imageId) || imageId <= 0) {
-      return res.redirect('/gestione?errore=' + encodeURIComponent('Immagine non valida'));
+      return res.redirect('/gestione?errore=' + encodeURIComponent('Immagine non valida') + '#struttura-' + id);
     }
 
     const imageRow = await dbGetUno(
@@ -375,7 +384,7 @@ async function postEliminaImmagineStruttura(req, res) {
       [imageId, id]
     );
     if (!imageRow) {
-      return res.redirect('/gestione?errore=' + encodeURIComponent('Immagine non trovata'));
+      return res.redirect('/gestione?errore=' + encodeURIComponent('Immagine non trovata') + '#struttura-' + id);
     }
 
     await dbRun('DELETE FROM facility_images WHERE id = ? AND id_struttura = ?', [imageId, id]);
@@ -392,10 +401,10 @@ async function postEliminaImmagineStruttura(req, res) {
     const newCover = nextCover ? nextCover.percorso_immagine : null;
     await dbRun('UPDATE facilities SET immagine = ? WHERE id = ?', [newCover, id]);
 
-    return res.redirect('/gestione?successo=' + encodeURIComponent('Immagine rimossa dalla galleria'));
+    return res.redirect('/gestione?successo=' + encodeURIComponent('Immagine rimossa dalla galleria') + '#struttura-' + id);
   } catch (err) {
     console.error('Errore eliminazione immagine struttura:', err.message);
-    return res.redirect('/gestione?errore=' + encodeURIComponent('Errore durante l\'eliminazione dell\'immagine'));
+    return res.redirect('/gestione?errore=' + encodeURIComponent('Errore durante l\'eliminazione dell\'immagine') + '#struttura-' + id);
   }
 }
 
@@ -410,7 +419,7 @@ async function postAggiornaServiziStruttura(req, res) {
   try {
     const facility = await getOwnedFacility(id, req.user.email);
     if (!facility) {
-      return res.redirect('/gestione?errore=' + encodeURIComponent('Struttura non trovata o non autorizzata'));
+      return res.redirect('/gestione?errore=' + encodeURIComponent('Struttura non trovata o non autorizzata') + '#struttura-' + id);
     }
 
     if (uniqueIds.length > 0) {
@@ -420,7 +429,7 @@ async function postAggiornaServiziStruttura(req, res) {
         uniqueIds
       );
       if (rows.length !== uniqueIds.length) {
-        return res.redirect('/gestione?errore=' + encodeURIComponent('Servizi selezionati non validi'));
+        return res.redirect('/gestione?errore=' + encodeURIComponent('Servizi selezionati non validi') + '#struttura-' + id);
       }
     }
 
@@ -439,10 +448,10 @@ async function postAggiornaServiziStruttura(req, res) {
       throw err;
     }
 
-    return res.redirect('/gestione?successo=' + encodeURIComponent('Servizi struttura aggiornati'));
+    return res.redirect('/gestione?successo=' + encodeURIComponent('Servizi struttura aggiornati') + '#struttura-' + id);
   } catch (err) {
     console.error('Errore aggiornamento servizi struttura:', err.message);
-    return res.redirect('/gestione?errore=' + encodeURIComponent('Errore durante l\'aggiornamento dei servizi'));
+    return res.redirect('/gestione?errore=' + encodeURIComponent('Errore durante l\'aggiornamento dei servizi') + '#struttura-' + id);
   }
 }
 
@@ -451,24 +460,24 @@ async function postAggiornaDettagliStruttura(req, res) {
   const { id } = req.params;
 
   if (!errors.isEmpty()) {
-    return res.redirect('/gestione?errore=' + encodeURIComponent(errors.array()[0].msg));
+    return res.redirect('/gestione?errore=' + encodeURIComponent(errors.array()[0].msg) + '#struttura-' + id);
   }
 
   try {
     const facility = await getOwnedFacility(id, req.user.email);
     if (!facility) {
-      return res.redirect('/gestione?errore=' + encodeURIComponent('Struttura non trovata o non autorizzata'));
+      return res.redirect('/gestione?errore=' + encodeURIComponent('Struttura non trovata o non autorizzata') + '#struttura-' + id);
     }
 
-    const { prezzo_notte, capacita } = matchedData(req);
+    const { nome, prezzo_notte, capacita } = matchedData(req);
     await dbRun(
-      'UPDATE facilities SET prezzo_notte = ?, capacita = ? WHERE id = ?',
-      [prezzo_notte, capacita, id]
+      'UPDATE facilities SET nome = ?, prezzo_notte = ?, capacita = ? WHERE id = ?',
+      [nome, prezzo_notte, capacita, id]
     );
-    return res.redirect('/gestione?successo=' + encodeURIComponent('Prezzo e capacità aggiornati'));
+    return res.redirect('/gestione?successo=' + encodeURIComponent('Nome, prezzo e capacità aggiornati') + '#struttura-' + id);
   } catch (err) {
     console.error('Errore aggiornamento dettagli struttura:', err.message);
-    return res.redirect('/gestione?errore=' + encodeURIComponent('Errore durante l\'aggiornamento della struttura'));
+    return res.redirect('/gestione?errore=' + encodeURIComponent('Errore durante l\'aggiornamento della struttura') + '#struttura-' + id);
   }
 }
 
@@ -496,13 +505,15 @@ async function postNuovaStruttura(req, res) {
 
     const valueParts = data.tappa.split('|');
     const tappaTipo = valueParts[0];
-    const tappaCitta = valueParts.slice(1).join('|').trim();
+    const tappaNumero = Number.parseInt(valueParts[1], 10);
+    const tappaCitta = valueParts.slice(2).join('|').trim();
     const cittaStruttura = tappaTipo === 'start' ? trail.citta_partenza : tappaCitta;
+    const numeroTappa = tappaTipo === 'stage' && !Number.isNaN(tappaNumero) ? tappaNumero : null;
 
     await dbRun(
-      `INSERT INTO facilities (email_ristoratore, id_cammino, nome, citta, descrizione)
-       VALUES (?, ?, ?, ?, ?)`,
-      [req.user.email, trail.id, data.nome, cittaStruttura, data.descrizione || null]
+      `INSERT INTO facilities (email_ristoratore, id_cammino, nome, citta, numero_tappa, prezzo_notte, descrizione)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [req.user.email, trail.id, data.nome, cittaStruttura, numeroTappa, data.prezzo_notte, data.descrizione || null]
     );
 
     return res.redirect('/gestione?successo=' + encodeURIComponent('Struttura aggiunta'));

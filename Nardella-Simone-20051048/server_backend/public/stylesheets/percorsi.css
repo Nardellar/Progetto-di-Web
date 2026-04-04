@@ -72,14 +72,27 @@
   text-transform: uppercase;
 }
 
+.percorsi-main .col-md-9 > .row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.percorsi-main article.col-md-4,
+.percorsi-main article.col-sm-6 {
+  display: flex;
+  margin-bottom: 30px;
+}
+
 .trail-card {
   background: #fff;
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 10px 25px rgba(18, 29, 49, 0.08);
-  margin-bottom: 30px;
+  margin-bottom: 0;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   min-height: 580px;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -120,6 +133,11 @@
   margin: 0 0 10px;
   font-size: 24px;
   line-height: 1.2;
+  min-height: 58px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .trail-content h3 a {
@@ -169,6 +187,11 @@
   font-size: 14px;
   line-height: 1.55;
   margin-bottom: 16px;
+  min-height: 65px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .trail-content .trail-cta {
@@ -263,6 +286,7 @@
 
   .trail-card {
     min-height: auto;
+    height: 100%;
   }
 
   .trail-content .trail-cta {
@@ -272,5 +296,23 @@
 
   .percorsi-sidebar {
     margin-top: 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .percorsi-main .col-md-9 > .row {
+    display: block;
+  }
+
+  .percorsi-main article.col-md-4,
+  .percorsi-main article.col-sm-6 {
+    display: block;
+    margin-bottom: 30px;
+  }
+
+  .trail-card {
+    min-height: auto;
+    height: auto;
+    margin-bottom: 0;
   }
 }

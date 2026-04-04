@@ -5,13 +5,9 @@ var router = express.Router();
 var { dbGetAll, dbGetUno } = require('../db/helpers');
 var trailDetailsBySlug = require('../config/trailDetails');
 
-var slugToView = {
-  'via-degli-dei': 'Via_degli_Dei_modern'
-};
+var slugToView = {};
 
-var facilityNameToView = {
-  'SHG Hotel': 'SHG_Hotel'
-};
+var facilityNameToView = {};
 
 router.get('/', async function (req, res, next) {
   try {
@@ -119,7 +115,7 @@ router.get('/strutture', async function (req, res, next) {
     selectedServices = Array.from(new Set(selectedServices));
 
     if (camminoSlug) {
-      filtroCammino = await dbGetUno('SELECT nome, slug FROM trails WHERE slug = ?', [camminoSlug]);
+      filtroCammino = await dbGetUno('SELECT nome, slug, citta_partenza FROM trails WHERE slug = ?', [camminoSlug]);
     }
 
     var whereParts = [];
@@ -139,14 +135,22 @@ router.get('/strutture', async function (req, res, next) {
     if (tappa) {
       var tappaParts = tappa.split('|');
       var tappaTipo = tappaParts[0];
+      var tappaNumero = Number.parseInt(tappaParts[1], 10);
       var tappaCitta = tappaParts.slice(1).join('|').trim();
 
-      if (tappaTipo === 'start' && tappaCitta) {
-        whereParts.push('t.citta_partenza = ?');
-        params.push(tappaCitta);
+      if (tappaTipo === 'start') {
+        if (tappaCitta) {
+          whereParts.push('t.citta_partenza = ?');
+          params.push(tappaCitta);
+        } else {
+          whereParts.push('f.citta = t.citta_partenza');
+        }
       } else if (tappaTipo === 'arrivo' && tappaCitta) {
         whereParts.push('f.citta = ?');
         params.push(tappaCitta);
+      } else if (tappaTipo === 'stage' && !Number.isNaN(tappaNumero)) {
+        whereParts.push('f.numero_tappa = ?');
+        params.push(tappaNumero);
       }
     }
 
@@ -220,43 +224,44 @@ router.get('/strutture', async function (req, res, next) {
       optionParams.push(camminoSlug);
     }
 
-    var tappeArrivo = await dbGetAll(
-      `SELECT DISTINCT f.citta
-       FROM facilities f
-       LEFT JOIN trails t ON f.id_cammino = t.id
-       ${optionWhere}
-       ORDER BY f.citta ASC`,
-      optionParams
-    );
-
-    var tappeInizio = await dbGetAll(
-      `SELECT DISTINCT t.citta_partenza
-       FROM trails t
-       ${camminoSlug ? ' WHERE t.slug = ?' : ''}
-       ORDER BY t.citta_partenza ASC`,
-      camminoSlug ? [camminoSlug] : []
-    );
-
     var tappaOptions = [];
-    var seenTappe = new Set();
-    var tappaIndex = 1;
-    tappeInizio.forEach(function (row) {
-      if (!row.citta_partenza) return;
-      var value = 'start|' + row.citta_partenza;
-      if (!seenTappe.has(value)) {
-        seenTappe.add(value);
-        tappaOptions.push({ value: value, label: 'Inizio' });
-      }
-    });
-    tappeArrivo.forEach(function (row) {
-      if (!row.citta) return;
-      var value = 'arrivo|' + row.citta;
-      if (!seenTappe.has(value)) {
-        seenTappe.add(value);
-        tappaOptions.push({ value: value, label: 'Tappa ' + tappaIndex + ' - ' + row.citta });
-        tappaIndex += 1;
-      }
-    });
+    var detailEntry = filtroCammino ? trailDetailsBySlug[filtroCammino.slug] : null;
+    var detailStages = (detailEntry && Array.isArray(detailEntry.stages)) ? detailEntry.stages : [];
+    var hasTrailDetails = !!(detailStages && detailStages.length);
+
+    if (filtroCammino && filtroCammino.citta_partenza) {
+      tappaOptions.push({ value: 'start', label: 'Inizio' });
+    }
+
+    if (hasTrailDetails) {
+      detailStages.forEach(function (stage, index) {
+        var title = String(stage.titolo || '').trim();
+        var parts = title.split(' - ');
+        var place = (parts.length > 1 ? parts[parts.length - 1] : title) || ('Tappa ' + (index + 1));
+        tappaOptions.push({
+          value: 'stage|' + (index + 1) + '|' + place,
+          label: 'Tappa ' + (index + 1) + ' - ' + place
+        });
+      });
+    } else {
+      var tappeArrivo = await dbGetAll(
+        `SELECT DISTINCT f.numero_tappa, f.citta
+         FROM facilities f
+         LEFT JOIN trails t ON f.id_cammino = t.id
+         ${optionWhere}
+         ORDER BY f.numero_tappa ASC`,
+        optionParams
+      );
+
+      tappeArrivo.forEach(function (row) {
+        if (!row.numero_tappa) return;
+        var label = row.citta ? ('Tappa ' + row.numero_tappa + ' - ' + row.citta) : ('Tappa ' + row.numero_tappa);
+        tappaOptions.push({
+          value: 'stage|' + row.numero_tappa,
+          label: label
+        });
+      });
+    }
 
     var services = await dbGetAll(
       `SELECT DISTINCT s.slug, s.nome, s.sort_order
@@ -472,18 +477,17 @@ router.get('/cerca', async function (req, res, next) {
     var trails = await dbGetAll(
       `SELECT * FROM trails
        WHERE nome LIKE ? OR citta_partenza LIKE ? OR citta_arrivo LIKE ?
-             OR regione LIKE ? OR descrizione LIKE ?
+             OR regione LIKE ?
        ORDER BY nome`,
-      [like, like, like, like, like]
+      [like, like, like, like]
     );
     var facilities = await dbGetAll(
       `SELECT f.*, t.nome AS nome_cammino, t.slug AS slug_cammino
        FROM facilities f
        LEFT JOIN trails t ON f.id_cammino = t.id
-       WHERE f.nome LIKE ? OR f.citta LIKE ? OR f.descrizione LIKE ?
-             OR f.indirizzo LIKE ?
+       WHERE f.nome LIKE ? OR f.citta LIKE ? OR f.indirizzo LIKE ?
        ORDER BY f.nome`,
-      [like, like, like, like]
+      [like, like, like]
     );
     res.render('cerca', { title: 'Ricerca: ' + q, query: q, trails: trails, facilities: facilities });
   } catch (err) {

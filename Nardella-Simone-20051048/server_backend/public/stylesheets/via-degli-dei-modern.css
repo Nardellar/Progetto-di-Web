@@ -49,7 +49,7 @@
 }
 
 .vddm-left-col .vddm-accordion {
-  flex: 1;
+  flex: 0 1 auto;
 }
 
 .vddm-section-title {
@@ -80,11 +80,30 @@
 }
 
 .vddm-accordion {
-  height: 100%;
   background: #ffffff;
   border: 1px solid #d9eaf3;
   border-radius: 10px;
   padding: 10px;
+}
+
+.vddm-stage-pager {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 0 0 10px;
+}
+
+.vddm-stage-pager-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2c42;
+  min-width: 145px;
+  text-align: center;
+}
+
+.vddm-stage-pager-btn {
+  min-width: 34px;
 }
 
 .vddm-booking-wrap {
@@ -213,7 +232,7 @@
 }
 
 .vddm-gallery-title {
-  margin: 18px 0 10px;
+  margin: 22px 0 8px;
 }
 
 .vddm-gallery-title h3 {
@@ -225,13 +244,15 @@
 .vddm-carousel {
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 12px 26px rgba(15, 28, 47, 0.14);
+  box-shadow: 0 8px 22px rgba(15, 28, 47, 0.13);
+  margin-top: 6px;
 }
 
 .vddm-carousel .item img {
   width: 100%;
-  height: 430px;
+  height: 520px;
   object-fit: cover;
+  display: block;
 }
 
 .vddm-facilities {
@@ -307,6 +328,6 @@
   }
 
   .vddm-carousel .item img {
-    height: 320px;
+    aspect-ratio: 16 / 10;
   }
 }

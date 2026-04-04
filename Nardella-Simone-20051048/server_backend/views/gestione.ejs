@@ -66,6 +66,12 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nuova-prezzo-notte">Prezzo per notte (&euro;)</label>
+                                    <input id="nuova-prezzo-notte" name="prezzo_notte" class="form-control" type="number" min="0" step="0.01" required>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="nuova-descrizione">Descrizione (opzionale)</label>
@@ -81,7 +87,7 @@
             <% } %>
 
             <% strutture.forEach(function(s) { %>
-            <div class="panel panel-primary">
+            <div class="panel panel-primary" id="struttura-<%= s.id %>">
                 <div class="panel-heading gestione-panel-heading">
                     <h3 class="panel-title gestione-panel-title">
                         <i class="fa fa-building"></i> <%= s.nome %> &mdash; <%= s.citta %>
@@ -145,6 +151,10 @@
                                 <% } %>
                             </ul>
                             <form action="/struttura/<%= s.id %>/dettagli" method="post" class="gestione-inline-form">
+                                <div class="form-group">
+                                    <label for="nome-struttura-<%= s.id %>">Nome struttura</label>
+                                    <input id="nome-struttura-<%= s.id %>" name="nome" class="form-control" type="text" maxlength="120" value="<%= s.nome %>" required>
+                                </div>
                                 <div class="form-group">
                                     <label for="prezzo-notte-<%= s.id %>">Prezzo per notte (&euro;)</label>
                                     <input id="prezzo-notte-<%= s.id %>" name="prezzo_notte" class="form-control" type="number" min="0" step="0.01" value="<%= s.prezzo_notte != null ? Number(s.prezzo_notte).toFixed(2) : '' %>" required>

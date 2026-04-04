@@ -27,14 +27,14 @@
 </head>
 
 <body>
-    <section class="header">
+    <section class="header home-header">
         <%- include('partials/navbar') %>
         <section class="banner">
             <div class="container">
                 <div class="banner-content">
                     <div class="owl-carousel owl-theme">
                         <div class="item">
-                            <h1>Inizia una nuova avventura</h1>
+                            <h1>Inizia una nuova<br>avventura</h1>
                             <a href="/percorsi" class="d-grid btn btn-success btn-outline-dark btn-lg custom-btn">Percorsi</a>
                         </div>
                         <div class="item">
@@ -97,8 +97,10 @@
                     <div class="content-div text-center">
                         <div class="blog-inner">
                             <div class="blog-img">
-                                <img class="img-responsive" src="/images/Via degli Dei.jpg" alt="" />
-                                <div class="img-border"></div>
+                                <a class="blog-img-link" href="/sentiero/via-degli-dei" aria-label="Via degli Dei: apri scheda sentiero">
+                                    <img class="img-responsive" src="/images/Via degli Dei.jpg" alt="Paesaggio sul sentiero Via degli Dei" />
+                                    <div class="img-border" aria-hidden="true"></div>
+                                </a>
                             </div>
                             <div class="blog-text">
                                 <p class="blog-heading">
@@ -115,16 +117,18 @@
                     <div class="content-div text-center">
                         <div class="blog-inner">
                             <div class="blog-img">
-                                <img class="img-responsive" src="/images/Kungsleden.jpg" alt="" />
-                                <div class="img-border"></div>
+                                <a class="blog-img-link" href="/sentiero/cammino-dei-briganti" aria-label="Cammino dei Briganti: apri scheda sentiero">
+                                    <img class="img-responsive" src="/images/camminoDeiBriganti.jpg" alt="Paesaggio sul Cammino dei Briganti" />
+                                    <div class="img-border" aria-hidden="true"></div>
+                                </a>
                             </div>
                             <div class="blog-text">
                                 <p class="blog-heading">
-                                    Kungsleden
+                                    Cammino dei Briganti
                                 </p>
                                 <p class="blog-textual-cont">
-                                    Un sentiero storico nel nord della Svezia, che attraversa paesaggi selvaggi e antiche foreste, offrendo un'esperienza immersiva nella natura nordica.                                </p>
-                                <a class="read-more" href="/sentiero/via-degli-dei">Per saperne di più</a>
+                                    Un anello di oltre 100 km tra Abruzzo e Lazio, tra borghi in pietra, mulattiere storiche e paesaggi appenninici autentici.                                </p>
+                                <a class="read-more" href="/sentiero/cammino-dei-briganti">Per saperne di più</a>
                             </div>
                         </div>
                     </div>
@@ -133,8 +137,10 @@
                     <div class="content-div text-center">
                         <div class="blog-inner">
                             <div class="blog-img">
-                                <img class="img-responsive" src="/images/Cammino Grande di Celestino.jpg" alt="" />
-                                <div class="img-border"></div>
+                                <a class="blog-img-link" href="/sentiero/cammino-grande-di-celestino" aria-label="Cammino Grande di Celestino: apri scheda sentiero">
+                                    <img class="img-responsive" src="/images/Cammino Grande di Celestino.jpg" alt="Paesaggio sul Cammino Grande di Celestino" />
+                                    <div class="img-border" aria-hidden="true"></div>
+                                </a>
                             </div>
                             <div class="blog-text">
                                 <p class="blog-heading">
@@ -142,7 +148,7 @@
                                 </p>
                                 <p class="blog-textual-cont">
                                     Un percorso spirituale attraverso l'Italia meridionale, seguendo le orme di San Celestino V, offrendo riflessione, storia e bellezze naturali.                                </p>
-                                <a class="read-more" href="/sentiero/via-degli-dei">Per saperne di più</a>
+                                <a class="read-more" href="/sentiero/cammino-grande-di-celestino">Per saperne di più</a>
                             </div>
                         </div>
                     </div>
@@ -178,7 +184,7 @@
                         <div class="content-div text-center">
                             <div class="gallery-image">
                                 <div class="gallery-overlay">
-                                    <a href="/sentiero/via-degli-dei"> <i class="fa fa-link" aria-hidden="true"></i></a>
+                                    <a href="/sentiero/cammino-grande-di-celestino"> <i class="fa fa-link" aria-hidden="true"></i></a>
                                 </div>
                                 <img class="img-responsive" src="/images/Cammino Grande di Celestino-imm1.jpg" alt="" />
                             </div>
@@ -188,9 +194,9 @@
                         <div class="content-div text-center">
                             <div class="gallery-image">
                                 <div class="gallery-overlay">
-                                    <a href="/sentiero/via-degli-dei"> <i class="fa fa-link" aria-hidden="true"></i></a>
+                                    <a href="/sentiero/cammino-dei-briganti"> <i class="fa fa-link" aria-hidden="true"></i></a>
                                 </div>
-                                <img class="img-responsive" src="/images/Kungsleden imm-1.jpg" alt="" />
+                                <img class="img-responsive" src="/images/camminoDeiBriganti.jpg" alt="" />
                             </div>
                         </div>
                     </div>
@@ -223,9 +229,9 @@
                         <div class="content-div text-center">
                             <div class="gallery-image-2">
                                 <div class="gallery-overlay">
-                                    <a href="/sentiero/via-degli-dei"> <i class="fa fa-link" aria-hidden="true"></i></a>
+                                    <a href="/sentiero/cammino-dei-briganti"> <i class="fa fa-link" aria-hidden="true"></i></a>
                                 </div>
-                                <img class="img-responsive" src="/images/Kungsleden imm-2.jpg" alt="" />
+                                <img class="img-responsive" src="/images/camminoDeiBriganti.jpg" alt="" />
                             </div>
                         </div>
                     </div>
@@ -233,7 +239,7 @@
                         <div class="content-div text-center">
                             <div class="gallery-image-2">
                                 <div class="gallery-overlay">
-                                    <a href="/sentiero/via-degli-dei"> <i class="fa fa-link" aria-hidden="true"></i></a>
+                                    <a href="/sentiero/cammino-grande-di-celestino"> <i class="fa fa-link" aria-hidden="true"></i></a>
                                 </div>
                                 <img class="img-responsive" src="/images/Cammino Grande di Celestino-imm2.jpg" alt="" />
                             </div>
@@ -243,7 +249,7 @@
                         <div class="content-div text-center">
                             <div class="gallery-image-2">
                                 <div class="gallery-overlay">
-                                    <a href="/sentiero/via-degli-dei"> <i class="fa fa-link" aria-hidden="true"></i></a>
+                                    <a href="/sentiero/cammino-grande-di-celestino"> <i class="fa fa-link" aria-hidden="true"></i></a>
 
                                 </div>
                                 <img class="img-responsive" src="/images/Cammino Grande di Celestino-imm3.jpg" alt="" />
@@ -276,6 +282,7 @@
     <%- include('partials/footer') %>
 
     <script src="/javascripts/jquery.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
     <script src="/javascripts/owl-carousel/owl.carousel.min.js"></script>
     <script>
         $(document).ready(function() {

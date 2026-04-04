@@ -7,7 +7,7 @@ var { uploadProfileImage } = require('../middleware/profileUpload');
 var camminatoreCtrl = require('../controllers/camminatoreController');
 
 router.post('/struttura/:id/prenota',
-  isLoggedIn, isCamminatore,
+  isLoggedIn,
   camminatoreCtrl.validaPrenotazione,
   camminatoreCtrl.postPrenotazione
 );

@@ -1,0 +1,33 @@
+✓ FARE PAGINA PROFILO AL POSTO DI ACCEDI/REGISTRATI QUANDO SEI LOGGATO → /profilo implementato
+
+✓ CAPIRE COME GESTIRE DIFFERENZ INTERFACCIA CAMMINATORE/OSPITANTE → profilo mostra pannello diverso per ruolo, ristoratore ha /gestione dedicata
+
+✓ fare pagina gestione struttura ristoratore → /gestione con prenotazioni e domande
+
+✓ VALUTA SE TENERE TAPPE PERCORSI HARD CODED NELL'HTML → tenute hardcoded in Via_degli_Dei.ejs con mappatura slugToView
+
+CAPISCI TUTTO DA "ok ora riguardando ciò che dovevamo fare oggi dimmi se hai fatto tutto"
+
+le pagine html non devono essere tutte di "div"
+
+il fatto che tu negli hotel metta solo il numero di ospiti e non la camera non ha molto senso, vedi se aggiungere la possibilità di scegliere camere
+
+il ristoratore deve poter modificare la propria pagina dell'hotel
+
+
+pagine da rendere piu accattivanti:
+1. pagina percorsi (bottoni brutti)
+2. percorso ----< una passata fatta               (aggiungi gpx sensata, vedi se lasciare barre orizzonatli dinamiche o cambiare approccio)
+3 lista hotel
+4 singolo hotel <------ una passata fatta
+5. pagina profilo (camminatore e sopratutto risotratore)
+6. pagina gestione struttura risotratore
+7. pagina home
+8. pagina ricerca
+
+
+cambiare logo
+
+gestire il fatto che le prneotazioni siano passate
+un sisema che controlli il superamento della capienza massima delle struttura
+

@@ -81,6 +81,12 @@ async function postPrenotazione(req, res) {
   const idStruttura = req.params.id;
   const bookingAnchor = '#booking-section';
 
+  if (!req.user || req.user.role !== 'camminatore') {
+    return res.redirect(
+      `/struttura/${idStruttura}?errore=${encodeURIComponent('Solo i camminatori possono inviare richieste di prenotazione')}${bookingAnchor}`
+    );
+  }
+
   if (!errors.isEmpty()) {
     return res.redirect(`/struttura/${idStruttura}?errore=${encodeURIComponent(errors.array()[0].msg)}${bookingAnchor}`);
   }
@@ -98,6 +104,12 @@ async function postPrenotazione(req, res) {
     const facility = await dbGetUno('SELECT * FROM facilities WHERE id = ?', [idStruttura]);
     if (!facility) {
       return res.redirect('/strutture?errore=Struttura non trovata');
+    }
+
+    if (facility.email_ristoratore === req.user.email) {
+      return res.redirect(
+        `/struttura/${idStruttura}?errore=${encodeURIComponent('Non puoi prenotare la tua stessa struttura')}${bookingAnchor}`
+      );
     }
 
     if (parseInt(numero_ospiti) > facility.capacita && facility.capacita > 0) {
