@@ -8,7 +8,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt');
 var db = require('./db/database');
-var imageLegacyMap = require('./config/imageLegacyMap');
+var AppError = require('./utils/AppError');
 var publicRouter = require('./routes/public');
 var authRouter = require('./routes/auth');
 var camminatoreRouter = require('./routes/camminatore');
@@ -23,35 +23,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-// Backward compatibility: old /images/<basename> references are rewritten to the new organized folders.
-app.use(function (req, _res, next) {
-  if (!req.path.startsWith('/images/')) {
-    return next();
-  }
-
-  var relPathRaw = req.path.slice('/images/'.length);
-  var relPath = relPathRaw;
-  try {
-    relPath = decodeURIComponent(relPathRaw);
-  } catch (_err) {
-    relPath = relPathRaw;
-  }
-
-  if (relPath.indexOf('/') !== -1) {
-    return next();
-  }
-
-  var mapped = imageLegacyMap[relPath];
-  if (!mapped) {
-    return next();
-  }
-
-  var queryIndex = req.url.indexOf('?');
-  var query = queryIndex >= 0 ? req.url.slice(queryIndex) : '';
-  req.url = '/images/' + mapped + query;
-  next();
-});
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -121,10 +92,13 @@ app.use('/', camminatoreRouter);
 app.use('/', ristoratoreRouter);
 
 app.use(function (req, res, next) {
-  next(createError(404));
+  next(AppError.notFound('Pagina non trovata'));
 });
 
 app.use(function (err, req, res, next) {
+  if (err instanceof AppError && err.redirectUrl) {
+    return res.redirect(err.redirectUrl);
+  }
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);

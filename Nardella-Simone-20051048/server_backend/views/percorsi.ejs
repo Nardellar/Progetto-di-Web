@@ -43,12 +43,12 @@
             <div class="row">
                 <div class="col-md-9 col-sm-8">
                     <div class="row">
-                        <% trails.forEach(function(trail, index) { %>
+                        <% cammini.forEach(function(cammino, index) { %>
                         <article class="col-md-4 col-sm-6">
                             <div class="trail-card">
-                                <a href="/sentiero/<%= trail.slug %>" class="trail-image-link">
-                                    <% if (trail.immagine) { %>
-                                    <img src="/images/<%= trail.immagine %>" alt="<%= trail.nome %>" class="trail-image">
+                                <a href="/sentiero/<%= cammino.slug %>" class="trail-image-link">
+                                    <% if (cammino.immagine) { %>
+                                    <img src="/images/<%= cammino.immagine %>" alt="<%= cammino.nome %>" class="trail-image">
                                     <% } else { %>
                                     <div class="trail-image placeholder">
                                         <i class="fa fa-map-signs"></i>
@@ -57,21 +57,21 @@
                                 </a>
 
                                 <div class="trail-content">
-                                    <h3><a href="/sentiero/<%= trail.slug %>"><%= trail.nome %></a></h3>
-                                    <p class="route"><i class="fa fa-map-marker"></i> <%= trail.citta_partenza %> &rarr; <%= trail.citta_arrivo %></p>
+                                    <h3><a href="/sentiero/<%= cammino.slug %>"><%= cammino.nome %></a></h3>
+                                    <p class="route"><i class="fa fa-map-marker"></i> <%= cammino.citta_partenza %> &rarr; <%= cammino.citta_arrivo %></p>
 
                                     <div class="chips">
-                                        <% if (trail.regione) { %><span><%= trail.regione %></span><% } %>
-                                        <% if (trail.stagione_ideale) { %><span><%= trail.stagione_ideale %></span><% } %>
+                                        <% if (cammino.regione) { %><span><%= cammino.regione %></span><% } %>
+                                        <% if (cammino.stagione_ideale) { %><span><%= cammino.stagione_ideale %></span><% } %>
                                     </div>
 
                                     <ul class="trail-meta">
-                                        <li><strong>Tappe:</strong> <%= trail.numero_tappe || '-' %></li>
-                                        <li><strong>Lunghezza:</strong> <%= trail.lunghezza_totale_km || '-' %> km</li>
+                                        <li><strong>Tappe:</strong> <%= cammino.numero_tappe || '-' %></li>
+                                        <li><strong>Lunghezza:</strong> <%= cammino.lunghezza_totale_km || '-' %> km</li>
                                     </ul>
 
-                                    <p class="desc"><%= trail.descrizione %></p>
-                                    <a class="btn btn-primary trail-cta" href="/sentiero/<%= trail.slug %>">Scopri il percorso</a>
+                                    <p class="desc"><%= cammino.descrizione %></p>
+                                    <a class="btn btn-primary trail-cta" href="/sentiero/<%= cammino.slug %>">Scopri il percorso</a>
                                 </div>
                             </div>
                         </article>

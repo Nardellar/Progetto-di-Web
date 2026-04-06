@@ -13,9 +13,8 @@
 
 .profilo-headline {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: center;
+    gap: 14px;
     margin-bottom: 14px;
 }
 
@@ -29,13 +28,18 @@
     margin-bottom: 8px;
     color: #657184;
 }
+
+.profilo-panel-body p {
+    font-size: 15px;
+}
+
 .profilo-avatar {
-    width: 84px;
-    height: 84px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #e9edf5;
-    box-shadow: 0 4px 14px rgba(20, 32, 52, 0.16);
+    border: 3px solid #f1f4fa;
+    box-shadow: 0 8px 18px rgba(20, 32, 52, 0.2);
 }
 
 .profilo-edit-box {
@@ -48,6 +52,10 @@
     margin-top: 0;
     margin-bottom: 12px;
     font-size: 18px;
+}
+
+.profilo-edit-box .help-block {
+    margin-bottom: 10px;
 }
 
 .profilo-content-panel .panel-heading {
@@ -71,43 +79,51 @@
     background: linear-gradient(135deg, #fbfdff 0%, #f3f7fc 100%);
 }
 
-.profilo-ristoratore-panel .panel-title {
-    font-size: 20px;
-}
-
 .profilo-ristoratore-text {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 16px;
+    font-size: 17px;
+    line-height: 1.55;
+    margin-bottom: 18px;
+    color: #2f3d53;
 }
 
 .profilo-ristoratore-stats {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 10px;
-    margin-bottom: 14px;
+    gap: 12px;
+    margin-bottom: 18px;
 }
 
 .profilo-ristoratore-stat {
     background: #fff;
-    border: 1px solid #e6ebf2;
+    border: 1px solid #dfe7f2;
     border-radius: 10px;
-    padding: 10px 12px;
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    flex-wrap: wrap;
+    padding: 12px 14px;
+}
+
+.profilo-ristoratore-stat .label {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-size: 12px;
 }
 
 .profilo-ristoratore-stat strong {
-    font-size: 22px;
-    color: #1d2736;
+    display: block;
+    font-size: 30px;
+    line-height: 1;
+    color: #233247;
 }
 
-@media (min-width: 992px) {
-    .profilo-ristoratore-stats {
-        grid-template-columns: 1fr;
-    }
+.profilo-ristoratore-stat span:last-child {
+    display: block;
+    margin-top: 6px;
+    font-size: 15px;
+    color: #4d5d74;
+}
+
+.profilo-ristoratore-panel .btn.btn-lg {
+    width: 100%;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 @media (max-width: 767px) {
@@ -121,5 +137,3 @@
     }
 }
 
-.profilo-edit-box .help-block {
-    margin-bottom: 10px;

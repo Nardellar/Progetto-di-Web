@@ -176,7 +176,7 @@ img{
     position: absolute;
     left: -30px;
     top: 210px;
-    background: url("../images/arrow-leftBlack.png") repeat !important;
+    background: url("../images/site/arrow-leftBlack.png") repeat !important;
     font-size: 0 !important;
     height: 28px;
     width: 17px;
@@ -185,8 +185,8 @@ img{
 }
 
 .header .banner .banner-content .owl-next {
-    background: url("../images/arrow-rightBlack.png") repeat !important;
-    content: ""; 
+    background: url("../images/site/arrow-rightBlack.png") repeat !important;
+    content: "";
     font-size: 0 !important;
     height: 28px;
     position: absolute;
@@ -202,7 +202,7 @@ img{
 	height: auto;
 	background-size: 100%;
 	background-color: rgba(240, 76, 37, 0.1);
-	background-image: url('../images/pattern-xv.png');
+  background-image: url('../images/site/pattern-xv.png');
     font-family: 'Dosis', sans-serif;
 }
 
@@ -400,7 +400,7 @@ img{
 /*====BLOG CSS STARTS====*/
 
 .blog {
-    background-image: url('../images/blog-banner.jpg');
+    background-image: url('../images/site/blog-banner.jpg');
     padding-bottom: 50px;
     background-size: cover;
     background-position: center;
@@ -514,7 +514,7 @@ img{
 /*====CHALLENGE CSS STARTS====*/
 
 .challenge {
-    background-image: url('../images/bg-texture.jpg');
+    background-image: url('../images/site/bg-texture.jpg');
     padding-bottom: 80px;
 }
 
@@ -608,7 +608,7 @@ img{
 /*====FOOTER CSS STARTS====*/
 
 .footer {
-    background-image: url('../images/immagineFooter.jpg');
+    background-image: url('../images/site/immagineFooter.jpg');
     height: auto;
     position: relative;
     background-size: cover;

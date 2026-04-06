@@ -341,11 +341,11 @@
     margin: 2px auto 0;
 }
 
-.reply-form-collapsed {
+.risposta-form-collapsed {
     display: none;
 }
 
-.reply-inline-form {
+.risposta-inline-form {
     margin: 10px 0 4px;
     padding: 12px;
     border: 1px solid #e2e8f3;

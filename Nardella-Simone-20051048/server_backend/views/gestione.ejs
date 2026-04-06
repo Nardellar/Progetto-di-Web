@@ -17,11 +17,11 @@
 </head>
 
 <body>
-    <section class="header" id="header">
+    <header class="header" id="header">
         <%- include('partials/navbar') %>
-    </section>
+    </header>
 
-    <section class="gestione-page">
+    <main class="gestione-page">
         <div class="container">
             <h1>Gestione strutture</h1>
             <p class="lead">Benvenuto, <%= user.nome %>. Qui puoi gestire le tue strutture, le prenotazioni e rispondere alle domande.</p>
@@ -48,10 +48,10 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="nuova-cammino">Cammino</label>
-                                    <select id="nuova-cammino" name="id_cammino" class="form-control" required>
+                                    <select id="nuova-cammino" name="id_cammino" class="form-control js-gestione-cammino" required>
                                         <option value="">Seleziona un cammino</option>
-                                        <% (trails || []).forEach(function(trail) { %>
-                                        <option value="<%= trail.id %>"><%= trail.nome %></option>
+                                        <% (cammini || []).forEach(function(cammino) { %>
+                                        <option value="<%= cammino.id %>"><%= cammino.nome %></option>
                                         <% }); %>
                                     </select>
                                 </div>
@@ -61,7 +61,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="nuova-tappa">Tappa del cammino</label>
-                                    <select id="nuova-tappa" name="tappa" class="form-control" required disabled>
+                                    <select id="nuova-tappa" name="tappa" class="form-control js-gestione-tappa" required disabled>
                                         <option value="">Seleziona prima un cammino</option>
                                     </select>
                                 </div>
@@ -86,45 +86,45 @@
             <div class="alert alert-info">Non hai ancora strutture registrate.</div>
             <% } %>
 
-            <% strutture.forEach(function(s) { %>
-            <div class="panel panel-primary" id="struttura-<%= s.id %>">
+            <% strutture.forEach(function(struttura) { %>
+            <article class="panel panel-primary" id="struttura-<%= struttura.id %>">
                 <div class="panel-heading gestione-panel-heading">
                     <h3 class="panel-title gestione-panel-title">
-                        <i class="fa fa-building"></i> <%= s.nome %> &mdash; <%= s.citta %>
+                        <i class="fa fa-building"></i> <%= struttura.nome %> &mdash; <%= struttura.citta %>
                     </h3>
                     <div class="gestione-panel-actions">
-                        <a href="/struttura/<%= s.id %>" class="btn btn-sm gestione-public-page-btn">Visualizza pagina pubblica</a>
-                        <form action="/struttura/<%= s.id %>/elimina" method="post" class="gestione-inline-delete" onsubmit="return confirm('Vuoi eliminare definitivamente questa struttura?');">
+                        <a href="/struttura/<%= struttura.id %>" class="btn btn-sm gestione-public-page-btn">Visualizza pagina pubblica</a>
+                        <form action="/struttura/<%= struttura.id %>/elimina" method="post" class="gestione-inline-delete" onsubmit="return confirm('Vuoi eliminare definitivamente questa struttura?');">
                             <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
                         </form>
                     </div>
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-3 gestione-media-col" data-structure-name="<%= s.nome %>">
-                            <% const immagineStruttura = s.immagine ? (s.immagine.startsWith('http') ? s.immagine : ('/images/' + s.immagine)) : null; %>
+                        <div class="col-md-3 gestione-media-col" data-structure-name="<%= struttura.nome %>">
+                            <% const immagineStruttura = struttura.immagine ? (struttura.immagine.startsWith('http') ? struttura.immagine : ('/images/' + struttura.immagine)) : null; %>
                             <% let anteprimaUrl = immagineStruttura;
-                               if (!anteprimaUrl && s.immagini && s.immagini.length) {
-                                 const prima = s.immagini[0];
+                               if (!anteprimaUrl && struttura.immagini && struttura.immagini.length) {
+                                 const prima = struttura.immagini[0];
                                  anteprimaUrl = prima.percorso_immagine.startsWith('http') ? prima.percorso_immagine : ('/images/' + prima.percorso_immagine);
                                } %>
                             <div class="gestione-preview-slot">
                                 <% if (anteprimaUrl) { %>
-                                <img src="<%= anteprimaUrl %>" alt="<%= s.nome %>" class="img-responsive gestione-facility-image gestione-preview-main">
+                                <img src="<%= anteprimaUrl %>" alt="<%= struttura.nome %>" class="img-responsive gestione-facility-image gestione-preview-main">
                                 <% } else { %>
                                 <p class="text-muted gestione-preview-empty">Nessuna immagine caricata.</p>
                                 <% } %>
                             </div>
 
-                            <h5>Galleria immagini (<%= (s.immagini || []).length %>)</h5>
-                            <% if (s.immagini && s.immagini.length) { %>
+                            <h5>Galleria immagini (<%= (struttura.immagini || []).length %>)</h5>
+                            <% if (struttura.immagini && struttura.immagini.length) { %>
                             <div class="gestione-gallery-list">
-                                <% s.immagini.forEach(function(img) { %>
+                                <% struttura.immagini.forEach(function(img) { %>
                                 <% const imgUrl = img.percorso_immagine.startsWith('http') ? img.percorso_immagine : ('/images/' + img.percorso_immagine); %>
                                 <% const isSelected = anteprimaUrl === imgUrl; %>
                                 <div class="gestione-gallery-item">
                                     <img src="<%= imgUrl %>" alt="Immagine struttura — clic per anteprima" class="img-responsive gestione-gallery-thumb gestione-gallery-thumb-selectable<%= isSelected ? ' is-selected' : '' %>" data-preview-src="<%= imgUrl %>" tabindex="0" role="button">
-                                    <form action="/struttura/<%= s.id %>/immagine/elimina" method="post" class="gestione-gallery-delete-form">
+                                    <form action="/struttura/<%= struttura.id %>/immagine/elimina" method="post" class="gestione-gallery-delete-form">
                                         <input type="hidden" name="image_id" value="<%= img.id %>">
                                         <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Vuoi eliminare questa immagine?')">Elimina</button>
                                     </form>
@@ -133,54 +133,66 @@
                             </div>
                             <% } %>
 
-                            <form action="/struttura/<%= s.id %>/immagine" method="post" enctype="multipart/form-data" class="gestione-inline-form">
+                            <form action="/struttura/<%= struttura.id %>/immagine" method="post" enctype="multipart/form-data" class="gestione-inline-form">
                                 <div class="form-group">
-                                    <label for="immagine-struttura-<%= s.id %>">Aggiungi immagine galleria</label>
-                                    <input id="immagine-struttura-<%= s.id %>" type="file" name="immagine_struttura" class="form-control" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" required>
+                                    <label for="immagine-struttura-<%= struttura.id %>">Aggiungi immagine galleria</label>
+                                    <input id="immagine-struttura-<%= struttura.id %>" type="file" name="immagine_struttura" class="form-control" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" required>
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-sm">Aggiungi immagine</button>
                             </form>
 
                             <hr>
                             <ul class="list-unstyled">
-                                <% if (s.prezzo_notte) { %>
-                                <li><strong>Prezzo:</strong> &euro;<%= s.prezzo_notte.toFixed(2) %>/notte</li>
+                                <% if (struttura.prezzo_notte) { %>
+                                <li><strong>Prezzo:</strong> &euro;<%= struttura.prezzo_notte.toFixed(2) %>/notte</li>
                                 <% } %>
-                                <% if (s.capacita) { %>
-                                <li><strong>Capacità:</strong> <%= s.capacita %> ospiti</li>
+                                <% if (struttura.capacita) { %>
+                                <li><strong>Capacità:</strong> <%= struttura.capacita %> ospiti</li>
                                 <% } %>
                             </ul>
-                            <form action="/struttura/<%= s.id %>/dettagli" method="post" class="gestione-inline-form">
+                            <form action="/struttura/<%= struttura.id %>/dettagli" method="post" class="gestione-inline-form">
                                 <div class="form-group">
-                                    <label for="nome-struttura-<%= s.id %>">Nome struttura</label>
-                                    <input id="nome-struttura-<%= s.id %>" name="nome" class="form-control" type="text" maxlength="120" value="<%= s.nome %>" required>
+                                    <label for="nome-struttura-<%= struttura.id %>">Nome struttura</label>
+                                    <input id="nome-struttura-<%= struttura.id %>" name="nome" class="form-control" type="text" maxlength="120" value="<%= struttura.nome %>" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="prezzo-notte-<%= s.id %>">Prezzo per notte (&euro;)</label>
-                                    <input id="prezzo-notte-<%= s.id %>" name="prezzo_notte" class="form-control" type="number" min="0" step="0.01" value="<%= s.prezzo_notte != null ? Number(s.prezzo_notte).toFixed(2) : '' %>" required>
+                                    <label for="cammino-struttura-<%= struttura.id %>">Cammino</label>
+                                    <select id="cammino-struttura-<%= struttura.id %>" name="id_cammino" class="form-control js-gestione-cammino" required>
+                                        <% (cammini || []).forEach(function(cammino) { %>
+                                        <option value="<%= cammino.id %>" <%= cammino.id === struttura.id_cammino ? 'selected' : '' %>><%= cammino.nome %></option>
+                                        <% }); %>
+                                    </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="capacita-<%= s.id %>">Capacità massima ospiti</label>
-                                    <input id="capacita-<%= s.id %>" name="capacita" class="form-control" type="number" min="1" max="1000" value="<%= s.capacita || 1 %>" required>
+                                    <label for="tappa-struttura-<%= struttura.id %>">Tappa del cammino</label>
+                                    <select id="tappa-struttura-<%= struttura.id %>" name="tappa" class="form-control js-gestione-tappa" data-selected-tappa="<%= struttura.current_tappa_value || '' %>" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="prezzo-notte-<%= struttura.id %>">Prezzo per notte (&euro;)</label>
+                                    <input id="prezzo-notte-<%= struttura.id %>" name="prezzo_notte" class="form-control" type="number" min="0" step="0.01" value="<%= struttura.prezzo_notte != null ? Number(struttura.prezzo_notte).toFixed(2) : '' %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="capacita-<%= struttura.id %>">Capacità massima ospiti</label>
+                                    <input id="capacita-<%= struttura.id %>" name="capacita" class="form-control" type="number" min="1" max="1000" value="<%= struttura.capacita || 1 %>" required>
                                 </div>
                                 <button type="submit" class="btn btn-success btn-sm">Salva dettagli struttura</button>
                             </form>
 
                             <hr>
-                            <form action="/struttura/<%= s.id %>/servizi" method="post" class="gestione-inline-form gestione-services-form">
+                            <form action="/struttura/<%= struttura.id %>/servizi" method="post" class="gestione-inline-form gestione-services-form">
                                 <h5>Servizi disponibili</h5>
-                                <% if (serviceCatalog && serviceCatalog.length) { %>
+                                <% if (catalogoServizi && catalogoServizi.length) { %>
                                 <div class="gestione-services-list">
-                                    <% serviceCatalog.forEach(function(service) { %>
-                                    <% const isChecked = (s.service_ids || []).indexOf(service.id) !== -1; %>
-                                    <label class="gestione-service-item" for="service-<%= s.id %>-<%= service.id %>">
-                                        <input id="service-<%= s.id %>-<%= service.id %>" type="checkbox" name="service_ids" value="<%= service.id %>" <%= isChecked ? 'checked' : '' %>>
-                                        <% if (service.icon_type === 'material') { %>
-                                        <i class="material-icons" aria-hidden="true"><%= service.icon_value %></i>
+                                    <% catalogoServizi.forEach(function(servizio) { %>
+                                    <% const isChecked = (struttura.service_ids || []).indexOf(servizio.id) !== -1; %>
+                                    <label class="gestione-service-item" for="service-<%= struttura.id %>-<%= servizio.id %>">
+                                        <input id="service-<%= struttura.id %>-<%= servizio.id %>" type="checkbox" name="service_ids" value="<%= servizio.id %>" <%= isChecked ? 'checked' : '' %>>
+                                        <% if (servizio.icona === 'material') { %>
+                                        <i class="material-icons" aria-hidden="true"><%= servizio.valore_icona %></i>
                                         <% } else { %>
-                                        <i class="fa <%= service.icon_value %>" aria-hidden="true"></i>
+                                        <i class="fa <%= servizio.valore_icona %>" aria-hidden="true"></i>
                                         <% } %>
-                                        <span><%= service.nome %></span>
+                                        <span><%= servizio.nome %></span>
                                     </label>
                                     <% }); %>
                                 </div>
@@ -193,8 +205,8 @@
                         <div class="col-md-9">
 
                             <!-- PRENOTAZIONI -->
-                            <h4><i class="fa fa-calendar"></i> Prenotazioni (<%= s.prenotazioni.length %>)</h4>
-                            <% if (s.prenotazioni.length === 0) { %>
+                            <h4><i class="fa fa-calendar"></i> Prenotazioni (<%= struttura.prenotazioni.length %>)</h4>
+                            <% if (struttura.prenotazioni.length === 0) { %>
                             <p class="text-muted">Nessuna prenotazione ricevuta.</p>
                             <% } else { %>
                             <table class="table table-condensed table-hover">
@@ -209,28 +221,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% s.prenotazioni.forEach(function(p) { %>
-                                    <tr class="<%= p.status === 'pending' ? 'warning' : (p.status === 'accepted' ? 'success' : 'danger') %>">
-                                        <td><%= p.nome_camminatore %> <%= p.cognome_camminatore %><br><small class="text-muted"><%= p.email_camminatore %></small></td>
-                                        <td><%= new Date(p.check_in).toLocaleDateString('it-IT') %></td>
-                                        <td><%= new Date(p.check_out).toLocaleDateString('it-IT') %></td>
-                                        <td><%= p.numero_ospiti %></td>
+                                    <% struttura.prenotazioni.forEach(function(prenotazione) { %>
+                                    <tr class="<%= prenotazione.status === 'pending' ? 'warning' : (prenotazione.status === 'accepted' ? 'success' : 'danger') %>">
+                                        <td><%= prenotazione.nome_camminatore %> <%= prenotazione.cognome_camminatore %><br><small class="text-muted"><%= prenotazione.email_camminatore %></small></td>
+                                        <td><%= new Date(prenotazione.check_in).toLocaleDateString('it-IT') %></td>
+                                        <td><%= new Date(prenotazione.check_out).toLocaleDateString('it-IT') %></td>
+                                        <td><%= prenotazione.numero_ospiti %></td>
                                         <td>
-                                            <% if (p.status === 'pending') { %>
+                                            <% if (prenotazione.status === 'pending') { %>
                                             <span class="label label-warning">In attesa</span>
-                                            <% } else if (p.status === 'accepted') { %>
+                                            <% } else if (prenotazione.status === 'accepted') { %>
                                             <span class="label label-success">Accettata</span>
                                             <% } else { %>
                                             <span class="label label-danger">Rifiutata</span>
                                             <% } %>
                                         </td>
                                         <td>
-                                            <% if (p.status === 'pending') { %>
-                                            <form action="/prenotazione/<%= p.id %>/aggiorna" method="post" style="display:inline">
+                                            <% if (prenotazione.status === 'pending') { %>
+                                            <form action="/prenotazione/<%= prenotazione.id %>/aggiorna" method="post" style="display:inline">
                                                 <input type="hidden" name="status" value="accepted">
                                                 <button type="submit" class="btn btn-success btn-xs"><i class="fa fa-check"></i> Accetta</button>
                                             </form>
-                                            <form action="/prenotazione/<%= p.id %>/aggiorna" method="post" style="display:inline">
+                                            <form action="/prenotazione/<%= prenotazione.id %>/aggiorna" method="post" style="display:inline">
                                                 <input type="hidden" name="status" value="rejected">
                                                 <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-times"></i> Rifiuta</button>
                                             </form>
@@ -247,26 +259,26 @@
                             <hr>
 
                             <!-- DOMANDE (solo senza risposta) -->
-                            <h4><i class="fa fa-comments"></i> Domande in attesa (<%= s.domande.length %>)</h4>
-                            <% if (s.domande.length === 0) { %>
+                            <h4><i class="fa fa-comments"></i> Domande in attesa (<%= struttura.domande.length %>)</h4>
+                            <% if (struttura.domande.length === 0) { %>
                             <p class="text-muted">Nessuna domanda in attesa di risposta.</p>
                             <% } else { %>
-                            <% s.domande.forEach(function(d) { %>
+                            <% struttura.domande.forEach(function(domanda) { %>
                             <div class="well well-sm">
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <strong><%= d.nome_autore %></strong>
-                                        <% if (!d.email_autore) { %><small>(Anonimo)</small><% } %>
+                                        <strong><%= domanda.nome_autore %></strong>
+                                        <% if (!domanda.email_autore) { %><small>(Anonimo)</small><% } %>
                                         <span class="text-muted pull-right">
-                                            <%= new Date(d.creato_il).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' }) %>
+                                            <%= new Date(domanda.creato_il).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' }) %>
                                         </span>
-                                        <p style="margin-top:5px"><%= d.testo %></p>
+                                        <p style="margin-top:5px"><%= domanda.testo %></p>
                                     </div>
                                     <div class="col-md-4">
-                                        <form action="/domanda/<%= d.id %>/rispondi" method="post">
+                                        <form action="/domanda/<%= domanda.id %>/rispondi" method="post">
                                             <div class="form-group gestione-reply-field">
-                                                <label for="risposta-<%= d.id %>" class="sr-only">Risposta alla domanda</label>
-                                                <textarea id="risposta-<%= d.id %>" name="testo" class="form-control input-sm" rows="2" placeholder="Scrivi la tua risposta..." required></textarea>
+                                                <label for="risposta-<%= domanda.id %>" class="sr-only">Risposta alla domanda</label>
+                                                <textarea id="risposta-<%= domanda.id %>" name="testo" class="form-control input-sm" rows="2" placeholder="Scrivi la tua risposta..." required></textarea>
                                             </div>
                                             <button type="submit" class="btn btn-primary btn-xs"><i class="fa fa-reply"></i> Rispondi</button>
                                         </form>
@@ -279,10 +291,10 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </article>
             <% }); %>
         </div>
-    </section>
+    </main>
 
     <%- include('partials/footer') %>
 
@@ -292,7 +304,7 @@
     <script src="/javascripts/gestione-gallery-preview.js"></script>
     <script>
         (function () {
-            var trails = <%- JSON.stringify(trails || []) %>;
+            var cammini = <%- JSON.stringify(cammini || []) %>;
             var toggle = document.querySelector('.gestione-add-toggle');
             var panel = document.querySelector('#new-facility-panel');
             var camminoSelect = document.getElementById('nuova-cammino');
@@ -305,37 +317,64 @@
                 });
             }
 
-            function updateTappeOptions() {
-                var selectedId = Number(camminoSelect.value || 0);
-                var trail = trails.find(function (t) { return t.id === selectedId; });
-                tappaSelect.innerHTML = '';
+            function updateTappeOptions(camminoSelectEl, tappaSelectEl, selectedTappaValue) {
+                var selectedId = Number(camminoSelectEl.value || 0);
+                var cammino = cammini.find(function (t) { return t.id === selectedId; });
+                tappaSelectEl.innerHTML = '';
 
-                if (!trail || !trail.tappe || !trail.tappe.length) {
-                    tappaSelect.disabled = true;
+                if (!cammino || !cammino.tappe || !cammino.tappe.length) {
+                    tappaSelectEl.disabled = true;
                     var option = document.createElement('option');
                     option.value = '';
                     option.textContent = 'Nessuna tappa disponibile';
-                    tappaSelect.appendChild(option);
+                    tappaSelectEl.appendChild(option);
                     return;
                 }
 
-                tappaSelect.disabled = false;
+                tappaSelectEl.disabled = false;
                 var placeholder = document.createElement('option');
                 placeholder.value = '';
                 placeholder.textContent = 'Seleziona una tappa';
-                tappaSelect.appendChild(placeholder);
+                tappaSelectEl.appendChild(placeholder);
 
-                trail.tappe.forEach(function (tappa) {
+                cammino.tappe.forEach(function (tappa) {
                     var option = document.createElement('option');
                     option.value = tappa.value;
                     option.textContent = tappa.label;
-                    tappaSelect.appendChild(option);
+                    if (selectedTappaValue && tappa.value === selectedTappaValue) {
+                        option.selected = true;
+                    }
+                    tappaSelectEl.appendChild(option);
                 });
             }
 
             if (camminoSelect && tappaSelect) {
-                camminoSelect.addEventListener('change', updateTappeOptions);
-                updateTappeOptions();
+                camminoSelect.addEventListener('change', function () {
+                    updateTappeOptions(camminoSelect, tappaSelect, '');
+                });
+                updateTappeOptions(camminoSelect, tappaSelect, tappaSelect.getAttribute('data-selected-tappa') || '');
+            }
+
+            var camminoSelectList = document.querySelectorAll('.js-gestione-cammino');
+            for (var i = 0; i < camminoSelectList.length; i += 1) {
+                var currentCamminoSelect = camminoSelectList[i];
+                if (currentCamminoSelect.id === 'nuova-cammino') {
+                    continue;
+                }
+
+                var currentTappaSelect = currentCamminoSelect
+                    .closest('form')
+                    .querySelector('.js-gestione-tappa');
+                if (!currentTappaSelect) {
+                    continue;
+                }
+
+                (function (camminoEl, tappaEl) {
+                    camminoEl.addEventListener('change', function () {
+                        updateTappeOptions(camminoEl, tappaEl, '');
+                    });
+                    updateTappeOptions(camminoEl, tappaEl, tappaEl.getAttribute('data-selected-tappa') || '');
+                })(currentCamminoSelect, currentTappaSelect);
             }
         })();
     </script>

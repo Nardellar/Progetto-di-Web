@@ -3,16 +3,14 @@
 var express = require('express');
 var router = express.Router();
 var { dbGetAll, dbGetUno } = require('../db/helpers');
-var trailDetailsBySlug = require('../config/trailDetails');
+var dettagliCamminoPerSlug = require('../config/trailDetails');
 
 var slugToView = {};
 
-var facilityNameToView = {};
-
 router.get('/', async function (req, res, next) {
   try {
-    const trails = await dbGetAll('SELECT * FROM trails ORDER BY id LIMIT 6');
-    res.render('index', { title: 'Trekking UPO', trails: trails });
+    const cammini = await dbGetAll('SELECT * FROM cammini ORDER BY id LIMIT 6');
+    res.render('index', { title: 'Trekking UPO', cammini: cammini });
   } catch (err) {
     next(err);
   }
@@ -52,14 +50,14 @@ router.get('/percorsi', async function (req, res, next) {
     }
 
     var whereSql = whereParts.length ? (' WHERE ' + whereParts.join(' AND ')) : '';
-    const trails = await dbGetAll('SELECT * FROM trails' + whereSql + ' ORDER BY nome', params);
+    const cammini = await dbGetAll('SELECT * FROM cammini' + whereSql + ' ORDER BY nome', params);
 
-    var regioni = await dbGetAll("SELECT DISTINCT regione FROM trails WHERE regione IS NOT NULL AND TRIM(regione) <> '' ORDER BY regione");
-    var stagioni = await dbGetAll("SELECT DISTINCT stagione_ideale FROM trails WHERE stagione_ideale IS NOT NULL AND TRIM(stagione_ideale) <> '' ORDER BY stagione_ideale");
+    var regioni = await dbGetAll("SELECT DISTINCT regione FROM cammini WHERE regione IS NOT NULL AND TRIM(regione) <> '' ORDER BY regione");
+    var stagioni = await dbGetAll("SELECT DISTINCT stagione_ideale FROM cammini WHERE stagione_ideale IS NOT NULL AND TRIM(stagione_ideale) <> '' ORDER BY stagione_ideale");
 
     res.render('percorsi', {
       title: 'Percorsi',
-      trails: trails,
+      cammini: cammini,
       filterOptions: {
         regioni: regioni.map(function (row) { return row.regione; }),
         stagioni: stagioni.map(function (row) { return row.stagione_ideale; })
@@ -82,12 +80,12 @@ router.get('/sentiero/via-degli-dei-modern', function (req, res) {
 
 router.get('/sentiero/:slug', async function (req, res, next) {
   try {
-    const trail = await dbGetUno('SELECT * FROM trails WHERE slug = ?', [req.params.slug]);
-    if (!trail) return next();
-    const facilities = await dbGetAll('SELECT * FROM facilities WHERE id_cammino = ? LIMIT 3', [trail.id]);
-    const trailDetails = trailDetailsBySlug[req.params.slug] || null;
+    const cammino = await dbGetUno('SELECT * FROM cammini WHERE slug = ?', [req.params.slug]);
+    if (!cammino) return next();
+    const strutture = await dbGetAll('SELECT * FROM strutture WHERE id_cammino = ? LIMIT 3', [cammino.id]);
+    const trailDetails = dettagliCamminoPerSlug[req.params.slug] || null;
     var viewName = slugToView[req.params.slug] || 'sentiero';
-    res.render(viewName, { title: trail.nome, trail: trail, facilities: facilities, trailDetails: trailDetails });
+    res.render(viewName, { title: cammino.nome, cammino: cammino, strutture: strutture, trailDetails: trailDetails });
   } catch (err) {
     next(err);
   }
@@ -115,7 +113,7 @@ router.get('/strutture', async function (req, res, next) {
     selectedServices = Array.from(new Set(selectedServices));
 
     if (camminoSlug) {
-      filtroCammino = await dbGetUno('SELECT nome, slug, citta_partenza FROM trails WHERE slug = ?', [camminoSlug]);
+      filtroCammino = await dbGetUno('SELECT nome, slug, citta_partenza FROM cammini WHERE slug = ?', [camminoSlug]);
     }
 
     var whereParts = [];
@@ -170,7 +168,7 @@ router.get('/strutture', async function (req, res, next) {
 
     if (selectedServices.length) {
       var servicePlaceholders = selectedServices.map(function () { return '?'; }).join(', ');
-      serviceJoinSql = ' JOIN facility_services fs ON fs.id_struttura = f.id JOIN service_catalog s ON s.id = fs.id_servizio';
+      serviceJoinSql = ' JOIN servizi_struttura fs ON fs.id_struttura = f.id JOIN servizi s ON s.id = fs.id_servizio';
       whereSql += (whereSql ? ' AND ' : ' WHERE ') + ('s.slug IN (' + servicePlaceholders + ')');
       Array.prototype.push.apply(params, selectedServices);
       groupSql = ' GROUP BY f.id HAVING COUNT(DISTINCT s.slug) = ?';
@@ -190,8 +188,8 @@ router.get('/strutture', async function (req, res, next) {
       `SELECT COUNT(*) AS total
        FROM (
          SELECT f.id
-         FROM facilities f
-         LEFT JOIN trails t ON f.id_cammino = t.id
+         FROM strutture f
+         LEFT JOIN cammini t ON f.id_cammino = t.id
          ${serviceJoinSql}
          ${whereSql}
          ${groupSql}
@@ -205,10 +203,10 @@ router.get('/strutture', async function (req, res, next) {
     }
     var offset = (page - 1) * pageSize;
 
-    var facilities = await dbGetAll(
+    var strutture = await dbGetAll(
        `SELECT f.*, t.nome AS nome_cammino, t.slug AS slug_cammino
-        FROM facilities f
-        LEFT JOIN trails t ON f.id_cammino = t.id
+        FROM strutture f
+        LEFT JOIN cammini t ON f.id_cammino = t.id
         ${serviceJoinSql}
         ${whereSql}
         ${groupSql}
@@ -225,8 +223,8 @@ router.get('/strutture', async function (req, res, next) {
     }
 
     var tappaOptions = [];
-    var detailEntry = filtroCammino ? trailDetailsBySlug[filtroCammino.slug] : null;
-    var detailStages = (detailEntry && Array.isArray(detailEntry.stages)) ? detailEntry.stages : [];
+    var detailEntry = filtroCammino ? dettagliCamminoPerSlug[filtroCammino.slug] : null;
+    var detailStages = (detailEntry && Array.isArray(detailEntry.tappe)) ? detailEntry.tappe : [];
     var hasTrailDetails = !!(detailStages && detailStages.length);
 
     if (filtroCammino && filtroCammino.citta_partenza) {
@@ -246,8 +244,8 @@ router.get('/strutture', async function (req, res, next) {
     } else {
       var tappeArrivo = await dbGetAll(
         `SELECT DISTINCT f.numero_tappa, f.citta
-         FROM facilities f
-         LEFT JOIN trails t ON f.id_cammino = t.id
+         FROM strutture f
+         LEFT JOIN cammini t ON f.id_cammino = t.id
          ${optionWhere}
          ORDER BY f.numero_tappa ASC`,
         optionParams
@@ -265,10 +263,10 @@ router.get('/strutture', async function (req, res, next) {
 
     var services = await dbGetAll(
       `SELECT DISTINCT s.slug, s.nome, s.sort_order
-       FROM service_catalog s
-       JOIN facility_services fs ON fs.id_servizio = s.id
-       JOIN facilities f ON fs.id_struttura = f.id
-       LEFT JOIN trails t ON f.id_cammino = t.id
+       FROM servizi s
+       JOIN servizi_struttura fs ON fs.id_servizio = s.id
+       JOIN strutture f ON fs.id_struttura = f.id
+       LEFT JOIN cammini t ON f.id_cammino = t.id
        ${optionWhere}
        ORDER BY s.sort_order ASC, s.nome ASC`,
       optionParams
@@ -295,7 +293,7 @@ router.get('/strutture', async function (req, res, next) {
 
     res.render('strutture', {
        title: pageTitle,
-       facilities: facilities,
+       strutture: strutture,
        filtroCammino: filtroCammino,
        filterOptions: {
          tappe: tappaOptions,
@@ -333,19 +331,19 @@ router.get('/strutture', async function (req, res, next) {
 
 router.get('/struttura/:id', async function (req, res, next) {
   try {
-    const facility = await dbGetUno(
+    const struttura = await dbGetUno(
       `SELECT f.*, t.nome AS nome_cammino, t.slug AS slug_cammino
-       FROM facilities f
-       LEFT JOIN trails t ON f.id_cammino = t.id
+       FROM strutture f
+       LEFT JOIN cammini t ON f.id_cammino = t.id
        WHERE f.id = ?`,
       [req.params.id]
     );
-    if (!facility) return next();
+    if (!struttura) return next();
     const hostOwner = await dbGetUno(
       `SELECT nome, cognome, immagine_profilo, created_at
        FROM utenti
        WHERE email = ?`,
-      [facility.email_ristoratore]
+      [struttura.email_ristoratore]
     );
     let hostAnniPiattaforma = 1;
     if (hostOwner && hostOwner.created_at) {
@@ -353,33 +351,33 @@ router.get('/struttura/:id', async function (req, res, next) {
       const years = (Date.now() - createdMs) / (365.25 * 24 * 60 * 60 * 1000);
       hostAnniPiattaforma = Math.max(1, Math.floor(years));
     }
-    const questions = await dbGetAll(
+    const domande = await dbGetAll(
       `SELECT q.*,
               uq.immagine_profilo AS immagine_profilo,
-              (SELECT COUNT(*) FROM answers a WHERE a.id_domanda = q.id) AS num_risposte
-       FROM questions q
+              (SELECT COUNT(*) FROM risposte a WHERE a.id_domanda = q.id) AS num_risposte
+       FROM domande q
        LEFT JOIN utenti uq ON q.email_autore = uq.email
        WHERE q.id_struttura = ?
        ORDER BY q.creato_il DESC`,
-      [facility.id]
+      [struttura.id]
     );
-    for (const q of questions) {
-      q.answers = await dbGetAll(
+    for (const domanda of domande) {
+      domanda.answers = await dbGetAll(
         `SELECT a.*, u.nome AS nome_risponditore, u.cognome AS cognome_risponditore, u.immagine_profilo AS immagine_risponditore
-         FROM answers a
+         FROM risposte a
          LEFT JOIN utenti u ON a.email_risponditore = u.email
          WHERE a.id_domanda = ?
          ORDER BY a.creato_il ASC`,
-        [q.id]
+        [domanda.id]
       );
     }
-    const reviews = await dbGetAll(
+    const recensioni = await dbGetAll(
       `SELECT r.*,
               u.nome,
               u.cognome,
               (
                 SELECT br2.check_in
-                FROM booking_requests br2
+                FROM prenotazioni br2
                 WHERE br2.id_struttura = r.id_struttura
                   AND br2.email_camminatore = r.email_camminatore
                   AND br2.status = 'accepted'
@@ -388,74 +386,73 @@ router.get('/struttura/:id', async function (req, res, next) {
               ) AS soggiorno_da,
               (
                 SELECT br3.check_out
-                FROM booking_requests br3
+                FROM prenotazioni br3
                 WHERE br3.id_struttura = r.id_struttura
                   AND br3.email_camminatore = r.email_camminatore
                   AND br3.status = 'accepted'
                 ORDER BY date(br3.check_out) DESC, br3.id DESC
                 LIMIT 1
               ) AS soggiorno_a
-       FROM reviews r
+       FROM recensioni r
        JOIN utenti u ON r.email_camminatore = u.email
        WHERE r.id_struttura = ?
        ORDER BY date(soggiorno_a) DESC, r.creato_il DESC`,
-      [facility.id]
+      [struttura.id]
     );
-    const facilityImages = await dbGetAll(
+    const immaginiStruttura = await dbGetAll(
       `SELECT id, percorso_immagine
-       FROM facility_images
+       FROM immagini_struttura
        WHERE id_struttura = ?
        ORDER BY creato_il DESC, id DESC`,
-      [facility.id]
+      [struttura.id]
     );
-    const facilityServices = await dbGetAll(
-      `SELECT s.id, s.slug, s.nome, s.icon_type, s.icon_value, s.sort_order
-       FROM facility_services fs
-       JOIN service_catalog s ON fs.id_servizio = s.id
+    const serviziStruttura = await dbGetAll(
+      `SELECT s.id, s.slug, s.nome, s.icona, s.valore_icona, s.ordine
+       FROM servizi_struttura fs
+       JOIN servizi s ON fs.id_servizio = s.id
        WHERE fs.id_struttura = ?
-       ORDER BY s.sort_order ASC, s.nome ASC`,
-      [facility.id]
+       ORDER BY s.ordine ASC, s.nome ASC`,
+      [struttura.id]
     );
-    const reviewStats = await dbGetUno(
+    const statisticheRecensioni = await dbGetUno(
       `SELECT COUNT(*) AS totale, ROUND(AVG(voto), 1) AS media
-       FROM reviews
+       FROM recensioni
        WHERE id_struttura = ?`,
-      [facility.id]
+      [struttura.id]
     );
-    const canReply = !!(req.user && req.user.role === 'ristoratore' && req.user.email === facility.email_ristoratore);
+    const isProprietario = !!(req.user && req.user.role === 'ristoratore' && req.user.email === struttura.email_ristoratore);
     let canReview = false;
     let myReview = null;
     if (req.user && req.user.role === 'camminatore') {
       const prenotazionePassata = await dbGetUno(
         `SELECT id
-         FROM booking_requests
+         FROM prenotazioni
          WHERE id_struttura = ?
            AND email_camminatore = ?
            AND status = 'accepted'
            AND date(check_out) < date('now')
          LIMIT 1`,
-        [facility.id, req.user.email]
+        [struttura.id, req.user.email]
       );
       canReview = !!prenotazionePassata;
       myReview = await dbGetUno(
         `SELECT id, voto, testo
-         FROM reviews
+         FROM recensioni
          WHERE id_struttura = ? AND email_camminatore = ?`,
-        [facility.id, req.user.email]
+        [struttura.id, req.user.email]
       );
     }
-    var viewName = facilityNameToView[facility.nome] || 'struttura';
-    res.render(viewName, {
-      title: facility.nome,
-      facility: facility,
+    res.render('struttura', {
+      title: struttura.nome,
+      struttura: struttura,
       hostOwner: hostOwner,
       hostAnniPiattaforma: hostAnniPiattaforma,
-      questions: questions,
-      reviews: reviews,
-      facilityImages: facilityImages || [],
-      facilityServices: facilityServices || [],
-      reviewStats: reviewStats || { totale: 0, media: null },
-      canReply: canReply,
+      domande: domande,
+      recensioni: recensioni,
+      immaginiStruttura: immaginiStruttura || [],
+      serviziStruttura: serviziStruttura || [],
+      statisticheRecensioni: statisticheRecensioni || { totale: 0, media: null },
+      isProprietario: isProprietario,
       canReview: canReview,
       myReview: myReview,
       successo: req.query.successo || null,
@@ -469,27 +466,27 @@ router.get('/struttura/:id', async function (req, res, next) {
 router.get('/cerca', async function (req, res, next) {
   var q = (req.query.q || '').trim();
   if (!q) {
-    return res.render('cerca', { title: 'Ricerca', query: '', trails: [], facilities: [] });
+    return res.render('cerca', { title: 'Ricerca', query: '', cammini: [], strutture: [] });
   }
 
   try {
     var like = '%' + q + '%';
-    var trails = await dbGetAll(
-      `SELECT * FROM trails
+    var cammini = await dbGetAll(
+      `SELECT * FROM cammini
        WHERE nome LIKE ? OR citta_partenza LIKE ? OR citta_arrivo LIKE ?
              OR regione LIKE ?
        ORDER BY nome`,
       [like, like, like, like]
     );
-    var facilities = await dbGetAll(
+    var strutture = await dbGetAll(
       `SELECT f.*, t.nome AS nome_cammino, t.slug AS slug_cammino
-       FROM facilities f
-       LEFT JOIN trails t ON f.id_cammino = t.id
+       FROM strutture f
+       LEFT JOIN cammini t ON f.id_cammino = t.id
        WHERE f.nome LIKE ? OR f.citta LIKE ? OR f.indirizzo LIKE ?
        ORDER BY f.nome`,
       [like, like, like]
     );
-    res.render('cerca', { title: 'Ricerca: ' + q, query: q, trails: trails, facilities: facilities });
+    res.render('cerca', { title: 'Ricerca: ' + q, query: q, cammini: cammini, strutture: strutture });
   } catch (err) {
     next(err);
   }

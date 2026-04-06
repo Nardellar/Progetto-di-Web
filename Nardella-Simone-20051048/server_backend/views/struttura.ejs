@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <title><%= title %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <meta name="description" content="<%= facility.nome %>">
+    <meta name="description" content="<%= struttura.nome %>">
     <meta name="author" content="Simone Nardella">
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
@@ -21,24 +21,24 @@
 
 <body class="single-page">
 
-    <section class="header" id="header">
+    <header class="header" id="header">
         <%- include('partials/navbar') %>
-    </section>
+    </header>
 
-    <section class="blog_wrapper">
+    <main class="blog_wrapper">
         <div class="container">
-            <div class="heading-top">
-                <h1><%= facility.nome %></h1>
-                <% if (facility.nome_cammino) { %>
-                <p class="facility-subtitle">Struttura sul percorso <a href="/sentiero/<%= facility.slug_cammino %>"><%= facility.nome_cammino %></a></p>
+            <header class="heading-top">
+                <h1><%= struttura.nome %></h1>
+                <% if (struttura.nome_cammino) { %>
+                <p class="facility-subtitle">Struttura sul percorso <a href="/sentiero/<%= struttura.slug_cammino %>"><%= struttura.nome_cammino %></a></p>
                 <% } %>
-            </div>
+            </header>
             <%- include('partials/notifications') %>
             <div class="row">
                 <div class="col-md-9 col-sm-8">
-                    <% const galleryImages = (facilityImages && facilityImages.length)
-                      ? facilityImages.map(function(img) { return img.percorso_immagine; })
-                      : (facility.immagine ? [facility.immagine] : []); %>
+                    <% const galleryImages = (immaginiStruttura && immaginiStruttura.length)
+                      ? immaginiStruttura.map(function(img) { return img.percorso_immagine; })
+                      : (struttura.immagine ? [struttura.immagine] : []); %>
                     <div class="post_block">
                         <div class="col-md-12">
                             <% if (galleryImages.length > 0) { %>
@@ -47,7 +47,7 @@
                                     <% galleryImages.forEach(function(imagePath, index) { %>
                                     <% const imageUrl = imagePath.startsWith('http') ? imagePath : ('/images/' + imagePath); %>
                                     <div class="item <%= index === 0 ? 'active' : '' %>">
-                                        <img src="<%= imageUrl %>" alt="<%= facility.nome %> - foto <%= index + 1 %>" class="facility-hero-image">
+                                        <img src="<%= imageUrl %>" alt="<%= struttura.nome %> - foto <%= index + 1 %>" class="facility-hero-image">
                                     </div>
                                     <% }); %>
                                 </div>
@@ -68,25 +68,25 @@
                             </div>
                             <% } %>
                             <div class="single-blog-content">
-                                <h2><%= facility.nome %></h2>
+                                <h2><%= struttura.nome %></h2>
                                 <p class="facility-description">
-                                    <% if (facility.indirizzo) { %>
+                                    <% if (struttura.indirizzo) { %>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                         <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
                                     </svg>
-                                    <%= facility.indirizzo %>, <%= facility.citta %><br>
+                                    <%= struttura.indirizzo %>, <%= struttura.citta %><br>
                                     <% } %>
-                                    <%= facility.descrizione %>
+                                    <%= struttura.descrizione %>
                                 </p>
-                                <% if (facility.capacita) { %>
-                                <p><strong>Capacità:</strong> <%= facility.capacita %> ospiti</p>
+                                <% if (struttura.capacita) { %>
+                                <p><strong>Capacità:</strong> <%= struttura.capacita %> ospiti</p>
                                 <% } %>
                             </div>
                         </div>
                         <div class="clearfix"></div>
                     </div>
 
-                    <div class="author_block">
+                    <section class="author_block" aria-label="Informazioni host">
                         <h2>Host</h2>
                         <% const hostImg = hostOwner && hostOwner.immagine_profilo
                           ? (hostOwner.immagine_profilo.startsWith('http') ? hostOwner.immagine_profilo : ('/images/' + hostOwner.immagine_profilo))
@@ -97,63 +97,61 @@
                             <% } %>
                         </div>
                         <div class="col-md-10 col-sm-10 no-padding">
-                            <% if (hostOwner) { %>
                             <h3><%= hostOwner.nome %> <%= hostOwner.cognome %></h3>
                             <span><%= hostAnniPiattaforma %> <%= hostAnniPiattaforma === 1 ? 'anno' : 'anni' %> sulla piattaforma</span>
-                            <p>Ciao, sono <%= hostOwner.nome %> <%= hostOwner.cognome %>, gestore di <strong><%= facility.nome %></strong><% if (facility.citta) { %> a <%= facility.citta %><% } %>. Sono disponibile per rispondere alle domande qui sotto e per aiutarti a organizzare al meglio il tuo soggiorno.</p>
-                            <% } else { %>
-                            <h3>Gestore della struttura</h3>
-                            <span>Host registrato</span>
-                            <p>Il gestore di <strong><%= facility.nome %></strong> e raggiungibile tramite le domande e le prenotazioni sul sito.</p>
-                            <% } %>
+                            <p>Ciao, sono <%= hostOwner.nome %> <%= hostOwner.cognome %>, gestore di <strong><%= struttura.nome %></strong><% if (struttura.citta) { %> a <%= struttura.citta %><% } %>. Sono disponibile per rispondere alle domande qui sotto e per aiutarti a organizzare al meglio il tuo soggiorno.</p>
                         </div>
                         <div class="clearfix"></div>
-                    </div>
+                    </section>
 
                      <!-- Sezione Domande e Risposte -->
-                     <div class="comments" id="qa-section">
-                        <h2><%= questions.length %> Domand<%= questions.length === 1 ? 'a' : 'e' %></h2>
+                     <section class="comments" id="qa-section" aria-label="Domande e risposte">
+                        <h2><%= domande.length %> Domand<%= domande.length === 1 ? 'a' : 'e' %></h2>
 
-                        <% questions.forEach(function(q) { %>
-                        <% const qImg = q.immagine_profilo ? (q.immagine_profilo.startsWith('http') ? q.immagine_profilo : ('/images/' + q.immagine_profilo)) : '/images/fotoProfiloAnonima.jpg'; %>
-                        <div class="comment_block" id="question-<%= q.id %>">
+                        <% domande.forEach(function(domanda) { %>
+                        <% const Img_dom = domanda.immagine_profilo ? (domanda.immagine_profilo.startsWith('http') ? domanda.immagine_profilo : ('/images/' + domanda.immagine_profilo)) : '/images/profiles/defaults/fotoProfiloAnonima.jpg'; %>
+                        <article class="comment_block" id="question-<%= domanda.id %>">
                             <div class="col-md-10 col-sm-10">
-                                <div class="col-md-2 col-sm-2"><img src="<%= qImg %>" class="qa-avatar"></div>
+                                <div class="col-md-2 col-sm-2"><img src="<%= Img_dom %>" class="qa-avatar"></div>
                                 <div class="col-md-10 col-sm-10 no-padding">
-                                    <h3><%= q.nome_autore %><%= q.email_autore ? '' : ' (Anonimo)' %></h3>
-                                    <span><%= new Date(q.creato_il).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) %> <%= new Date(q.creato_il).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) %></span>
-                                    <p><%= q.testo %></p>
+                                    <h3><%= domanda.nome_autore %><%= domanda.email_autore ? '' : ' (Anonimo)' %></h3>
+                                    <span><%= new Date(domanda.creato_il).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) %> <%= new Date(domanda.creato_il).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) %></span>
+                                    <p><%= domanda.testo %></p>
                                 </div>
                             </div>
                             <div class="col-md-2 col-sm-2 question-actions">
-                                <% if (canReply) { %>
-                                <button type="button" class="readmore js-reply-toggle" data-reply-target="reply-form-<%= q.id %>">Rispondi</button>
+                                <% if (isProprietario) { %>
+<!--                                ARRIVATO QUI-->
+
+
+
+                                <button type="button" class="readmore js-risposta-toggle" data-risposta-target="form-risposta-<%= domanda.id %>">Rispondi</button>
                                 <% } %>
-                                <% if (user && q.email_autore && user.email === q.email_autore) { %>
-                                <form action="/domanda/<%= q.id %>/cancella" method="post" class="delete-question-form">
-                                    <input type="hidden" name="redirect_to" value="/struttura/<%= facility.id %>">
+                                <% if (user && domanda.email_autore && user.email === domanda.email_autore) { %>
+                                <form action="/domanda/<%= domanda.id %>/cancella" method="post" class="delete-question-form">
+                                    <input type="hidden" name="redirect_to" value="/struttura/<%= struttura.id %>">
                                     <button type="submit" class="readmore delete-question-btn" onclick="return confirm('Vuoi davvero cancellare questa domanda?')">Cancella</button>
                                 </form>
                                 <% } %>
                             </div>
-                            <% if (canReply) { %>
+                            <% if (isProprietario) { %>
                             <div class="col-md-12">
-                                <form id="reply-form-<%= q.id %>" class="reply-form-collapsed reply-inline-form" action="/domanda/<%= q.id %>/rispondi" method="post">
-                                    <input type="hidden" name="redirect_to" value="/struttura/<%= facility.id %>">
+                                <form id="form-risposta-<%= domanda.id %>" class="risposta-form-collapsed risposta-inline-form" action="/domanda/<%= domanda.id %>/rispondi" method="post">
+                                    <input type="hidden" name="redirect_to" value="/struttura/<%= struttura.id %>">
                                     <div class="form-group">
-                                        <label for="reply-text-<%= q.id %>" class="sr-only">Scrivi la risposta</label>
-                                        <textarea id="reply-text-<%= q.id %>" name="testo" class="form-control" rows="3" placeholder="Scrivi la tua risposta..." required></textarea>
+                                        <label for="testo-risposta-<%= domanda.id %>" class="sr-only">Scrivi la risposta</label>
+                                        <textarea id="testo-risposta-<%= domanda.id %>" name="testo" class="form-control" rows="3" placeholder="Scrivi la tua risposta..." required></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-reply"></i> Invia risposta</button>
                                 </form>
                             </div>
                             <% } %>
                             <div class="clearfix"></div>
-                        </div>
+                        </article>
 
-                        <% q.answers.forEach(function(a) { %>
-                        <% const aImg = a.immagine_risponditore ? (a.immagine_risponditore.startsWith('http') ? a.immagine_risponditore : ('/images/' + a.immagine_risponditore)) : '/images/Host1.jpg'; %>
-                        <div class="comment_block col-md-offset-1">
+                        <% domanda.answers.forEach(function(a) { %>
+                        <% const aImg = a.immagine_risponditore ? (a.immagine_risponditore.startsWith('http') ? a.immagine_risponditore : ('/images/' + a.immagine_risponditore)) : '/images/profiles/defaults/fotoProfiloAnonima.jpg'; %>
+                        <article class="comment_block col-md-offset-1">
                             <div class="col-md-10 col-sm-10">
                                 <div class="col-md-2 col-sm-2"><img src="<%= aImg %>" class="qa-avatar"></div>
                                 <div class="col-md-10 col-sm-10 no-padding">
@@ -164,36 +162,36 @@
                             </div>
                             <% if (user && user.role === 'ristoratore' && user.email === a.email_risponditore) { %>
                             <div class="col-md-2 col-sm-2 question-actions">
-                                <button type="button" class="readmore js-reply-toggle" data-reply-target="edit-answer-form-<%= a.id %>">Modifica</button>
+                                <button type="button" class="readmore js-risposta-toggle" data-risposta-target="form-modifica-risposta-<%= a.id %>">Modifica</button>
                                 <form action="/risposta/<%= a.id %>/cancella" method="post" class="delete-question-form">
-                                    <input type="hidden" name="redirect_to" value="/struttura/<%= facility.id %>">
+                                    <input type="hidden" name="redirect_to" value="/struttura/<%= struttura.id %>">
                                     <button type="submit" class="readmore delete-question-btn" onclick="return confirm('Vuoi davvero cancellare questa risposta?')">Cancella</button>
                                 </form>
                             </div>
                             <div class="col-md-12">
-                                <form id="edit-answer-form-<%= a.id %>" class="reply-form-collapsed reply-inline-form" action="/risposta/<%= a.id %>/modifica" method="post">
-                                    <input type="hidden" name="redirect_to" value="/struttura/<%= facility.id %>">
+                                <form id="form-modifica-risposta-<%= a.id %>" class="risposta-form-collapsed risposta-inline-form" action="/risposta/<%= a.id %>/modifica" method="post">
+                                    <input type="hidden" name="redirect_to" value="/struttura/<%= struttura.id %>">
                                     <div class="form-group">
-                                        <label for="edit-answer-text-<%= a.id %>" class="sr-only">Modifica risposta</label>
-                                        <textarea id="edit-answer-text-<%= a.id %>" name="testo" class="form-control" rows="3" required><%= a.testo %></textarea>
+                                        <label for="testo-modifica-risposta-<%= a.id %>" class="sr-only">Modifica risposta</label>
+                                        <textarea id="testo-modifica-risposta-<%= a.id %>" name="testo" class="form-control" rows="3" required><%= a.testo %></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Salva modifica</button>
                                 </form>
                             </div>
                             <% } %>
                             <div class="clearfix"></div>
-                        </div>
+                        </article>
                         <% }); %>
                         <% }); %>
 
                         <!-- Form nuova domanda -->
-                        <% const strutturaProprietario = user && user.role === 'ristoratore' && user.email === facility.email_ristoratore; %>
-                        <div class="leave_reply">
+                        <% const strutturaProprietario = user && user.role === 'ristoratore' && user.email === struttura.email_ristoratore; %>
+                        <section class="leave_reply" aria-label="Invia una domanda">
                             <h2>Fai una domanda</h2>
                             <% if (strutturaProprietario) { %>
                             <p class="text-muted owner-self-question-note">Come gestore di questa struttura non puoi inviare domande a te stesso. Usa la sezione <a href="/gestione">Gestione strutture</a> per le comunicazioni con gli ospiti.</p>
                             <% } else { %>
-                            <form action="/struttura/<%= facility.id %>/domanda" method="post">
+                            <form action="/struttura/<%= struttura.id %>/domanda" method="post">
                                 <% if (!user) { %>
                                 <div class="form-group col-md-12 col-sm-12">
                                     <label for="domanda-nome" class="sr-only">Nome</label>
@@ -211,20 +209,20 @@
                                 </div>
                             </form>
                             <% } %>
-                        </div>
+                        </section>
                         <div class="clearfix"></div>
-                        <div class="reviews-block" id="reviews-section">
-                            <h2>Recensioni (<%= reviewStats.totale || 0 %>)</h2>
+                        <section class="reviews-block" id="reviews-section" aria-label="Recensioni">
+                            <h2>Recensioni (<%= statisticheRecensioni.totale || 0 %>)</h2>
                             <p class="review-summary">
-                                <% if (reviewStats.media) { %>
-                                Media voti: <strong><%= reviewStats.media %>/5</strong>
+                                <% if (statisticheRecensioni.media) { %>
+                                Media voti: <strong><%= statisticheRecensioni.media %>/5</strong>
                                 <% } else { %>
                                 Nessuna recensione ancora disponibile.
                                 <% } %>
                             </p>
 
-                            <% if (reviews && reviews.length) { %>
-                            <% reviews.forEach(function(r) { %>
+                            <% if (recensioni && recensioni.length) { %>
+                            <% recensioni.forEach(function(r) { %>
                             <div class="review-item">
                                 <div class="review-item-header">
                                     <strong><%= r.nome %> <%= r.cognome %></strong>
@@ -245,7 +243,7 @@
 
                             <% if (user && user.role === 'camminatore') { %>
                             <% if (canReview) { %>
-                            <form class="review-form" action="/struttura/<%= facility.id %>/recensione" method="post">
+                            <form class="review-form" action="/struttura/<%= struttura.id %>/recensione" method="post">
                                 <h3><%= myReview ? 'Aggiorna la tua recensione' : 'Lascia una recensione' %></h3>
                                 <div class="rating-input">
                                     <% [5,4,3,2,1].forEach(function(star) { %>
@@ -265,9 +263,9 @@
                             <% } else if (!user) { %>
                             <p><a href="/registrazione">Accedi</a> come camminatore per lasciare una recensione.</p>
                             <% } %>
-                        </div>
+                        </section>
                         <div class="clearfix"></div>
-                    </div>
+                    </section>
                 </div>
 
                 <!-- Sidebar con prenotazione -->
@@ -276,18 +274,18 @@
                         <div class="widget">
                             <h2 class="heading">Informazioni</h2>
                             <ul>
-                                <li><strong>Città:</strong> <%= facility.citta %></li>
-                                <% if (facility.numero_tappa) { %>
-                                <li><strong>Tappa:</strong> <%= facility.numero_tappa %></li>
+                                <li><strong>Città:</strong> <%= struttura.citta %></li>
+                                <% if (struttura.numero_tappa) { %>
+                                <li><strong>Tappa:</strong> <%= struttura.numero_tappa %></li>
                                 <% } %>
-                                <% if (facility.indirizzo) { %>
-                                <li><strong>Indirizzo:</strong> <%= facility.indirizzo %></li>
+                                <% if (struttura.indirizzo) { %>
+                                <li><strong>Indirizzo:</strong> <%= struttura.indirizzo %></li>
                                 <% } %>
-                                <% if (facility.prezzo_notte) { %>
-                                <li><strong>Prezzo/notte:</strong> &euro;<%= facility.prezzo_notte.toFixed(2) %></li>
+                                <% if (struttura.prezzo_notte) { %>
+                                <li><strong>Prezzo/notte:</strong> &euro;<%= struttura.prezzo_notte.toFixed(2) %></li>
                                 <% } %>
-                                <% if (facility.capacita) { %>
-                                <li><strong>Capacità:</strong> <%= facility.capacita %> ospiti</li>
+                                <% if (struttura.capacita) { %>
+                                <li><strong>Capacità:</strong> <%= struttura.capacita %> ospiti</li>
                                 <% } %>
                             </ul>
                         </div>
@@ -300,7 +298,7 @@
                         <section class="col-md-12 reservation-box" id="booking-section">
                             <div class="reservation-form">
                                 <h3>Prenota il tuo soggiorno</h3>
-                                <form action="/struttura/<%= facility.id %>/prenota" method="post">
+                                <form action="/struttura/<%= struttura.id %>/prenota" method="post">
                                     <div class="form-group">
                                         <label for="check_in">Check-in:</label>
                                         <input id="check_in" name="check_in" class="form-control" type="date" min="<%= new Date().toISOString().split('T')[0] %>" required>
@@ -327,14 +325,14 @@
             </div>
         </div>
         <div class="clearfix"></div>
-    </section>
+    </main>
 
     <%- include('partials/footer') %>
 
     <script src="/javascripts/jquery.min.js"></script>
     <script src="/javascripts/bootstrap.min.js"></script>
     <script src="/javascripts/notifications.js"></script>
-    <script src="/javascripts/reply-toggle.js"></script>
+    <script src="/javascripts/risposta-toggle.js"></script>
     <script src="/javascripts/booking-validation.js"></script>
 </body>
 

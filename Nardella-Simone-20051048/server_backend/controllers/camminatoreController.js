@@ -1,11 +1,15 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const { dbRun, dbGetUno, dbGetAll } = require('../db/helpers');
+const { dbRun, dbGetUno } = require('../db/helpers');
 const { body, validationResult, matchedData } = require('express-validator');
+const {
+  validaProfilo,
+  postAggiornaProfilo,
+  getProfilo,
+  normalizePersonName
+} = require('./profileController');
 
-//Check prenotazioni
+// Check prenotazioni
 const validaPrenotazione = [
   body('check_in')
     .notEmpty().withMessage('Data check-in obbligatoria')
@@ -23,9 +27,9 @@ const validaDomanda = [
   body('nome_autore')
     .if((_value, { req }) => !req.user)
     .trim()
-    .notEmpty().withMessage('Il nome è obbligatorio'),
+    .notEmpty().withMessage('Il nome e obbligatorio'),
   body('testo')
-    .trim().notEmpty().withMessage('La domanda non può essere vuota')
+    .trim().notEmpty().withMessage('La domanda non puo essere vuota')
     .isLength({ max: 2000 }).withMessage('Domanda troppo lunga (max 2000 caratteri)')
 ];
 
@@ -38,43 +42,6 @@ const validaRecensione = [
     .trim()
     .isLength({ max: 1500 }).withMessage('Recensione troppo lunga (max 1500 caratteri)')
 ];
-
-const validaProfilo = [
-  body('nome')
-    .trim()
-    .notEmpty().withMessage('Il nome utente è obbligatorio')
-    .isLength({ min: 2, max: 80 }).withMessage('Il nome utente deve avere tra 2 e 80 caratteri'),
-  body('cognome')
-    .trim()
-    .notEmpty().withMessage('Il cognome è obbligatorio')
-    .isLength({ min: 2, max: 80 }).withMessage('Il cognome deve avere tra 2 e 80 caratteri')
-];
-
-function normalizePersonName(value) {
-  return String(value || '')
-    .trim()
-    .replace(/\s+/g, ' ')
-    .toLowerCase()
-    .split(' ')
-    .map((token) => token
-      .split(/(['-])/)
-      .map((part) => {
-        if (part === '\'' || part === '-') return part;
-        if (!part) return part;
-        return part.charAt(0).toUpperCase() + part.slice(1);
-      })
-      .join(''))
-    .join(' ');
-}
-
-function getRedirectTarget(rawValue, fallbackPath) {
-  const value = (rawValue || '').trim();
-  if (value.startsWith('/struttura/') || value === '/profilo') {
-    return value;
-  }
-  return fallbackPath;
-}
-
 
 async function postPrenotazione(req, res) {
   const errors = validationResult(req);
@@ -94,14 +61,14 @@ async function postPrenotazione(req, res) {
   const { check_in, check_out, numero_ospiti } = matchedData(req);
 
   if (new Date(check_in) < new Date().setHours(0, 0, 0, 0)) {
-    return res.redirect(`/struttura/${idStruttura}?errore=${encodeURIComponent('Il check-in non può essere nel passato')}${bookingAnchor}`);
+    return res.redirect(`/struttura/${idStruttura}?errore=${encodeURIComponent('Il check-in non puo essere nel passato')}${bookingAnchor}`);
   }
   if (new Date(check_out) < new Date(check_in)) {
     return res.redirect(`/struttura/${idStruttura}?errore=${encodeURIComponent('Il check-out deve essere dopo il check-in')}${bookingAnchor}`);
   }
 
   try {
-    const facility = await dbGetUno('SELECT * FROM facilities WHERE id = ?', [idStruttura]);
+    const facility = await dbGetUno('SELECT * FROM strutture WHERE id = ?', [idStruttura]);
     if (!facility) {
       return res.redirect('/strutture?errore=Struttura non trovata');
     }
@@ -112,12 +79,12 @@ async function postPrenotazione(req, res) {
       );
     }
 
-    if (parseInt(numero_ospiti) > facility.capacita && facility.capacita > 0) {
-      return res.redirect(`/struttura/${idStruttura}?errore=${encodeURIComponent(`Capacità massima: ${facility.capacita} ospiti`)}${bookingAnchor}`);
+    if (parseInt(numero_ospiti, 10) > facility.capacita && facility.capacita > 0) {
+      return res.redirect(`/struttura/${idStruttura}?errore=${encodeURIComponent(`Capacita massima: ${facility.capacita} ospiti`)}${bookingAnchor}`);
     }
 
     await dbRun(
-      `INSERT INTO booking_requests (id_struttura, email_camminatore, check_in, check_out, numero_ospiti)
+      `INSERT INTO prenotazioni (id_struttura, email_camminatore, check_in, check_out, numero_ospiti)
        VALUES (?, ?, ?, ?, ?)`,
       [idStruttura, req.user.email, check_in, check_out, numero_ospiti]
     );
@@ -141,7 +108,7 @@ async function postDomanda(req, res) {
   const { nome_autore, testo } = matchedData(req);
 
   try {
-    const facility = await dbGetUno('SELECT * FROM facilities WHERE id = ?', [idStruttura]);
+    const facility = await dbGetUno('SELECT * FROM strutture WHERE id = ?', [idStruttura]);
     if (!facility) {
       return res.redirect('/strutture?errore=Struttura non trovata');
     }
@@ -157,7 +124,7 @@ async function postDomanda(req, res) {
     }
 
     await dbRun(
-      `INSERT INTO questions (id_struttura, nome_autore, email_autore, testo)
+      `INSERT INTO domande (id_struttura, nome_autore, email_autore, testo)
        VALUES (?, ?, ?, ?)`,
       [
         idStruttura,
@@ -176,12 +143,15 @@ async function postDomanda(req, res) {
 
 async function postCancellaDomanda(req, res) {
   const idDomanda = req.params.id;
-  const redirectTarget = getRedirectTarget(req.body.redirect_to, '/profilo');
+  const rawRedirect = String(req.body.redirect_to || '').trim();
+  const redirectTarget = (rawRedirect.startsWith('/struttura/') || rawRedirect === '/profilo')
+    ? rawRedirect
+    : '/profilo';
   const anchor = redirectTarget === '/profilo' ? '#profilo-domande' : '#qa-section';
 
   try {
     const domanda = await dbGetUno(
-      'SELECT id, email_autore FROM questions WHERE id = ?',
+      'SELECT id, email_autore FROM domande WHERE id = ?',
       [idDomanda]
     );
 
@@ -197,8 +167,8 @@ async function postCancellaDomanda(req, res) {
       );
     }
 
-    await dbRun('DELETE FROM answers WHERE id_domanda = ?', [idDomanda]);
-    await dbRun('DELETE FROM questions WHERE id = ?', [idDomanda]);
+    await dbRun('DELETE FROM risposte WHERE id_domanda = ?', [idDomanda]);
+    await dbRun('DELETE FROM domande WHERE id = ?', [idDomanda]);
 
     return res.redirect(
       `${redirectTarget}?successo=${encodeURIComponent('Domanda cancellata con successo')}${anchor}`
@@ -223,14 +193,14 @@ async function postRecensione(req, res) {
   const { voto, testo } = matchedData(req);
 
   try {
-    const facility = await dbGetUno('SELECT id FROM facilities WHERE id = ?', [idStruttura]);
+    const facility = await dbGetUno('SELECT id FROM strutture WHERE id = ?', [idStruttura]);
     if (!facility) {
       return res.redirect('/strutture?errore=Struttura non trovata');
     }
 
     const prenotazionePassata = await dbGetUno(
       `SELECT id
-       FROM booking_requests
+       FROM prenotazioni
        WHERE id_struttura = ?
          AND email_camminatore = ?
          AND status = 'accepted'
@@ -246,13 +216,13 @@ async function postRecensione(req, res) {
     }
 
     const esistente = await dbGetUno(
-      'SELECT id FROM reviews WHERE id_struttura = ? AND email_camminatore = ?',
+      'SELECT id FROM recensioni WHERE id_struttura = ? AND email_camminatore = ?',
       [idStruttura, req.user.email]
     );
 
     if (esistente) {
       await dbRun(
-        `UPDATE reviews
+        `UPDATE recensioni
          SET voto = ?, testo = ?, creato_il = CURRENT_TIMESTAMP
          WHERE id = ?`,
         [voto, testo || null, esistente.id]
@@ -263,7 +233,7 @@ async function postRecensione(req, res) {
     }
 
     await dbRun(
-      `INSERT INTO reviews (id_struttura, email_camminatore, voto, testo)
+      `INSERT INTO recensioni (id_struttura, email_camminatore, voto, testo)
        VALUES (?, ?, ?, ?)`,
       [idStruttura, req.user.email, voto, testo || null]
     );
@@ -279,99 +249,6 @@ async function postRecensione(req, res) {
   }
 }
 
-async function postAggiornaProfilo(req, res) {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.redirect(`/profilo?errore=${encodeURIComponent(errors.array()[0].msg)}#profilo-info`);
-  }
-
-  const { nome, cognome } = matchedData(req);
-  const normalizedNome = normalizePersonName(nome);
-  const normalizedCognome = normalizePersonName(cognome);
-  const vecchiaImmagine = req.user.immagine_profilo || null;
-  const nuovaImmagine = req.file ? ('profiles/' + req.file.filename) : vecchiaImmagine;
-
-  try {
-    await dbRun(
-      `UPDATE utenti
-       SET nome = ?, cognome = ?, immagine_profilo = ?
-       WHERE email = ?`,
-      [normalizedNome, normalizedCognome, nuovaImmagine, req.user.email]
-    );
-
-    if (req.file && vecchiaImmagine && vecchiaImmagine.startsWith('profiles/')) {
-      const oldFilePath = path.join(__dirname, '..', 'public', 'images', vecchiaImmagine);
-      fs.unlink(oldFilePath, (err) => {
-        if (err && err.code !== 'ENOENT') {
-          console.error('Errore eliminazione vecchia immagine profilo:', err.message);
-        }
-      });
-    }
-
-    return res.redirect('/profilo?successo=Profilo aggiornato con successo#profilo-info');
-  } catch (err) {
-    console.error('Errore aggiornamento profilo:', err.message);
-    return res.redirect('/profilo?errore=Errore durante l\'aggiornamento del profilo#profilo-info');
-  }
-}
-
-async function getProfilo(req, res) {
-  try {
-    let ristoratoreStats = { pendingRequests: 0, questions: 0 };
-
-    if (req.user && req.user.role === 'ristoratore') {
-      const pendingRow = await dbGetUno(
-        `SELECT COUNT(*) AS total
-         FROM booking_requests br
-         JOIN facilities f ON br.id_struttura = f.id
-         WHERE f.email_ristoratore = ? AND br.status = 'pending'`,
-        [req.user.email]
-      );
-      const questionsRow = await dbGetUno(
-        `SELECT COUNT(DISTINCT q.id) AS total
-         FROM questions q
-         JOIN facilities f ON q.id_struttura = f.id
-         LEFT JOIN answers a ON a.id_domanda = q.id
-         WHERE f.email_ristoratore = ? AND a.id IS NULL`,
-        [req.user.email]
-      );
-
-      ristoratoreStats = {
-        pendingRequests: pendingRow ? Number(pendingRow.total) : 0,
-        questions: questionsRow ? Number(questionsRow.total) : 0
-      };
-    }
-
-    const prenotazioni = await dbGetAll(
-      `SELECT br.*, f.nome AS nome_struttura, f.citta AS citta_struttura
-       FROM booking_requests br
-       JOIN facilities f ON br.id_struttura = f.id
-       WHERE br.email_camminatore = ?
-       ORDER BY br.creato_il DESC`,
-      [req.user.email]
-    );
-
-    const domande = await dbGetAll(
-      `SELECT q.*, f.nome AS nome_struttura, f.id AS id_struttura_link
-       FROM questions q
-       JOIN facilities f ON q.id_struttura = f.id
-       WHERE q.email_autore = ?
-       ORDER BY q.creato_il DESC`,
-      [req.user.email]
-    );
-
-    res.render('profilo', {
-      title: 'Il mio profilo',
-      prenotazioni: prenotazioni,
-      domande: domande,
-      ristoratoreStats: ristoratoreStats
-    });
-  } catch (err) {
-    console.error('Errore profilo:', err.message);
-    res.status(500).render('error', { message: 'Errore caricamento profilo', error: { status: 500 } });
-  }
-}
 
 module.exports = {
   validaPrenotazione,

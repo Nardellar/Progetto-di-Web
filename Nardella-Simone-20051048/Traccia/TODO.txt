@@ -26,8 +26,18 @@ pagine da rendere piu accattivanti:
 8. pagina ricerca
 
 
-cambiare logo
 
 gestire il fatto che le prneotazioni siano passate
 un sisema che controlli il superamento della capienza massima delle struttura
 
+hai una tabella periodo chiusura degli alberghi che ora come ora è inutile
+il gestore non puo modificare la propria descrizione nella pagina struttura
+ci sono fallback nascosti dappertutto, assicurati di toglierli
+
+obbiettivo:
+1) traduzione
+2) rimozione fallback o struttura inefficiente
+3)comprensione
+
+adesso sto rileggendo velocemnte tutti gli ejs prendendo lista di file modificiati
+arrivato 123 di struttura ejs, da dove lo prende canreply?

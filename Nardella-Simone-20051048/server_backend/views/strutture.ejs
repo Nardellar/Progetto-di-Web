@@ -26,7 +26,7 @@
             <% var filters = activeFilters || {}; %>
             <% var options = filterOptions || { tappe: [], services: [], sortOptions: [] }; %>
             <% var resetUrl = filtroCammino ? ('/strutture?cammino=' + filtroCammino.slug) : '/strutture'; %>
-            <% var pager = pagination || { currentPage: 1, totalPages: 1, totalItems: facilities.length, hasPrev: false, hasNext: false }; %>
+            <% var pager = pagination || { currentPage: 1, totalPages: 1, totalItems: strutture.length, hasPrev: false, hasNext: false }; %>
             <% var pageBase = baseQueryString ? ('/strutture?' + baseQueryString + '&page=') : '/strutture?page='; %>
              <div class="heading-top">
                  <h1>Strutture</h1>
@@ -39,11 +39,11 @@
              </div>
              <div class="row">
                  <div class="col-md-9 col-sm-8">
-                    <% if (facilities.length === 0) { %>
+                    <% if (strutture.length === 0) { %>
                     <p class="facilities-empty">Nessuna struttura disponibile al momento.</p>
                     <% } %>
 
-                     <% facilities.forEach(function(f) { %>
+                     <% strutture.forEach(function(f) { %>
                      <div class="post_block">
                         <div class="col-md-12">
                             <div class="col-md-5">

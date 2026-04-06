@@ -1,61 +1,80 @@
 'use strict';
 
 (function () {
-  function closeNotice(notice) {
-    if (!notice) return;
-    notice.style.opacity = '0';
-    notice.style.transform = 'translateY(-4px)';
-    setTimeout(function () {
-      if (notice.parentElement) {
-        notice.parentElement.removeChild(notice);
-      }
-    }, 180);
-  }
 
-  function cleanupUrlParams() {
-    var url = new URL(window.location.href);
-    var params = url.searchParams;
-    var keys = ['successo', 'errore', 'success', 'error'];
-    var changed = false;
-    for (var i = 0; i < keys.length; i += 1) {
-      if (params.has(keys[i])) {
-        params.delete(keys[i]);
-        changed = true;
-      }
+  /**
+   * Gestisce le notifiche in-page (successo/errore) con auto-chiusura
+   * e pulizia dei parametri dalla barra degli indirizzi.
+   */
+  class NotificationManager {
+    constructor(rootId, autoCloseMs) {
+      this.root = document.getElementById(rootId);
+      this.autoCloseMs = autoCloseMs;
     }
-    if (changed) {
-      var query = params.toString();
-      var cleanUrl = url.pathname + (query ? '?' + query : '') + url.hash;
-      window.history.replaceState({}, '', cleanUrl);
+
+    init() {
+      if (!this.root) return;
+
+      var notices = this.root.querySelectorAll('.app-notice');
+      for (var i = 0; i < notices.length; i += 1) {
+        this._bindNotice(notices[i]);
+      }
+
+      NotificationManager.cleanupUrlParams();
     }
-  }
 
-  function initNotifications() {
-    var root = document.getElementById('app-notifications');
-    if (!root) return;
+    _bindNotice(notice) {
+      var self = this;
+      var closeBtn = notice.querySelector('.app-notice-close');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function () {
+          self._close(notice);
+        });
+      }
 
-    var notices = root.querySelectorAll('.app-notice');
-    for (var i = 0; i < notices.length; i += 1) {
-      (function (notice) {
-        var closeBtn = notice.querySelector('.app-notice-close');
-        if (closeBtn) {
-          closeBtn.addEventListener('click', function () {
-            closeNotice(notice);
-          });
+      setTimeout(function () {
+        self._close(notice);
+      }, this.autoCloseMs);
+    }
+
+    _close(notice) {
+      if (!notice) return;
+      notice.style.opacity = '0';
+      notice.style.transform = 'translateY(-4px)';
+      setTimeout(function () {
+        if (notice.parentElement) {
+          notice.parentElement.removeChild(notice);
         }
-
-        setTimeout(function () {
-          closeNotice(notice);
-        }, 5200);
-      })(notices[i]);
+      }, 180);
     }
 
-    cleanupUrlParams();
+    static cleanupUrlParams() {
+      var url = new URL(window.location.href);
+      var params = url.searchParams;
+      var keys = ['successo', 'errore', 'success', 'error'];
+      var changed = false;
+      for (var i = 0; i < keys.length; i += 1) {
+        if (params.has(keys[i])) {
+          params.delete(keys[i]);
+          changed = true;
+        }
+      }
+      if (changed) {
+        var query = params.toString();
+        var cleanUrl = url.pathname + (query ? '?' + query : '') + url.hash;
+        window.history.replaceState({}, '', cleanUrl);
+      }
+    }
+  }
+
+  function start() {
+    var manager = new NotificationManager('app-notifications', 5200);
+    manager.init();
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initNotifications);
+    document.addEventListener('DOMContentLoaded', start);
   } else {
-    initNotifications();
+    start();
   }
 })();

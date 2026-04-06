@@ -4,7 +4,7 @@ module.exports = {
   'alta-via-dolomitica': {
     subtitle: 'Dal Lago di Braies a Belluno lungo alcune tra le montagne piu significative delle Dolomiti.',
     gpxFile: 'altavia-delle-dolomiti-n-1.gpx',
-    managementTappe: [
+    elencoTappe: [
       'Rifugio Biella',
       'Rifugio Fanes (o Lavarella)',
       'Rifugio Lagazuoi',
@@ -17,10 +17,10 @@ module.exports = {
       'Rifugio Pian de Fontana',
       'Belluno (La Pissa)'
     ],
-    technical: {
+    dati_tecnici: {
       percorso: 'Dal Lago di Braies (Tre Cime Dolomiti / Alta Pusteria) fino a Belluno.',
       numeroTappe: 11,
-      lunghezzaKm: '125 km circa',
+      lunghezzaTot: '125 km circa',
       dislivelloSalitaTotale: '7.300 m',
       dislivelloDiscesaTotale: '8.400 m',
       dislivelloSalitaMassimo: '1.070 m (Fanes - Lagazuoi, III tappa)',
@@ -34,7 +34,7 @@ module.exports = {
     },
     intro:
       'L\'Alta Via 1 delle Dolomiti e uno dei trekking piu spettacolari e celebri al mondo. Lunga circa 125 km, attraversa il cuore delle Dolomiti dal Lago di Braies fino a Belluno, con paesaggi che cambiano di valle in valle.',
-    classicStagesNote:
+    notaTappeClassiche:
       'Il percorso classico viene spesso suddiviso in 11 tappe principali.',
     galleryImages: [
       'trails/alta-via-1_carosello_2.jpg',
@@ -42,7 +42,7 @@ module.exports = {
 
 
     ],
-    stages: [
+    tappe: [
       {
         titolo: 'Lago di Braies - Rifugio Biella',
         tempo: '~3,5 - 4 ore',
@@ -126,7 +126,7 @@ module.exports = {
     kicker: 'Cammino iconico',
     subtitle: 'Da Bologna a Firenze in 5 tappe tra storia, natura e panorami appenninici.',
     gpxFile: 'via-degli-dei-da-bologna-a-firenze.gpx',
-    managementTappe: [
+    elencoTappe: [
       'Badolo',
       'Madonna dei Fornelli',
       'Passo della Futa',
@@ -135,7 +135,7 @@ module.exports = {
     ],
     intro:
       'La Via degli Dei e uno dei cammini piu affascinanti e storici d\'Italia. Lunga circa 130 km, attraversa l\'Appennino Tosco-Emiliano da Piazza Maggiore a Bologna fino a Piazza della Signoria a Firenze, offrendo un mix unico di natura e antichi basolati romani.',
-    classicStagesNote:
+    notaTappeClassiche:
       'Il percorso classico viene solitamente suddiviso in 5 o 6 tappe principali.',
     galleryImages: [
       'trails/via_degli_dei_carosello_1.jpeg',
@@ -144,7 +144,7 @@ module.exports = {
       'trails/Via degli Dei imm-2.jpg',
       'trails/Via degli Dei imm-3.jpg'
     ],
-    stages: [
+    tappe: [
       {
         titolo: 'Bologna - Badolo',
         lunghezza: '21,3 km',
@@ -190,7 +190,7 @@ module.exports = {
   'cammino-grande-di-celestino': {
     subtitle: 'Da Sulmona a Serramonacesca nel cuore del Parco Nazionale della Majella.',
     gpxFile: 'traccia-generale.gpx',
-    managementTappe: [
+    elencoTappe: [
       'Pacentro',
       'Caramanico Terme',
       'Decontra',
@@ -199,13 +199,13 @@ module.exports = {
     ],
     intro:
       'Il Cammino di Celestino, noto anche come Cammino Classico degli Eremi della Majella, segue i passi di Pietro da Morrone tra spiritualita, natura selvaggia e borghi medievali.',
-    classicStagesNote:
+    notaTappeClassiche:
       'Il percorso classico e lungo circa 80-90 km ed e suddiviso in 5 tappe principali.',
     galleryImages: [
       'trails/307224e506_Pacentro_centro storico.jpg',
       'trails/cammino-celestino.jpeg'
     ],
-    stages: [
+    tappe: [
       {
         titolo: 'Badia Morronese (Sulmona) - Pacentro',
         tempo: '~4 - 5 ore',
@@ -246,7 +246,7 @@ module.exports = {
   'cammino-dei-briganti': {
     subtitle: 'Anello di circa 108 km tra Abruzzo e Lazio sulle tracce dei briganti post-unitari.',
     gpxFile: 'cammino-dei-briganti.gpx',
-    managementTappe: [
+    elencoTappe: [
       'Santo Stefano',
       'Nesce',
       'Corvaro',
@@ -257,13 +257,13 @@ module.exports = {
     ],
     intro:
       'Il Cammino dei Briganti e un percorso ad anello di circa 108 km, percorribile in 7 giorni, con quote medie tra 800 e 1.300 metri e un massimo di 1.788 metri nella tappa del Lago della Duchessa. Il cammino attraversa il confine storico tra Abruzzo e Lazio, seguendo le storie della Banda di Cartore e di altri briganti post-unitari, tra natura selvaggia e borghi autentici.',
-    classicStagesNote:
+    notaTappeClassiche:
       'Il percorso classico e suddiviso in 7 tappe principali.',
     galleryImages: [
       'trails/cammino_briganti_carosello_3.jpg',
       'trails/cammino_dei_briganti_carosello_2.jpg'
     ],
-    stages: [
+    tappe: [
       {
         titolo: 'Sante Marie - Santo Stefano',
         tempo: '~4 - 5 ore',
@@ -320,7 +320,7 @@ module.exports = {
   'magna-via-francigena': {
     subtitle: 'Da Palermo ad Agrigento: 185 km da costa a costa nel cuore piu autentico della Sicilia.',
     gpxFile: 'magna-via-francigena-completa-2021.gpx',
-    managementTappe: [
+    elencoTappe: [
       'Santa Cristina Gela',
       'Corleone',
       'Prizzi',
@@ -333,13 +333,13 @@ module.exports = {
     ],
     intro:
       'La Magna Via Francigena e uno dei cammini piu affascinanti d\'Italia. Lunga circa 185 km, attraversa la Sicilia da costa a costa, partendo dal Mar Tirreno di Palermo e arrivando al Mar Mediterraneo di Agrigento. E un viaggio nel cuore piu autentico, rurale e storico dell\'isola, lontano dalle rotte turistiche convenzionali.',
-    classicStagesNote:
+    notaTappeClassiche:
       'Le stagioni ideali sono primavera (fine marzo-maggio) e autunno (settembre-ottobre): estate troppo calda sulle trazzere esposte e inverno spesso fangoso.',
     galleryImages: [
       'trails/magnaViaFrancigena.jpg',
       'trails/magna_via_francigena_carosello_2.jpg'
     ],
-    stages: [
+    tappe: [
       {
         titolo: 'Palermo - Santa Cristina Gela',
         lunghezza: '~25 km',

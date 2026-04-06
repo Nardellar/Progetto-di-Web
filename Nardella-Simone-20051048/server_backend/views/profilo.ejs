@@ -19,7 +19,7 @@
 <body>
     <% const profileImage = (user && user.immagine_profilo)
       ? (user.immagine_profilo.startsWith('http') ? user.immagine_profilo : ('/images/' + user.immagine_profilo))
-      : '/images/fotoProfiloAnonima.jpg'; %>
+      : '/images/profiles/defaults/fotoProfiloAnonima.jpg'; %>
 
     <section class="header" id="header">
         <%- include('partials/navbar') %>
@@ -79,7 +79,7 @@
                                 </div>
                                 <div class="profilo-ristoratore-stat">
                                     <span class="label label-info">Domande</span>
-                                    <strong><%= (ristoratoreStats && ristoratoreStats.questions) ? ristoratoreStats.questions : 0 %></strong>
+                                    <strong><%= (ristoratoreStats && ristoratoreStats.domandeSenzaRisposta) ? ristoratoreStats.domandeSenzaRisposta : 0 %></strong>
                                     <span>totali</span>
                                 </div>
                             </div>

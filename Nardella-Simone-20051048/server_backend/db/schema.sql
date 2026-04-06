@@ -1,5 +1,16 @@
 PRAGMA foreign_keys = ON;
 
+-- Pulizia fase legacy: rimuove eventuali viste alias create nelle migrazioni precedenti.
+DROP VIEW IF EXISTS cammini;
+DROP VIEW IF EXISTS strutture;
+DROP VIEW IF EXISTS immagini_struttura;
+DROP VIEW IF EXISTS servizi;
+DROP VIEW IF EXISTS servizi_struttura;
+DROP VIEW IF EXISTS prenotazioni;
+DROP VIEW IF EXISTS domande;
+DROP VIEW IF EXISTS risposte;
+DROP VIEW IF EXISTS recensioni;
+
 CREATE TABLE IF NOT EXISTS utenti (
   email TEXT PRIMARY KEY,
   password_hash TEXT NOT NULL,
@@ -7,10 +18,10 @@ CREATE TABLE IF NOT EXISTS utenti (
   cognome TEXT NOT NULL,
   immagine_profilo TEXT,
   role TEXT NOT NULL CHECK(role IN ('camminatore', 'ristoratore')),
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP --serve ai risotratori per mostrare su sito anzianita dell''account
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS trails (
+CREATE TABLE IF NOT EXISTS cammini (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   nome TEXT NOT NULL,
   slug TEXT NOT NULL UNIQUE,
@@ -24,7 +35,15 @@ CREATE TABLE IF NOT EXISTS trails (
   immagine TEXT
 );
 
-CREATE TABLE IF NOT EXISTS facilities (
+CREATE TABLE IF NOT EXISTS cammini_stagioni (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id_cammino INTEGER NOT NULL,
+  stagione TEXT NOT NULL CHECK(stagione IN ('primavera', 'estate', 'autunno', 'inverno')),
+  FOREIGN KEY (id_cammino) REFERENCES cammini(id),
+  UNIQUE (id_cammino, stagione)
+);
+
+CREATE TABLE IF NOT EXISTS strutture (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   email_ristoratore TEXT NOT NULL,
   id_cammino INTEGER,
@@ -37,49 +56,39 @@ CREATE TABLE IF NOT EXISTS facilities (
   prezzo_notte REAL CHECK(prezzo_notte >= 0),
   capacita INTEGER DEFAULT 0,
   FOREIGN KEY (email_ristoratore) REFERENCES utenti(email),
-  FOREIGN KEY (id_cammino) REFERENCES trails(id),
+  FOREIGN KEY (id_cammino) REFERENCES cammini(id),
   UNIQUE (id_cammino, nome)
 );
 
-CREATE TABLE IF NOT EXISTS facility_images (
+CREATE TABLE IF NOT EXISTS immagini_struttura (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   id_struttura INTEGER NOT NULL,
   percorso_immagine TEXT NOT NULL,
   creato_il DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (id_struttura) REFERENCES facilities(id),
+  FOREIGN KEY (id_struttura) REFERENCES strutture(id),
   UNIQUE (id_struttura, percorso_immagine)
 );
 
-CREATE TABLE IF NOT EXISTS service_catalog (
+CREATE TABLE IF NOT EXISTS servizi (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   slug TEXT NOT NULL UNIQUE,
   nome TEXT NOT NULL,
-  icon_type TEXT NOT NULL CHECK(icon_type IN ('fa', 'material')),
-  icon_value TEXT NOT NULL,
-  sort_order INTEGER NOT NULL DEFAULT 0
+  icona TEXT NOT NULL CHECK(icona IN ('fa', 'material')),
+  valore_icona TEXT NOT NULL,
+  ordine INTEGER NOT NULL DEFAULT 0
 );
 
-CREATE TABLE IF NOT EXISTS facility_services (
+CREATE TABLE IF NOT EXISTS servizi_struttura (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   id_struttura INTEGER NOT NULL,
   id_servizio INTEGER NOT NULL,
   creato_il DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (id_struttura) REFERENCES facilities(id),
-  FOREIGN KEY (id_servizio) REFERENCES service_catalog(id),
+  FOREIGN KEY (id_struttura) REFERENCES strutture(id),
+  FOREIGN KEY (id_servizio) REFERENCES servizi(id),
   UNIQUE (id_struttura, id_servizio)
 );
 
-CREATE TABLE IF NOT EXISTS facility_unavailability (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  id_struttura INTEGER NOT NULL,
-  data_da DATE NOT NULL,
-  data_a DATE NOT NULL,
-  nota TEXT,
-  CHECK (date(data_a) >= date(data_da)),
-  FOREIGN KEY (id_struttura) REFERENCES facilities(id)
-);
-
-CREATE TABLE IF NOT EXISTS booking_requests (
+CREATE TABLE IF NOT EXISTS prenotazioni (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   id_struttura INTEGER NOT NULL,
   email_camminatore TEXT NOT NULL,
@@ -89,32 +98,32 @@ CREATE TABLE IF NOT EXISTS booking_requests (
   status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'accepted', 'rejected')),
   creato_il DATETIME DEFAULT CURRENT_TIMESTAMP,
   CHECK (date(check_out) >= date(check_in)),
-  FOREIGN KEY (id_struttura) REFERENCES facilities(id),
+  FOREIGN KEY (id_struttura) REFERENCES strutture(id),
   FOREIGN KEY (email_camminatore) REFERENCES utenti(email)
 );
 
-CREATE TABLE IF NOT EXISTS questions (
+CREATE TABLE IF NOT EXISTS domande (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   id_struttura INTEGER NOT NULL,
   nome_autore TEXT NOT NULL,
   email_autore TEXT,
   testo TEXT NOT NULL,
   creato_il DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (id_struttura) REFERENCES facilities(id),
+  FOREIGN KEY (id_struttura) REFERENCES strutture(id),
   FOREIGN KEY (email_autore) REFERENCES utenti(email)
 );
 
-CREATE TABLE IF NOT EXISTS answers (
+CREATE TABLE IF NOT EXISTS risposte (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   id_domanda INTEGER NOT NULL,
   email_risponditore TEXT NOT NULL,
   testo TEXT NOT NULL,
   creato_il DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (id_domanda) REFERENCES questions(id),
+  FOREIGN KEY (id_domanda) REFERENCES domande(id),
   FOREIGN KEY (email_risponditore) REFERENCES utenti(email)
 );
 
-CREATE TABLE IF NOT EXISTS reviews (
+CREATE TABLE IF NOT EXISTS recensioni (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   id_struttura INTEGER NOT NULL,
   email_camminatore TEXT NOT NULL,
@@ -122,6 +131,7 @@ CREATE TABLE IF NOT EXISTS reviews (
   testo TEXT,
   creato_il DATETIME DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (id_struttura, email_camminatore),
-  FOREIGN KEY (id_struttura) REFERENCES facilities(id),
+  FOREIGN KEY (id_struttura) REFERENCES strutture(id),
   FOREIGN KEY (email_camminatore) REFERENCES utenti(email)
 );
+

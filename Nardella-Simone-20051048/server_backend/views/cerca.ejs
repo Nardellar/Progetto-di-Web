@@ -34,15 +34,15 @@
             <% if (query) { %>
             <p class="lead">Risultati per "<strong><%= query %></strong>"</p>
 
-            <% if (trails.length === 0 && facilities.length === 0) { %>
+            <% if (cammini.length === 0 && strutture.length === 0) { %>
             <div class="alert alert-info">Nessun risultato trovato. Prova con termini diversi.</div>
             <% } %>
 
             <!-- Percorsi -->
-            <% if (trails.length > 0) { %>
-            <h3><i class="fa fa-map-signs"></i> Percorsi (<%= trails.length %>)</h3>
+            <% if (cammini.length > 0) { %>
+            <h3><i class="fa fa-map-signs"></i> Percorsi (<%= cammini.length %>)</h3>
             <div class="row">
-                <% trails.forEach(function(t) { %>
+                <% cammini.forEach(function(t) { %>
                 <div class="col-md-4" style="margin-bottom: 20px;">
                     <div class="panel panel-default">
                         <% if (t.immagine) { %>
@@ -63,10 +63,10 @@
             <% } %>
 
             <!-- Strutture -->
-            <% if (facilities.length > 0) { %>
-            <h3><i class="fa fa-building"></i> Strutture (<%= facilities.length %>)</h3>
+            <% if (strutture.length > 0) { %>
+            <h3><i class="fa fa-building"></i> Strutture (<%= strutture.length %>)</h3>
             <div class="row">
-                <% facilities.forEach(function(f) { %>
+                <% strutture.forEach(function(f) { %>
                 <div class="col-md-4" style="margin-bottom: 20px;">
                     <div class="panel panel-default">
                         <% if (f.immagine) { %>
