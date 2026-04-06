@@ -138,11 +138,9 @@ module.exports = {
     notaTappeClassiche:
       'Il percorso classico viene solitamente suddiviso in 5 o 6 tappe principali.',
     galleryImages: [
-      'trails/via_degli_dei_carosello_1.jpeg',
+      'trails/via_degli_dei_carosello_1.jpg',
       'trails/Via-degli-Dei_carosello_2.jpg',
-      'trails/Via degli Dei imm-1.jpg',
-      'trails/Via degli Dei imm-2.jpg',
-      'trails/Via degli Dei imm-3.jpg'
+      'trails/download.jpeg'
     ],
     tappe: [
       {

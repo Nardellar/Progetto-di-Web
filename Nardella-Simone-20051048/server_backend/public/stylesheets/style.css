@@ -108,7 +108,7 @@ img{
 }
 
 .header {
-    background-image: url('../images/TestingMod.jpg');
+    background-image: url('../images/facilities/seed/TestingMod.jpg');
     height: 645px;
     background-position: center;
     background-repeat: no-repeat;
@@ -360,6 +360,15 @@ img{
 .gallery .gallery-image-2 {
     position: relative;
     display: inline-block;
+    width: 100%;
+}
+
+.gallery .gallery-image img,
+.gallery .gallery-image-2 img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
 }
 
 .gallery .gallery-overlay {

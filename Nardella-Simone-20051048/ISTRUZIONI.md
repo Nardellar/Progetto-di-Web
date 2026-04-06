@@ -6,11 +6,17 @@
 1. Aprire un terminale nella cartella `server_backend`:
 
 ```bash
-cd server_backend
+cd Nardella-Simone-20051048\server_backend
 npm install
 ```
 
-2. Avviare il server:
+2. Popolare il database (crea `trekking.db`):
+
+```bash
+sqlite3 db/trekking.db < db/trekking_dump.sql  
+```
+
+3.Avviare il server:
 
 ```bash
 npm start
@@ -18,43 +24,15 @@ npm start
 
 Applicazione disponibile su `http://localhost:3000`.
 
-Per sviluppo con riavvio automatico:
-
-```bash
-npm run dev
-```
-
 ---
 ## Database SQLite
 
 - DB usato in esecuzione: `server_backend/db/trekking.db`
 - Schema: `server_backend/db/schema.sql`
 - Seed: `server_backend/db/init.js`
-- Dump consegna: `server_backend/db/trekking_dump.sql`
+- Dump: `server_backend/db/trekking_dump.sql`
 
-### Quando usare `node db/init.js`
 
-`npm start` **non** popola il DB: avvia solo il server.
-
-Eseguire `node db/init.js` solo se vuoi ricreare il database da zero:
-
-```bash
-cd server_backend
-node db/init.js
-```
-
-Attenzione: questa operazione sovrascrive i dati presenti nel DB.
-
-### Rigenerare il dump prima della consegna
-
-Dopo le ultime modifiche dati (strutture, immagini, ecc.), rigenera il dump:
-
-```bash
-cd server_backend/db
-sqlite3 trekking.db ".dump" > trekking_dump.sql
-```
-
----
 ## Utenti di prova
 
 | Ruolo | Email | Password |
