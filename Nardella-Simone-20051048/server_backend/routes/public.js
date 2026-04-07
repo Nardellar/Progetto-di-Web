@@ -262,13 +262,13 @@ router.get('/strutture', async function (req, res, next) {
     }
 
     var services = await dbGetAll(
-      `SELECT DISTINCT s.slug, s.nome, s.sort_order
+      `SELECT DISTINCT s.slug, s.nome, s.ordine
        FROM servizi s
        JOIN servizi_struttura fs ON fs.id_servizio = s.id
        JOIN strutture f ON fs.id_struttura = f.id
        LEFT JOIN cammini t ON f.id_cammino = t.id
        ${optionWhere}
-       ORDER BY s.sort_order ASC, s.nome ASC`,
+       ORDER BY s.ordine ASC, s.nome ASC`,
       optionParams
     );
 
