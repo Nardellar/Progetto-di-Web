@@ -72,12 +72,16 @@ passport.deserializeUser((email, done) => {
   });
 });
 
+
+//Middlware globale sempre attivato per fornire user e notifiche di successo/errore a ejs e anche per controllare se user è autenticato
 app.use((req, res, next) => {
+  //per avere user nel codcie ejs
   res.locals.user = req.user || null;
+  //per avere notice successo o errore nella url, non messo nei parametri ejs dato che dopo post sempre redirect e si perde il parametro
   res.locals.noticeSuccess = req.query.successo || req.query.success || null;
   res.locals.noticeError = req.query.errore || req.query.error || null;
 
-  if (req.isAuthenticated && req.isAuthenticated()) {
+  if (req.isAuthenticated()) {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     res.set('Pragma', 'no-cache');
     res.set('Expires', '0');
@@ -95,6 +99,7 @@ app.use(function (req, res, next) {
   next(AppError.notFound('Pagina non trovata'));
 });
 
+//render di error universale
 app.use(function (err, req, res, next) {
   if (err instanceof AppError && err.redirectUrl) {
     return res.redirect(err.redirectUrl);

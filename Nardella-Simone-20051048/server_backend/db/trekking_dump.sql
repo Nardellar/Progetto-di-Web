@@ -250,8 +250,8 @@ CREATE TABLE prenotazioni (
   FOREIGN KEY (id_struttura) REFERENCES strutture(id),
   FOREIGN KEY (email_camminatore) REFERENCES utenti(email)
 );
-INSERT INTO prenotazioni VALUES(1,1,'camminatore@test.it','2026-06-15','2026-06-18',2,'pending','2026-04-05 23:38:30');
-INSERT INTO prenotazioni VALUES(2,1,'camminatore@test.it','2025-05-10','2025-05-12',2,'accepted','2026-04-05 23:38:30');
+INSERT INTO prenotazioni VALUES(1,1,'camminatore@test.it','2026-06-15','2026-06-18',2,'pending','2026-04-04 21:42:50');
+INSERT INTO prenotazioni VALUES(2,1,'camminatore@test.it','2025-05-10','2025-05-12',2,'accepted','2026-04-04 21:42:50');
 CREATE TABLE domande (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   id_struttura INTEGER NOT NULL,

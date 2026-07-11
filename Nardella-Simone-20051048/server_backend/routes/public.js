@@ -18,6 +18,7 @@ router.get('/', async function (req, res, next) {
 
 router.get('/percorsi', async function (req, res, next) {
   try {
+    //filtri form ricerca perocrsi
     var tappeRange = (req.query.tappeRange || '').trim();
     var regione = (req.query.regione || '').trim();
     var stagione = (req.query.stagione || '').trim();

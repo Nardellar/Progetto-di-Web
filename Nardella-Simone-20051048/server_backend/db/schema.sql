@@ -1,15 +1,5 @@
 PRAGMA foreign_keys = ON;
 
--- Pulizia fase legacy: rimuove eventuali viste alias create nelle migrazioni precedenti.
-DROP VIEW IF EXISTS cammini;
-DROP VIEW IF EXISTS strutture;
-DROP VIEW IF EXISTS immagini_struttura;
-DROP VIEW IF EXISTS servizi;
-DROP VIEW IF EXISTS servizi_struttura;
-DROP VIEW IF EXISTS prenotazioni;
-DROP VIEW IF EXISTS domande;
-DROP VIEW IF EXISTS risposte;
-DROP VIEW IF EXISTS recensioni;
 
 CREATE TABLE IF NOT EXISTS utenti (
   email TEXT PRIMARY KEY,

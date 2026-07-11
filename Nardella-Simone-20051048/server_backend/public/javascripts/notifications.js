@@ -3,8 +3,7 @@
 (function () {
 
   /**
-   * Gestisce le notifiche in-page (successo/errore) con auto-chiusura
-   * e pulizia dei parametri dalla barra degli indirizzi.
+   * Gestisce le notifiche (successo/errore) 
    */
   class NotificationManager {
     constructor(rootId, autoCloseMs) {
