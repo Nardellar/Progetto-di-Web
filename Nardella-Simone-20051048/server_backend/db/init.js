@@ -36,7 +36,7 @@ db.exec(schemaSQL, (err) => {
        'Un anello tra Lazio e Abruzzo sulle tracce dei briganti post-unitari.',
        'trails/camminoDeiBriganti.jpg');
 
-    -- Utenti di test (password in chiaro documentata in ISTRUZIONI.md alla root del progetto)
+    -- Utenti di test (password in chiaro documentata in README.md alla root del progetto)
     INSERT OR IGNORE INTO utenti (email, password_hash, nome, cognome, role)
     VALUES
       ('ristoratore@test.it', '$2b$10$2CufpTrnWNORv8kop83vyeReoA56As89YeuG0hZ.p6kilSm2zpB8K', 'Matteo', 'Barbieri', 'ristoratore'),

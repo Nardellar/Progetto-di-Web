@@ -61,19 +61,19 @@ CREATE TABLE strutture (
   FOREIGN KEY (id_cammino) REFERENCES cammini(id),
   UNIQUE (id_cammino, nome)
 );
-INSERT INTO strutture VALUES(1,'ristoratore@test.it',1,'SHG Hotel','Bologna',NULL,'Via Risorgimento 186','Hotel con WiFi, ristorante e bar. Valutato 8,1 per coppie.','facilities/ristoratore_test.it-285328376-1775484045187.jpg',75.0,30);
-INSERT INTO strutture VALUES(2,'ristoratore@test.it',1,'Residence Mugello','Madonna dei Fornelli',2,'Via del Centro 12','Affittacamere con vista montagna, colazione italiana inclusa.','facilities/ristoratore_test.it-ViaDegliDeiHotel2-1775484102579.jpg',55.0,8);
-INSERT INTO strutture VALUES(3,'ristoratore@test.it',1,'Residence Mugello Resort','Scarperia',4,'Via Mugello 5','Appartamenti con angolo cottura e vista giardino, a 30 km da Firenze.','facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483923371.jpg',95.0,20);
-INSERT INTO strutture VALUES(4,'ristoratore@test.it',1,'Locanda del Passo','Monzuno',3,'Via della Torre 8','Locanda di montagna con camere essenziali, ideale per una sosta tranquilla.','facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483902497.jpg',62.0,14);
-INSERT INTO strutture VALUES(5,'ristoratore@test.it',1,'B&B Collina del Sole','Firenze',5,'Via del Pellegrino 22','Bed & breakfast in centro storico con colazione artigianale.','facilities/ristoratore_test.it-ristoratore_test.it-firenze-177540329465-1775483696367.webp',88.0,10);
-INSERT INTO strutture VALUES(6,'ristoratore@test.it',3,'Rifugio Lagazuoi','Cortina d''Ampezzo',3,'Passo Falzarego','Rifugio alpino a 2752m con vista panoramica sulle Dolomiti, cucina tipica tirolese.','facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775481865562.webp',60.0,40);
-INSERT INTO strutture VALUES(9,'ristoratore@test.it',3,'Albergo delle Cime','Belluno (La Pissa)',11,'Via degli Alpini 9','Albergo a gestione familiare vicino al centro storico.','facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483414284.jpg',78.0,20);
-INSERT INTO strutture VALUES(11,'ristoratore@test.it',2,'Casa del Pellegrino Alento','Serramonacesca',5,'Contrada Abbazia 3','Alloggio per camminatori vicino all''Abbazia di San Liberatore, atmosfera semplice e accogliente con spazi comuni e deposito zaini.','facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483389781.jpg',55.0,12);
-INSERT INTO strutture VALUES(12,'ristoratore@test.it',2,'Borgo del Morrone','L''Aquila',NULL,'Via Badia 18','Affittacamere storico con camere luminose e deposito bici.','facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483286540.jpg',72.0,16);
-INSERT INTO strutture VALUES(13,'ristoratore@test.it',4,'Agriturismo Valle dei Templi','Agrigento',9,'Contrada San Biagio','Agriturismo immerso negli uliveti siciliani, a pochi km dalla Valle dei Templi.','facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483134931.jpg',45.0,12);
-INSERT INTO strutture VALUES(14,'ristoratore@test.it',4,'Casa dei Pellegrini','Santa Cristina Gela',1,'Via del Rosario 11','Alloggio semplice con camere private e spazi comuni.','facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483096530.webp',52.0,14);
-INSERT INTO strutture VALUES(17,'ristoratore@test.it',5,'B&B Valle del Salto','Cartore',3,'Via Fonte 6','Camere in pietra con colazione casalinga.','facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483076578.jpg',48.0,8);
-INSERT INTO strutture VALUES(18,'ristoratore@test.it',5,'Rifugio dei Marsi','Tagliacozzo',7,'Via della Rocca 14','Rifugio con vista sulla valle, perfetto per l''ultima tappa.','facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775481841163.jpg',60.0,15);
+INSERT INTO strutture VALUES(1,'ristoratore@test.it',1,'SHG Hotel','Bologna',NULL,'Via Risorgimento 186','Hotel con WiFi, ristorante e bar. Valutato 8,1 per coppie.','facilities/seed/ristoratore_test.it-285328376-1775484045187.jpg',75.0,30);
+INSERT INTO strutture VALUES(2,'ristoratore@test.it',1,'Residence Mugello','Madonna dei Fornelli',2,'Via del Centro 12','Affittacamere con vista montagna, colazione italiana inclusa.','facilities/seed/ristoratore_test.it-ViaDegliDeiHotel2-1775484102579.jpg',55.0,8);
+INSERT INTO strutture VALUES(3,'ristoratore@test.it',1,'Residence Mugello Resort','Scarperia',4,'Via Mugello 5','Appartamenti con angolo cottura e vista giardino, a 30 km da Firenze.','facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483923371.jpg',95.0,20);
+INSERT INTO strutture VALUES(4,'ristoratore@test.it',1,'Locanda del Passo','Monzuno',3,'Via della Torre 8','Locanda di montagna con camere essenziali, ideale per una sosta tranquilla.','facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483902497.jpg',62.0,14);
+INSERT INTO strutture VALUES(5,'ristoratore@test.it',1,'B&B Collina del Sole','Firenze',5,'Via del Pellegrino 22','Bed & breakfast in centro storico con colazione artigianale.','facilities/seed/ristoratore_test.it-ristoratore_test.it-firenze-177540329465-1775483696367.webp',88.0,10);
+INSERT INTO strutture VALUES(6,'ristoratore@test.it',3,'Rifugio Lagazuoi','Cortina d''Ampezzo',3,'Passo Falzarego','Rifugio alpino a 2752m con vista panoramica sulle Dolomiti, cucina tipica tirolese.','facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775481865562.webp',60.0,40);
+INSERT INTO strutture VALUES(9,'ristoratore@test.it',3,'Albergo delle Cime','Belluno (La Pissa)',11,'Via degli Alpini 9','Albergo a gestione familiare vicino al centro storico.','facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483414284.jpg',78.0,20);
+INSERT INTO strutture VALUES(11,'ristoratore@test.it',2,'Casa del Pellegrino Alento','Serramonacesca',5,'Contrada Abbazia 3','Alloggio per camminatori vicino all''Abbazia di San Liberatore, atmosfera semplice e accogliente con spazi comuni e deposito zaini.','facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483389781.jpg',55.0,12);
+INSERT INTO strutture VALUES(12,'ristoratore@test.it',2,'Borgo del Morrone','L''Aquila',NULL,'Via Badia 18','Affittacamere storico con camere luminose e deposito bici.','facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483286540.jpg',72.0,16);
+INSERT INTO strutture VALUES(13,'ristoratore@test.it',4,'Agriturismo Valle dei Templi','Agrigento',9,'Contrada San Biagio','Agriturismo immerso negli uliveti siciliani, a pochi km dalla Valle dei Templi.','facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483134931.jpg',45.0,12);
+INSERT INTO strutture VALUES(14,'ristoratore@test.it',4,'Casa dei Pellegrini','Santa Cristina Gela',1,'Via del Rosario 11','Alloggio semplice con camere private e spazi comuni.','facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483096530.webp',52.0,14);
+INSERT INTO strutture VALUES(17,'ristoratore@test.it',5,'B&B Valle del Salto','Cartore',3,'Via Fonte 6','Camere in pietra con colazione casalinga.','facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483076578.jpg',48.0,8);
+INSERT INTO strutture VALUES(18,'ristoratore@test.it',5,'Rifugio dei Marsi','Tagliacozzo',7,'Via della Rocca 14','Rifugio con vista sulla valle, perfetto per l''ultima tappa.','facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775481841163.jpg',60.0,15);
 CREATE TABLE immagini_struttura (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   id_struttura INTEGER NOT NULL,
@@ -82,32 +82,32 @@ CREATE TABLE immagini_struttura (
   FOREIGN KEY (id_struttura) REFERENCES strutture(id),
   UNIQUE (id_struttura, percorso_immagine)
 );
-INSERT INTO immagini_struttura VALUES(11,18,'facilities/ristoratore_test.it-ristoratore_test.it-460646877-1775133037-1775481831300.jpg','2026-04-06 13:23:51');
-INSERT INTO immagini_struttura VALUES(12,18,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775481841163.jpg','2026-04-06 13:24:01');
-INSERT INTO immagini_struttura VALUES(13,6,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775481855649.jpg','2026-04-06 13:24:15');
-INSERT INTO immagini_struttura VALUES(14,6,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775481865562.webp','2026-04-06 13:24:25');
-INSERT INTO immagini_struttura VALUES(15,17,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483057971.jpg','2026-04-06 13:44:17');
-INSERT INTO immagini_struttura VALUES(16,17,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483076578.jpg','2026-04-06 13:44:36');
-INSERT INTO immagini_struttura VALUES(17,14,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483088885.webp','2026-04-06 13:44:48');
-INSERT INTO immagini_struttura VALUES(18,14,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483096530.webp','2026-04-06 13:44:56');
-INSERT INTO immagini_struttura VALUES(19,13,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483125791.jpg','2026-04-06 13:45:25');
-INSERT INTO immagini_struttura VALUES(20,13,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483134931.jpg','2026-04-06 13:45:34');
-INSERT INTO immagini_struttura VALUES(21,12,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483264065.jpg','2026-04-06 13:47:44');
-INSERT INTO immagini_struttura VALUES(22,12,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483286540.jpg','2026-04-06 13:48:06');
-INSERT INTO immagini_struttura VALUES(23,11,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483383846.jpg','2026-04-06 13:49:43');
-INSERT INTO immagini_struttura VALUES(24,11,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483389781.jpg','2026-04-06 13:49:49');
-INSERT INTO immagini_struttura VALUES(25,9,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483402603.webp','2026-04-06 13:50:02');
-INSERT INTO immagini_struttura VALUES(26,9,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483414284.jpg','2026-04-06 13:50:14');
-INSERT INTO immagini_struttura VALUES(27,5,'facilities/ristoratore_test.it-ristoratore_test.it-firenze2-17754032892-1775483683987.webp','2026-04-06 13:54:44');
-INSERT INTO immagini_struttura VALUES(28,5,'facilities/ristoratore_test.it-ristoratore_test.it-firenze-177540329465-1775483696367.webp','2026-04-06 13:54:56');
-INSERT INTO immagini_struttura VALUES(29,4,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483892458.jpg','2026-04-06 13:58:12');
-INSERT INTO immagini_struttura VALUES(30,4,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483902497.jpg','2026-04-06 13:58:22');
-INSERT INTO immagini_struttura VALUES(31,3,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483910849.webp','2026-04-06 13:58:30');
-INSERT INTO immagini_struttura VALUES(32,3,'facilities/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483923371.jpg','2026-04-06 13:58:43');
-INSERT INTO immagini_struttura VALUES(33,1,'facilities/ristoratore_test.it-513956112-1775484040159.jpg','2026-04-06 14:00:40');
-INSERT INTO immagini_struttura VALUES(34,1,'facilities/ristoratore_test.it-285328376-1775484045187.jpg','2026-04-06 14:00:45');
-INSERT INTO immagini_struttura VALUES(35,2,'facilities/ristoratore_test.it-ViaDegliDeiHotel3-1775484088986.jpg','2026-04-06 14:01:28');
-INSERT INTO immagini_struttura VALUES(36,2,'facilities/ristoratore_test.it-ViaDegliDeiHotel2-1775484102579.jpg','2026-04-06 14:01:42');
+INSERT INTO immagini_struttura VALUES(11,18,'facilities/seed/ristoratore_test.it-ristoratore_test.it-460646877-1775133037-1775481831300.jpg','2026-04-06 13:23:51');
+INSERT INTO immagini_struttura VALUES(12,18,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775481841163.jpg','2026-04-06 13:24:01');
+INSERT INTO immagini_struttura VALUES(13,6,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775481855649.jpg','2026-04-06 13:24:15');
+INSERT INTO immagini_struttura VALUES(14,6,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775481865562.webp','2026-04-06 13:24:25');
+INSERT INTO immagini_struttura VALUES(15,17,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483057971.jpg','2026-04-06 13:44:17');
+INSERT INTO immagini_struttura VALUES(16,17,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483076578.jpg','2026-04-06 13:44:36');
+INSERT INTO immagini_struttura VALUES(17,14,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483088885.webp','2026-04-06 13:44:48');
+INSERT INTO immagini_struttura VALUES(18,14,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483096530.webp','2026-04-06 13:44:56');
+INSERT INTO immagini_struttura VALUES(19,13,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483125791.jpg','2026-04-06 13:45:25');
+INSERT INTO immagini_struttura VALUES(20,13,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483134931.jpg','2026-04-06 13:45:34');
+INSERT INTO immagini_struttura VALUES(21,12,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483264065.jpg','2026-04-06 13:47:44');
+INSERT INTO immagini_struttura VALUES(22,12,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483286540.jpg','2026-04-06 13:48:06');
+INSERT INTO immagini_struttura VALUES(23,11,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483383846.jpg','2026-04-06 13:49:43');
+INSERT INTO immagini_struttura VALUES(24,11,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483389781.jpg','2026-04-06 13:49:49');
+INSERT INTO immagini_struttura VALUES(25,9,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483402603.webp','2026-04-06 13:50:02');
+INSERT INTO immagini_struttura VALUES(26,9,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483414284.jpg','2026-04-06 13:50:14');
+INSERT INTO immagini_struttura VALUES(27,5,'facilities/seed/ristoratore_test.it-ristoratore_test.it-firenze2-17754032892-1775483683987.webp','2026-04-06 13:54:44');
+INSERT INTO immagini_struttura VALUES(28,5,'facilities/seed/ristoratore_test.it-ristoratore_test.it-firenze-177540329465-1775483696367.webp','2026-04-06 13:54:56');
+INSERT INTO immagini_struttura VALUES(29,4,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483892458.jpg','2026-04-06 13:58:12');
+INSERT INTO immagini_struttura VALUES(30,4,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483902497.jpg','2026-04-06 13:58:22');
+INSERT INTO immagini_struttura VALUES(31,3,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483910849.webp','2026-04-06 13:58:30');
+INSERT INTO immagini_struttura VALUES(32,3,'facilities/seed/ristoratore_test.it-ristoratore_test.it-ristoratore_test.it--1775483923371.jpg','2026-04-06 13:58:43');
+INSERT INTO immagini_struttura VALUES(33,1,'facilities/seed/ristoratore_test.it-513956112-1775484040159.jpg','2026-04-06 14:00:40');
+INSERT INTO immagini_struttura VALUES(34,1,'facilities/seed/ristoratore_test.it-285328376-1775484045187.jpg','2026-04-06 14:00:45');
+INSERT INTO immagini_struttura VALUES(35,2,'facilities/seed/ristoratore_test.it-ViaDegliDeiHotel3-1775484088986.jpg','2026-04-06 14:01:28');
+INSERT INTO immagini_struttura VALUES(36,2,'facilities/seed/ristoratore_test.it-ViaDegliDeiHotel2-1775484102579.jpg','2026-04-06 14:01:42');
 CREATE TABLE servizi (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   slug TEXT NOT NULL UNIQUE,

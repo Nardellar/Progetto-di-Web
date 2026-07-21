@@ -9,8 +9,8 @@ Questa cartella contiene sia asset statici del sito sia upload utente.
 - `profiles/`: immagini profilo caricate dagli utenti
   - `profiles/defaults/`: avatar di default
 - `facilities/`: immagini strutture
-  - `facilities/seed/`: immagini demo/statiche
-  - `facilities/` (root): immagini caricate dai ristoratori
+  - `facilities/seed/`: immagini demo versionate (usate da `db/init.js` e dal dump)
+  - `facilities/` (root): upload runtime dei ristoratori (non versionati)
 - `blog/`: immagini specifiche blog
 
 ## Convenzione path

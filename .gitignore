@@ -1,7 +1,34 @@
-/Nardella-Simone-20051048/server_backend/node_modules/
-Nardella-Simone-20051048/.cursor/rules/mf0438-progetto-esame.mdc
-.idea/dataSources.xml
-.idea/jsLibraryMappings.xml
-.idea/sqldialects.xml
-.idea/db-forest-config.xml
-/.idea/
+# Dependencies
+**/node_modules/
+
+# SQLite runtime databases
+**/*.db
+**/*.db-journal
+**/*.db-wal
+**/*.db-shm
+
+# User uploads (keep defaults and seed assets)
+Nardella-Simone-20051048/server_backend/public/images/profiles/*
+!Nardella-Simone-20051048/server_backend/public/images/profiles/defaults/
+!Nardella-Simone-20051048/server_backend/public/images/profiles/defaults/**
+
+Nardella-Simone-20051048/server_backend/public/images/facilities/*
+!Nardella-Simone-20051048/server_backend/public/images/facilities/seed/
+!Nardella-Simone-20051048/server_backend/public/images/facilities/seed/**
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Cursor local rules (not part of the project deliverable)
+Nardella-Simone-20051048/.cursor/
+
+# Logs / env
+*.log
+.env
+.env.*
+!/.env.example

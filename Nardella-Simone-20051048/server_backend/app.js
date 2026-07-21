@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-  secret: 'trekking-upo-secret-2026',
+  secret: process.env.SESSION_SECRET || 'trekking-upo-secret-2026',
   resave: false,
   saveUninitialized: false
 }));
