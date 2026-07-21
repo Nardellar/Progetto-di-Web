@@ -117,8 +117,8 @@ SESSION_SECRET='il-tuo-secret' npm start
 
 ## Mappe GPX
 
-Le tracce sono file statici in `server_backend/public/gpx/`.  
-Il nome file per ciascun cammino è associato allo slug in `server_backend/config/trailDetails.js`.  
+Le tracce sono file statici in `Nardella-Simone-20051048/server_backend/public/gpx`.  
+Il nome file per ciascun cammino è associato allo slug in `Nardella-Simone-20051048/server_backend/config/trailDetails.js`.  
 Nella pagina sentiero, `trail-map.js` scarica il GPX e lo disegna con Leaflet.
 
 ---
@@ -146,8 +146,8 @@ Nardella-Simone-20051048/
 
 ## Documentazione d’esame
 
-- Traccia: [`Traccia/MF0438 - Progetto Esame.docx.pdf`](Traccia/MF0438%20-%20Progetto%20Esame.docx.pdf)
-- Relazione: [`documentazione/Relazione.pdf`](documentazione/Relazione.pdf)
+- Traccia: [`Traccia/MF0438 - Progetto Esame.docx.pdf`](Nardella-Simone-20051048/Traccia/MF0438 - Progetto Esame.docx.pdf)
+- Relazione: [`Nardella-Simone-20051048/documentazione/Relazione.pdf`](Nardella-Simone-20051048/documentazione/Relazione.pdf)
 
 ---
 
